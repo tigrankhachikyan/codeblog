@@ -1,16 +1,16 @@
-import { FETCH_POSTS } from "../actions/types";
+import { LOAD_POST } from "../actions/types";
 
 let initState = {
-  posts: []
+  latestPosts: []
 };
 
 export default (state = initState, action) => {
   switch (action.type) {
-    case FETCH_POSTS:
+    case LOAD_POST:
       console.log("DISPATCHED FETCH_POSTS : ", action.payload);
       return {
         ...state, 
-        posts: [action.payload, ...state.posts]
+        latestPosts: [action.payload, ...state.latestPosts]
       }
     default:
       return state;
