@@ -1,4 +1,4 @@
-import { postsRef } from "../config/firebase";
+import { postsRef } from "../config/firebase.js";
 import { FETCH_POSTS } from "./types";
 
 export const addPost = newPost => async dispatch => {
@@ -10,10 +10,19 @@ export const addPost = newPost => async dispatch => {
 // };
 
 export const fetchPosts = () => async dispatch => {
-  postsRef.on("value", snapshot => {
-    dispatch({
-      type: FETCH_POSTS,
-      payload: snapshot.val()
+  postsRef.get()
+  .then((snapshot) => {
+    snapshot.forEach((doc) => {
+      dispatch({
+        type: FETCH_POSTS,
+        payload: { 
+          postId: doc.id,
+          data: doc.data()
+        }
+      });
     });
+  })
+  .catch((err) => {
+    console.log('Error getting documents', err);
   });
 };
