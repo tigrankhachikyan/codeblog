@@ -12,17 +12,18 @@ class NavBar extends Component {
     return (
       <nav>
         <ul>
-          <li><Link to={'/'}>Home</Link></li>
+          <li><Link to={'/'}>Code Blog</Link></li>
           <li><Link to={'/about'}>About</Link></li>
           {
             auth && <li><Link to={'/account'}>Account</Link></li>
           }
+          <li style={{float: "right"}}>
           {
-            !auth && <li><Link to={'/signin'}>SignIn</Link></li>
+            auth 
+              ? <a onClick={signOut}>Sign Out</a>
+              : <Link to={'/signin'}>SignIn</Link>
           }
-          {
-            auth && <li><a onClick={signOut}>Sign Out</a></li>
-          }
+          </li>
         </ul>
       </nav>
     );

@@ -10,7 +10,10 @@ import {
 
 import * as actions from "./actions";
 
-import Account from "./Account";
+import Account from "./components/Account";
+import DashBoard from "./components/Account/DashBoard";
+import Editor from "./components/Account/Editor";
+
 import requireAuth from "./auth/requireAuth";
 
 import SignIn from "./SignIn";
@@ -40,6 +43,7 @@ class App extends Component {
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/account" component={requireAuth(Account)}/>
+            <Route path="/account/editor" component={requireAuth(Editor)}/>
 
             <Route path="/signout" render={() => {
               if (auth) {

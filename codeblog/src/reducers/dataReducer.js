@@ -1,7 +1,8 @@
-import { LOAD_POST } from "../actions/types";
+import { LOAD_POST, CREATE_POST } from "../actions/types";
 
 let initState = {
-  latestPosts: []
+  latestPosts: [],
+  newPost: null,
 };
 
 export default (state = initState, action) => {
@@ -11,6 +12,12 @@ export default (state = initState, action) => {
       return {
         ...state, 
         latestPosts: [action.payload, ...state.latestPosts]
+      }
+    case CREATE_POST:
+      console.log("DISPATCHED CREATE_POST : ", action.payload);
+      return {
+        ...state, 
+        newPost: {...action.payload}
       }
     default:
       return state;

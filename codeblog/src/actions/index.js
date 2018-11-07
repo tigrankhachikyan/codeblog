@@ -1,5 +1,5 @@
 import { authRef, provider, postsRef } from "../config/firebase.js";
-import { LOAD_POST, FETCH_USER } from "./types";
+import { LOAD_POST, FETCH_USER, CREATE_POST } from "./types";
 
 export const addPost = newPost => async dispatch => {
   postsRef.push().set(newPost);
@@ -21,6 +21,25 @@ export const fetchPosts = () => async dispatch => {
         }
       });
     });
+  })
+  .catch((err) => {
+    console.log('Error getting documents', err);
+  });
+};
+
+export const createPost = () => async dispatch => {
+  const data = {title: "NEw POST"};
+
+  const newPost = postsRef.add(data)
+    .then(ref => {
+    dispatch({
+      type: CREATE_POST,
+      payload: { 
+        id: ref.id,
+        title: data.title
+      }
+    });
+    console.log('Added document with ID: ', ref.id, ref, ref.data);
   })
   .catch((err) => {
     console.log('Error getting documents', err);
