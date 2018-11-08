@@ -5,9 +5,9 @@ import {
   Redirect,
 } from "react-router-dom";
 import { connect } from "react-redux";
-import { signIn } from "./actions";
+import { signIn } from "../actions";
 import PropTypes from "prop-types";
-import GoogleSignInButton from "./components/utils/GoogleSignInButton";
+import GoogleSignInButton from "../components/utils/GoogleSignInButton";
 
 class SignIn extends Component {
   constructor(props) {

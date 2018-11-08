@@ -16,7 +16,7 @@ import Editor from "./components/Account/Editor";
 
 import requireAuth from "./auth/requireAuth";
 
-import SignIn from "./SignIn";
+import SignIn from "./auth/SignIn";
 import Home from "./Home";
 import About from "./About";
 import NavBar from "./NavBar";
