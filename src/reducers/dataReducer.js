@@ -6,9 +6,10 @@ let initState = {
 };
 
 export default (state = initState, action) => {
+  console.log("DISPATCHER RUNNED " );
   switch (action.type) {
     case LOAD_POST:
-      console.log("DISPATCHED FETCH_POSTS : ", action.payload);
+      console.log("DISPATCHED LOAD_POST : ", action.payload);
       return {
         ...state, 
         latestPosts: [action.payload, ...state.latestPosts]
