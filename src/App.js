@@ -25,7 +25,7 @@ import './index.css';
 
 class App extends Component {
   
-  componentWillMount() {
+  componentDidMount() {
     const { auth } = this.props;
     if (auth) return;
 
@@ -43,7 +43,6 @@ class App extends Component {
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/account" component={requireAuth(Account)}/>
-            <Route path="/account/editor" component={requireAuth(Editor)}/>
 
             <Route path="/signout" render={() => {
               if (auth) {
@@ -58,11 +57,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ data, auth }) => {
-  return {
-    data,
-    auth
-  };
+const mapStateToProps = ({ auth }) => {
+  return { auth };
 };
 
 export default connect(mapStateToProps, actions)(App);

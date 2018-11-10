@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-
-import * as actions from "../../actions";
 
 import DashBoard from './DashBoard';
 import Editor from './Editor';
@@ -10,7 +7,7 @@ import Modal from '../utils/Modal';
 
 import './index.css';
 
-class Account extends Component {
+export default class Account extends Component {
   constructor() {
     super();
     this.state = {
@@ -40,17 +37,9 @@ class Account extends Component {
           </Modal>
 
           <Route exact path={`/account/`} component={DashBoard}/>
-          <Route path={`/account/edit/:id`} component={Editor}/>
+          <Route exact path={'/account/edit/:id'} component={Editor}/>
         </main>
       </div>
     );
   }
 }
-
-const mapStateToProps = ({ data }) => {
-  return {
-    data
-  };
-};
-
-export default connect(mapStateToProps, actions)(Account);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import {
   Link,
@@ -7,23 +7,44 @@ import * as actions from "./actions";
 import "./NavBar.css";
 
 class NavBar extends Component {
+  render_profile() {
+    const { auth, signOut } = this.props;
+
+    return <Fragment>
+      <li style={{float: "right"}}>
+        <Link to={'/account'}>
+          {auth.displayName || 'Account'}
+        </Link>
+      </li>
+      <li style={{float: "right"}}>
+        <a onClick={signOut}>Sign Out</a>
+      </li>
+    </Fragment>
+  }
+  render_signin() {
+    return <Fragment>
+      <li style={{float: "right"}}>
+        <Link to={'/signin'}>SignIn</Link>
+      </li>
+
+      <li style={{float: "right"}}>
+        <Link to={'/signup'}>SignUp</Link>
+      </li>
+    </Fragment>
+  }
+
   render() {
     const { data, auth, signOut, signIn } = this.props;
     return (
       <nav>
         <ul>
-          <li><Link to={'/'}>Code Blog</Link></li>
+          <li><Link to={'/'}><img src="logo.png" height={35}/></Link></li>
           <li><Link to={'/about'}>About</Link></li>
-          {
-            auth && <li><Link to={'/account'}>Account</Link></li>
-          }
-          <li style={{float: "right"}}>
-          {
-            auth 
-              ? <a onClick={signOut}>Sign Out</a>
-              : <Link to={'/signin'}>SignIn</Link>
-          }
-          </li>
+            {
+              auth 
+                ? this.render_profile()
+                : this.render_signin()
+            }
         </ul>
       </nav>
     );

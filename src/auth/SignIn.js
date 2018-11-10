@@ -27,7 +27,7 @@ class SignIn extends Component {
     if (redirectToReferrer) return <Redirect to={from} />;
 
     return (
-      <div className="center">
+      <div>
         <GoogleSignInButton action={signIn}/>
       </div>
     );

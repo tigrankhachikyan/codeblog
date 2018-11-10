@@ -1,12 +1,12 @@
-import { LOAD_POST, CREATE_POST } from "../actions/types";
+import { LOAD_POST, LOAD_EDIT_POST, CREATE_POST } from "../actions/types";
 
 let initState = {
   latestPosts: [],
-  newPost: null,
+  editPost: null,
 };
 
 export default (state = initState, action) => {
-  console.log("DISPATCHER RUNNED " );
+  console.log("DISPATCHER RUNNED ", action );
   switch (action.type) {
     case LOAD_POST:
       console.log("DISPATCHED LOAD_POST : ", action.payload);
@@ -14,11 +14,10 @@ export default (state = initState, action) => {
         ...state, 
         latestPosts: [action.payload, ...state.latestPosts]
       }
-    case CREATE_POST:
-      console.log("DISPATCHED CREATE_POST : ", action.payload);
+    case LOAD_EDIT_POST:
       return {
         ...state, 
-        newPost: {...action.payload}
+        editPost: {...action.payload}
       }
     default:
       return state;

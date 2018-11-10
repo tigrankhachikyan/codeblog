@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "./actions";
 
+import { Button } from 'react-bootstrap';
+
 import './index.css';
 
 class Home extends Component {
   
-  componentWillMount() {
+  componentDidMount() {
     const { data, fetchPosts } = this.props;
     if (data.latestPosts.length) return;
     fetchPosts();
@@ -17,11 +19,19 @@ class Home extends Component {
     return (
       <div className="Home">
         <h1>Code Blog</h1>
-        <pre>
+        <ul>
           {
-            JSON.stringify(data, null, 2)
+            data.latestPosts.map((post, i) => {
+              return <li key={i}>
+                <div>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.body_markdown}</p>
+                </div>
+              </li>
+            })
           }
-        </pre>
+        </ul>
+
       </div>
     );
   }
