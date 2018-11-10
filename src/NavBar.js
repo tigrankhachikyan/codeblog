@@ -4,6 +4,8 @@ import {
   Link,
 } from "react-router-dom";
 import * as actions from "./actions";
+import logo from './images/logo.png';
+
 import "./NavBar.css";
 
 class NavBar extends Component {
@@ -38,7 +40,7 @@ class NavBar extends Component {
     return (
       <nav>
         <ul>
-          <li><Link to={'/'}><img src="logo.png" height={35}/></Link></li>
+          <li><Link to={'/'}><img src={logo} height={35}/></Link></li>
           <li><Link to={'/about'}>About</Link></li>
             {
               auth 
