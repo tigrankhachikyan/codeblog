@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import './index.css';
 
 class Editor extends Component {
@@ -39,6 +41,7 @@ class Editor extends Component {
           <div>
             <Markdown markup={ this.state.markdown } />
           </div>
+          <a className="save-button"  title="Save or Autosave after each 20sec"><FontAwesomeIcon icon="save" /></a>
         </div>
       </div>
     );

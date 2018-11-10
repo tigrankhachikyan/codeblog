@@ -8,6 +8,7 @@ import {
   withRouter
 } from "react-router-dom";
 
+
 import * as actions from "./actions";
 
 import Account from "./components/Account";
@@ -22,6 +23,13 @@ import About from "./About";
 import NavBar from "./NavBar";
 
 import './index.css';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faSave);
+
 
 class App extends Component {
   

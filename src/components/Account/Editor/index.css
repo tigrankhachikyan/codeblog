@@ -18,3 +18,20 @@
   width: 100%;
   height: 100vh;
 }
+
+.save-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: Gainsboro;
+  text-align: center;
+  line-height: 50px;
+  font-size: 25px;
+  cursor: pointer;
+}
+
