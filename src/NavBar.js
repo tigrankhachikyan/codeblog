@@ -17,7 +17,7 @@ class NavBar extends Component {
         </Link>
       </li>
       <li style={{float: "right"}}>
-        <a onClick={signOut}>Sign Out</a>
+        <Link to={'/'} onClick={signOut}>Sign Out</Link>
       </li>
     </Fragment>
   }
