@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
+import { Markdown } from 'react-showdown';
+import './index.css';
 
 class Editor extends Component {
   constructor(props) {
     super(props);
-    console.log('constructor');
+    this.state = {
+      markdown: "",
+    }
   }
 
   componentDidMount() {
     const postId = this.props.match.params.id;
-    console.log("EDITOR MOUNT: ", postId);
-
-//    if (! this.props.data.editPost ) {
-       this.props.fetchPostById(postId).then(doc => {
-         console.log(doc)
-       })
-//    }
+    this.props.fetchPostById(postId).then(doc => {
+      console.log(doc)
+    })
   }
 
   render() {
+    const markdown = '# Hello\n\nMore content...';
+
     return (
       <div>
         <h1>Editor</h1>
@@ -27,6 +29,17 @@ class Editor extends Component {
         <pre>
           {JSON.stringify(this.props.post, null,2)}
         </pre>
+        <div className="editor-container">
+          <div>
+            <textarea 
+              width={100} 
+              heigth={100}
+              onChange={(e) => this.setState({markdown: e.target.value}) }/>
+          </div>
+          <div>
+            <Markdown markup={ this.state.markdown } />
+          </div>
+        </div>
       </div>
     );
   }
