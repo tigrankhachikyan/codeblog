@@ -14,7 +14,6 @@ export default class Account extends Component {
     }
   }
   render() {
-    const { data } = this.props;
     return (
       <div className="Account">
         <main>

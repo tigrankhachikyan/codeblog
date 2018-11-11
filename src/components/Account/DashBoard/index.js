@@ -13,7 +13,14 @@ class DashBoard extends Component {
     super();
     this.state = {
       showDialog: false,
+      userPosts: []
     }
+  }
+  componentDidMount() {
+    const { fetchUserPosts, uid } = this.props;
+    fetchUserPosts(uid).then(posts => {
+      this.setState({userPosts: posts});
+    })
   }
   showModal = () => {
     this.setState({ showDialog: true });
@@ -24,7 +31,8 @@ class DashBoard extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { latestPosts } = this.props;
+    console.log(this.state);
     const actions = [
       <a className="round-button" onClick={this.showModal}>
         <FontAwesomeIcon icon="file" />
@@ -45,11 +53,11 @@ class DashBoard extends Component {
 
         <ul>
           {
-            data.latestPosts.map((post, i) => {
+            this.state.userPosts.map((post, i) => {
               return <li key={i}>
                 <div>
-                  <h3><Link to={`/account/edit/${post.postId}`}>{post.data.title}</Link></h3>
-                  <p>{post.data.body_markdown}</p>
+                  <h3><Link to={`/account/edit/${post.postId}`}>{post.title}</Link></h3>
+                  <p>{post.body_markdown.substr(0,50) + "..."}</p>
                 </div>
               </li>
             })
@@ -60,9 +68,10 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({ data }) => {
+const mapStateToProps = ({ data, auth }) => {
   return {
-    data
+    latestPosts: data.latestPosts,
+    uid: auth.uid
   };
 };
 

@@ -28,6 +28,27 @@ export const fetchPosts = () => async dispatch => {
     });
 };
 
+export const fetchUserPosts = (uid) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    const userPostsref = postsRef.where('uid', '==', uid);
+    const docs = [];
+
+    userPostsref.get()
+      .then((snapshot) => {
+        snapshot.forEach((doc, i) => {
+          const data = doc.data();
+          docs.push({...data, postId: doc.id});
+        });
+
+        resolve(docs);
+      })
+      .catch((err) => {
+        console.log('Error getting documents', err);
+        reject(err);
+      });
+  })
+};
+
 export const createPost = (payload) => async dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.add(payload)
@@ -69,10 +90,11 @@ export const fetchPostById = (postId) => async dispatch => {
 
 export const savePostById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
-    postsRef.doc(postId).set({
+    postsRef.doc(postId).update({
       body_markdown: payload.body_markdown,
       date_modified: new Date()
     });
+    console.log("SAVED");
   })
 };
 

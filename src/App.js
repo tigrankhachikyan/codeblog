@@ -26,9 +26,9 @@ import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faFile, faColumns } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faFile, faColumns, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-library.add([faSave,faFile, faColumns]);
+library.add([faSave,faFile, faColumns, faTimes]);
 
 class App extends Component {
   

@@ -12,20 +12,36 @@ class Editor extends Component {
     super(props);
     this.state = {
       markdown: "",
+      title: ""
     }
   }
 
   componentDidMount() {
     const postId = this.props.match.params.id;
     this.props.fetchPostById(postId).then(doc => {
-      console.log(doc)
+      this.setState({
+        markdown: doc.body_markdown || "Start typing your post",
+        title: doc.body_markdown,
+      })
     })
+  }
+
+  closeEditingHandles = () => {
+
+  }
+  saveContent = () => {
+    const postId = this.props.match.params.id;
+    const { savePostById } = this.props;
+    savePostById(postId, {body_markdown: this.state.markdown});
   }
 
   render() {
     const actions = [
-      <a className="round-button">
+      <a className="round-button" onClick={this.saveContent}>
         <FontAwesomeIcon icon="save" />
+      </a>,
+      <a className="round-button" onClick={this.closeEditingHandles}>
+        <FontAwesomeIcon icon="times" />
       </a>,
     ];
     return (
@@ -33,16 +49,17 @@ class Editor extends Component {
         <h1>Editor</h1>
         <p>{this.props.match.params.id}</p>
         <pre>
-          {JSON.stringify(this.props.post, null,2)}
+          {/* {JSON.stringify(this.props.post, null,2)} */}
         </pre>
         <div className="editor-container">
           <div>
             <textarea 
               style={{overflow: "auto", resize: "none" }}
+              value={this.state.markdown}
               onChange={(e) => this.setState({markdown: e.target.value}) }/>
           </div>
           <div>
-            <Markdown markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
+            <Markdown options={{tables: true}} markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
           </div>
         </div>
         

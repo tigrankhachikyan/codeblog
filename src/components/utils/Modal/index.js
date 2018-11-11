@@ -22,15 +22,17 @@ class Modal extends Component {
 
   handleCreate = (e) => {
     const { createPost } = this.props;
+    const { uid } = this.props;
     e.preventDefault();
 
     const data = {
       title: this.state.title,
       date_created: new Date(),
+      uid: uid
     };
+    console.log(data);
     createPost(data).then((postId) => {
       this.props.history.push(`/account/edit/${postId}`);
-      this.props.handleClose();
     })
   }
 
@@ -66,10 +68,9 @@ class Modal extends Component {
 }
 
 
-const mapStateToProps = ({ data, auth }) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    data,
-    auth
+    uid: auth.uid
   };
 };
 
