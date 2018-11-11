@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 import * as actions from "./actions";
 
 import './index.css';
@@ -14,6 +16,7 @@ class Home extends Component {
 
   render() {
     const { data } = this.props;
+    console.log(data);
     return (
       <div className="Home">
         <h1>Code Blog</h1>
@@ -22,8 +25,8 @@ class Home extends Component {
             data.latestPosts.map((post, i) => {
               return <li key={i}>
                 <div>
-                  <h3>{post.data.title}</h3>
-                  <p>{post.data.body_markdown}</p>
+                  <Link to={`/posts/${post.postId}`}>{post.data.title}</Link>
+                  <p>{post.data.body_markdown.substr(0, 50)}</p>
                 </div>
               </li>
             })

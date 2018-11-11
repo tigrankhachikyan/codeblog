@@ -21,6 +21,7 @@ import SignIn from "./auth/SignIn";
 import Home from "./Home";
 import About from "./About";
 import NavBar from "./NavBar";
+import PostView from "./components/PostView";
 
 import './index.css';
 
@@ -47,6 +48,7 @@ class App extends Component {
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
+            <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/account" component={requireAuth(Account)}/>
