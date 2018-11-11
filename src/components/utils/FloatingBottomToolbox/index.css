@@ -1,0 +1,12 @@
+.floating-toolbox {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  
+  display: inline-block;
+  padding: 10px;
+}
+
+.floating-toolbox-item {
+  margin: 5px;
+}

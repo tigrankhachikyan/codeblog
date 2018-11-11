@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import {
   Link,
+  NavLink
 } from "react-router-dom";
 import * as actions from "./actions";
 import logo from './images/logo.png';
@@ -14,23 +15,23 @@ class NavBar extends Component {
 
     return <Fragment>
       <li style={{float: "right"}}>
-        <Link to={'/account'}>
+        <NavLink to={'/account'}>
           {auth.displayName || 'Account'}
-        </Link>
+        </NavLink>
       </li>
       <li style={{float: "right"}}>
-        <Link to={'/'} onClick={signOut}>Sign Out</Link>
+        <NavLink to={'/'} onClick={signOut}>Sign Out</NavLink>
       </li>
     </Fragment>
   }
   render_signin() {
     return <Fragment>
       <li style={{float: "right"}}>
-        <Link to={'/signin'}>SignIn</Link>
+        <NavLink to={'/signin'}>SignIn</NavLink>
       </li>
 
       <li style={{float: "right"}}>
-        <Link to={'/signup'}>SignUp</Link>
+        <NavLink to={'/signup'}>SignUp</NavLink>
       </li>
     </Fragment>
   }
@@ -40,8 +41,8 @@ class NavBar extends Component {
     return (
       <nav>
         <ul>
-          <li><Link to={'/'}><img src={logo} height={35}/></Link></li>
-          <li><Link to={'/about'}>About</Link></li>
+          <li><NavLink to={'/'}><img src={logo} height={35}/></NavLink></li>
+          <li><NavLink to={'/about'}>About</NavLink></li>
             {
               auth 
                 ? this.render_profile()

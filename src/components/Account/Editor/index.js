@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
+import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './index.css';
@@ -22,8 +23,11 @@ class Editor extends Component {
   }
 
   render() {
-    const markdown = '# Hello\n\nMore content...';
-
+    const actions = [
+      <a className="round-button">
+        <FontAwesomeIcon icon="save" />
+      </a>,
+    ];
     return (
       <div>
         <h1>Editor</h1>
@@ -41,8 +45,12 @@ class Editor extends Component {
           <div>
             <Markdown markup={ this.state.markdown } />
           </div>
-          <a className="save-button"  title="Save or Autosave after each 20sec"><FontAwesomeIcon icon="save" /></a>
         </div>
+        
+        <FloatingBottomToolbox 
+            actions={actions}
+        />
+
       </div>
     );
   }
