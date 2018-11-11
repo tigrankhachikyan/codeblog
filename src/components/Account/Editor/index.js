@@ -38,12 +38,11 @@ class Editor extends Component {
         <div className="editor-container">
           <div>
             <textarea 
-              width={100} 
-              heigth={100}
+              style={{overflow: "auto", resize: "none" }}
               onChange={(e) => this.setState({markdown: e.target.value}) }/>
           </div>
           <div>
-            <Markdown markup={ this.state.markdown } />
+            <Markdown markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
           </div>
         </div>
         

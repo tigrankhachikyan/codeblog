@@ -9,31 +9,11 @@
 .editor-container > div {
   flex: 50%;
   padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
 }
 
 .editor-container > div > textarea {
-  left: 0; 
-  top: 0; 
-  right: 0;
-  bottom: 100px;  /* Actually the height of select and input */
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  resize: none;
+  overflow: auto;
 }
-
-.save-button {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: Gainsboro;
-  text-align: center;
-  line-height: 50px;
-  font-size: 25px;
-  cursor: pointer;
-}
-
