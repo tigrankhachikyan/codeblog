@@ -11,6 +11,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+//const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(reduxThunk)));
 
 ReactDOM.render(
   <Provider store={store}>

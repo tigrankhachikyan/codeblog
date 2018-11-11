@@ -1,13 +1,10 @@
 import { authRef, provider, postsRef } from "../config/firebase.js";
 import { LOAD_POST, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
+import { ADD_TOAST, REMOVE_TOAST } from "./types";
 
 export const addPost = newPost => async dispatch => {
   postsRef.push().set(newPost);
 };
-
-// export const completeToDo = completeToDoId => async dispatch => {
-//   todosRef.child(completeToDoId).remove();
-// };
 
 export const fetchPosts = () => async dispatch => {
   postsRef.get()
@@ -133,3 +130,17 @@ export const signOut = () => dispatch => {
       console.log(error);
     });
 };
+
+export const addToast = (options = {}) => dispatch => {
+  dispatch({
+    payload: options,
+    type: ADD_TOAST
+  });
+}
+
+export const removeToast = (id) => dispatch => {
+  dispatch({
+    payload: id,
+    type: REMOVE_TOAST
+  });
+}

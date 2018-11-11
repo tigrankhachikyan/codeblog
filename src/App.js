@@ -23,6 +23,8 @@ import About from "./About";
 import NavBar from "./NavBar";
 import PostView from "./components/PostView";
 
+import Toasts from "./components/Toasts";
+
 import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -60,6 +62,7 @@ class App extends Component {
               return <Redirect to="/"/>
             }}/>
           </div>
+          <Toasts />
         </div>
       </Router>
     );
