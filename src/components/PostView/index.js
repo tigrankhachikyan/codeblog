@@ -33,7 +33,7 @@ class PostView extends Component {
   render() {
     console.log(this.state);
     return (
-      <div class="container">
+      <div className="container">
         {
           this.state.post && <Markdown markup={ this.state.post.body_markdown } />
         }
