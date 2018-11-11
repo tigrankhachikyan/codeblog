@@ -69,3 +69,104 @@ div.PostView a {
 div.PostView a:hover { 
   color: #ffcc66;
 }
+
+body {
+    padding: 50px;
+    /* background-color: blueviolet; */
+}
+
+.app {
+    /* width: 1200px; */
+    /* height: 600px; */
+    border: 2px solid black;
+    display: flex;
+    align-items: stretch;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.postView {
+    width: 70%;
+    border: 1px solid green;
+    text-align: center;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid yellow;
+    width: 30%;
+    padding-left: 200px;
+    padding-right: 150px;
+    box-sizing: border-box;
+    height: 250px;
+}
+
+.flexContainer img {
+    width: 50px;
+    height: 50px;
+   
+}
+
+.flexContainer button {
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    border-style: none;
+    color: #6475ab;   
+}
+
+.postComment {
+    border: 2px solid blue;
+    padding: 10px;
+    
+}
+
+.test {
+    display: flex;
+}
+
+.postComment img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    
+}
+
+.commentText {
+    width: 85%;
+    height: 50px;
+}
+
+.newCommrnts {
+    height: 70px;
+}
+.commentBtn {
+    /* margin-bottom: 40px; */
+    margin-left: 20px;
+    width: 80px;
+    height: 30px;
+    background-color: #0089ff;
+    border: 1px solid #0089ff;
+    border-radius: 5px;
+    color: white;
+    margin-top: 25px;
+
+    
+}
+
+.textContainer {
+    padding: 10px;
+    display: flex;
+}
+
+.newComment {
+    padding: 10px;
+    border: 2px solid purple;
+    margin-bottom: 10px;
+}
+
+.removeComment {
+   margin-left: 1100px;
+}

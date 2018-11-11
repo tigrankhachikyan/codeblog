@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import '../index.css'
-import fb from '../images/fb.png'
-import twitter from '../images/twitter.png'
-import like from '../images/like.png'
-import bookmark from '../images/bookmark.png'
-import bookmarkCliked from '../images/bookmarkCliked.png'
+import './index.css'
+import fb from '../../images/fb.png'
+import twitter from '../../images/twitter.png'
+import like from '../../images/like.png'
+import bookmark from '../../images/bookmark.png'
+import bookmarkCliked from '../../images/bookmarkCliked.png'
 class Tools extends Component {
     constructor(props) {
         super(props);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import '../index.css';
-import person from '../images/person.png';
+import './index.css';
+import person from '../../images/person.png';
 import NewCommment from './newComment'
 
 
