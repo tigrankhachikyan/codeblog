@@ -91,7 +91,7 @@ export const savePostById = (postId, payload) => async dispatch => {
       body_markdown: payload.body_markdown,
       date_modified: new Date()
     });
-    console.log("SAVED");
+    resolve();
   })
 };
 

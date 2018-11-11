@@ -32,8 +32,8 @@ class Editor extends Component {
   saveContent = () => {
     const postId = this.props.match.params.id;
     const { savePostById, addToast } = this.props;
-    savePostById(postId, {body_markdown: this.state.markdown});
-    addToast({text: "Saved", color: "lightgreen"});
+    savePostById(postId, {body_markdown: this.state.markdown})
+      .then(() => addToast({text: "Saved", color: "lightgreen"}));
   }
 
   render() {
