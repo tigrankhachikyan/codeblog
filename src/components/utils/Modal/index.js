@@ -12,6 +12,7 @@ class Modal extends Component {
     this.state = {
       title: "",
       slug: "",
+      slugChanged: false
     }
   }
 
@@ -30,10 +31,30 @@ class Modal extends Component {
       date_created: new Date(),
       uid: uid
     };
-    console.log(data);
     createPost(data).then((postId) => {
       this.props.history.push(`/account/edit/${postId}`);
     })
+  }
+
+  handleTitleChange = (e) => {
+    this.setState({
+      title: e.target.value,
+      slug: this.state.slugChanged ? this.state.slug : e.target.value.replace(/\s/, '-')
+    })
+  }
+
+
+  handleSlugChange = (e) => {
+    if (e.target.value) {
+      this.setState({
+        slugChanged: true,
+        slug: e.target.value,
+      });
+    } else {
+      this.setState({
+        slugChanged: false,
+      });
+    }
   }
 
   render() {
@@ -47,13 +68,14 @@ class Modal extends Component {
             <li>
               <label>
                 Title:
-                <input type="text" value={this.state.title} onChange={(e) => {this.setState({title: e.target.value})}} />
+                <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
               </label>
             </li>
             <li>
               <label>
                 Slug:
-                <input type="text" value={""} onChange={() => {}} />
+                <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
+                 />
               </label>
             </li>
             <li>
