@@ -26,10 +26,9 @@ import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faFile, faColumns } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSave);
-
+library.add([faSave,faFile, faColumns]);
 
 class App extends Component {
   
@@ -46,7 +45,7 @@ class App extends Component {
       <Router>
         <div>
           <NavBar />
-          <div className="container">
+          <div>
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
