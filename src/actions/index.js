@@ -131,11 +131,18 @@ export const signOut = () => dispatch => {
     });
 };
 
-export const addToast = (options = {}) => dispatch => {
+export const addToast = (options = {}) => (dispatch, getState) => {
+  const { toasts } = getState();
   dispatch({
     payload: options,
     type: ADD_TOAST
   });
+  setTimeout(() => {
+    dispatch({
+      payload: toasts.id,
+      type: REMOVE_TOAST
+    })
+  }, 2000);
 }
 
 export const removeToast = (id) => dispatch => {
