@@ -10,8 +10,8 @@ import Spinner from '../utils/Spinner';
 import Prism from "prismjs";
 import "../../css/prism.css";
 import PostBody from './PostBody';
-import Tools from './tools';
-import Comments from  './comments';
+import Tools from './Tools';
+import Comments from  './Comments';
 
 import './index.css';
 
