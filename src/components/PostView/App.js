@@ -1,20 +1,12 @@
 import React, { Component } from "react"
 import './index.css';
-import PostView from './postview';
+import PostBody from './PostBody';
 import Tools from './tools';
 import Comments from  './comments';
 
 
 
 class App extends Component {
-    constructor (props) {
-        super(props);
-        
-       
-
-
-    }
-
     render() {
         return (
 
@@ -22,7 +14,7 @@ class App extends Component {
             <div  className = 'app'>
                 <div className = 'test'> 
                     <Tools/>
-                    <PostView/>
+                    <PostBody/>
                 </div>
                     <Comments/>
             </div>
