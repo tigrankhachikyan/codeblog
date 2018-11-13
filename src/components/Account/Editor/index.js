@@ -11,6 +11,9 @@ class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isChanged: false,
+      _autoSaveTimerId: null,
+
       markdown: "",
       title: ""
     }
@@ -21,19 +24,40 @@ class Editor extends Component {
     this.props.fetchPostById(postId).then(doc => {
       this.setState({
         markdown: doc.body_markdown || "Start typing your post",
-        title: doc.body_markdown,
+        title: doc.title,
       })
     })
+
+    const timerId = setInterval(() => {
+      if (!this.state.isChanged) return;
+
+      this.saveContent();
+    }, 7000)
+    this.setState({_autoSaveTimerId: timerId});
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state._autoSaveTimerId);
   }
 
   closeEditingHandles = () => {
-
   }
+
+  handleChange = (e) => {
+    this.setState({
+      markdown: e.target.value,
+      isChanged: true
+    })
+  }
+
   saveContent = () => {
     const postId = this.props.match.params.id;
     const { savePostById, addToast } = this.props;
     savePostById(postId, {body_markdown: this.state.markdown})
-      .then(() => addToast({text: "Saved", color: "lightgreen"}));
+      .then(() => {
+        this.setState({isChanged: false});
+        addToast({text: "Saved", color: "lightgreen"});
+      });
   }
 
   render() {
@@ -49,6 +73,9 @@ class Editor extends Component {
       <div>
         <h1>Editor</h1>
         <p>{this.props.match.params.id}</p>
+        <h2>{this.state.title}
+          { this.state.isChanged && <span>(Unsaved Changes)</span>}
+        </h2>
         <pre>
           {/* {JSON.stringify(this.props.post, null,2)} */}
         </pre>
@@ -57,7 +84,7 @@ class Editor extends Component {
             <textarea 
               style={{overflow: "auto", resize: "none" }}
               value={this.state.markdown}
-              onChange={(e) => this.setState({markdown: e.target.value}) }/>
+              onChange={this.handleChange}/>
           </div>
           <div>
             <Markdown options={{tables: true}} markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
