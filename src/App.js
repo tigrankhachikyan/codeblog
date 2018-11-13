@@ -43,13 +43,20 @@ class App extends Component {
   }
 
   render() {
-    const { data, auth, signOut, signIn } = this.props;
+    const { data, auth, signOut, signIn, fetchUserPostBySlug } = this.props;
     return (
       <Router>
         <div>
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
+            {/* <Route exact path="/:uid/:slug" render={(props) => {
+              const uid = props.match.params.uid;
+              const slug = props.match.params.slug;
+              fetchUserPostBySlug(uid, slug).then(post => {
+
+              })
+            }} /> */}
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
@@ -70,6 +77,7 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
+  console.log(auth);
   return { auth };
 };
 

@@ -85,6 +85,24 @@ export const fetchPostById = (postId) => async dispatch => {
   })
 };
 
+export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug)
+    postRef.get()
+      .then(doc => {
+        if (!doc.exists) {
+          reject('No such document!');
+        } else {
+          resolve(doc.data());
+        }
+      })
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
 export const savePostById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).update({
