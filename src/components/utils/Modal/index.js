@@ -39,7 +39,7 @@ class Modal extends Component {
   handleTitleChange = (e) => {
     this.setState({
       title: e.target.value,
-      slug: this.state.slugChanged ? this.state.slug : e.target.value.replace(/\s/, '-')
+      slug: this.state.slugChanged ? this.state.slug : e.target.value.replace(/\s+/g, '-')
     })
   }
 
