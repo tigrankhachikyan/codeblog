@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
+
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
@@ -41,6 +43,11 @@ class Editor extends Component {
   }
 
   closeEditingHandles = () => {
+    if (this.state.isChanged) {
+      alert("There are unsaved Changes!");
+      return;
+    }
+    this.props.history.push(`/account`);
   }
 
   handleChange = (e) => {
@@ -106,4 +113,4 @@ const mapStateToProps = ({ data }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(Editor);
+export default withRouter(connect(mapStateToProps, actions)(Editor));
