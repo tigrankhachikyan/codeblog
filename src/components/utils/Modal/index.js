@@ -28,6 +28,7 @@ class Modal extends Component {
 
     const data = {
       title: this.state.title,
+      slug: this.state.slug,
       date_created: new Date(),
       uid: uid
     };
