@@ -1,5 +1,5 @@
 import { authRef, provider, postsRef } from "../config/firebase.js";
-import { LOAD_POST, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
+import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
 import { ADD_TOAST, REMOVE_TOAST } from "./types";
 
 export const addPost = newPost => async dispatch => {
@@ -9,15 +9,19 @@ export const addPost = newPost => async dispatch => {
 export const fetchPosts = () => async dispatch => {
   postsRef.get()
     .then((snapshot) => {
-      snapshot.forEach((doc, i) => {
-        dispatch({
-          type: LOAD_POST,
-          payload: {
-            _index: i,
-            postId: doc.id,
-            data: doc.data()
-          }
-        });
+      const posts = [];
+
+      snapshot.forEach(doc => {
+        const post = {
+          postId: doc.id,
+          data: doc.data()
+        };
+        posts.push(post)
+      });
+
+      dispatch({
+        type: LOAD_POSTS,
+        payload: { posts }
       });
     })
     .catch((err) => {

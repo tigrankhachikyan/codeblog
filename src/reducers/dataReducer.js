@@ -1,4 +1,4 @@
-import { LOAD_POST, LOAD_EDIT_POST, CREATE_POST } from "../actions/types";
+import { LOAD_POSTS, LOAD_EDIT_POST, CREATE_POST } from "../actions/types";
 
 let initState = {
   latestPosts: [],
@@ -8,11 +8,11 @@ let initState = {
 export default (state = initState, action) => {
   console.log("DISPATCHER RUNNED ", action );
   switch (action.type) {
-    case LOAD_POST:
+    case LOAD_POSTS:
       console.log("DISPATCHED LOAD_POST : ", action.payload);
       return {
         ...state, 
-        latestPosts: [action.payload, ...state.latestPosts]
+        latestPosts: [...action.payload.posts, ...state.latestPosts]
       }
     case LOAD_EDIT_POST:
       return {
