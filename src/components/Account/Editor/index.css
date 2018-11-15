@@ -8,14 +8,23 @@
 
 .editor-container > div {
   flex: 50%;
-  padding: 10px;
 }
 
 .editor-container > div > textarea {
+  background-color: gainsboro;
+  font-size: 16px;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  border-right: 5px dashed #4c4a37;
   width: 100%;
-  height: 100%;
   resize: none;
   overflow: auto;
+  padding: 10px;
+}
+
+.editor-container > div > div {
+  padding: 10px;
 }
 
 

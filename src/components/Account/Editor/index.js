@@ -15,31 +15,51 @@ class Editor extends Component {
     this.state = {
       isChanged: false,
       _autoSaveTimerId: null,
+    
+      _editorHeight: window.innerHeight,
 
       markdown: "",
-      title: ""
+      title: "",
+
+      draftIsEmpty: true,
     }
   }
 
   componentDidMount() {
     const postId = this.props.match.params.id;
-    this.props.fetchPostById(postId).then(doc => {
-      this.setState({
-        markdown: doc.body_markdown || "Start typing your post",
-        title: doc.title,
-      })
+
+    this.props.fetchPostById(postId)
+    .then(doc => doc)
+    .then((post) => {
+      this.props.fetchPostDraftById(postId)
+      .then(doc => this.setState({
+        draftIsEmpty: false,
+        markdown: doc.body_markdown,
+        title: post.title,
+      }))
+      .catch(err => this.setState({
+        markdown: post.body_markdown || "Start typing your post",
+        title: post.title,
+      }))
     })
 
     const timerId = setInterval(() => {
       if (!this.state.isChanged) return;
 
-      this.saveContent();
+      this.saveDraftContent();
     }, 7000)
     this.setState({_autoSaveTimerId: timerId});
+
+    window.addEventListener('resize', this.windowSizeChangeHandler);
+  }
+
+  windowSizeChangeHandler = (e) => {
+    this.setState({_editorHeight: window.innerHeight})
   }
 
   componentWillUnmount() {
     clearInterval(this.state._autoSaveTimerId);
+    window.removeEventListener('resize', this.windowSizeChangeHandler);
   }
 
   closeEditingHandles = () => {
@@ -57,29 +77,28 @@ class Editor extends Component {
     })
   }
 
-  saveContent = () => {
-    const postId = this.props.match.params.id;
-    const { savePostById, addToast } = this.props;
-    savePostById(postId, {body_markdown: this.state.markdown})
-      .then(() => {
-        this.setState({isChanged: false});
-        addToast({text: "Saved", color: "lightgreen"});
-      });
-  }
-
   saveDraftContent = () => {
     const postId = this.props.match.params.id;
     const { savePostDraftById, addToast } = this.props;
-    savePostDraftById(postId, {draft_markdown: this.state.markdown})
+    savePostDraftById(postId, {body_markdown: this.state.markdown})
       .then(() => {
         this.setState({isChanged: false});
         addToast({text: "Saved draft", color: "lightgreen"});
       });
   }
+  
+  publishDraft = () => {
+    const postId = this.props.match.params.id;
+    const { publishDraftById, addToast } = this.props;
+    publishDraftById(postId).then(() => {
+      this.setState({isChanged: false});
+      addToast({text: "Successfully published latest draft changes", color: "lightgreen"});
+    });
+  }
 
   render() {
     const actions = [
-      <a className="round-button" onClick={this.saveContent}>
+      <a className="round-button" onClick={this.saveDraftContent} title="Save Draft">
         <FontAwesomeIcon icon="save" />
       </a>,
       <a className="round-button" onClick={this.closeEditingHandles}>
@@ -88,23 +107,31 @@ class Editor extends Component {
     ];
     return (
       <div>
-        <h1>Editor</h1>
-        <p>{this.props.match.params.id}</p>
-        <h2>{this.state.title}
-          { this.state.isChanged && <span>(Unsaved Changes)</span>}
+        <h2 style={{display: 'inline'}}>
+          {this.state.title}
         </h2>
-        <pre>
-          {/* {JSON.stringify(this.props.post, null,2)} */}
-        </pre>
+        <hr />
+        { this.state.isChanged && <span>(Unsaved Changes)</span>}
+        { !this.state.draftIsEmpty && <h4>Loaded Draft content</h4> }
+        <div style={{float: "right"}}>
+          <button
+            onClick={this.publishDraft}
+          >
+            Publish
+          </button>
+        </div>
+
         <div className="editor-container">
           <div>
             <textarea 
-              style={{overflow: "auto", resize: "none" }}
+              style={{overflow: "auto", resize: "none", height: window.innerHeight - 90 }}
               value={this.state.markdown}
               onChange={this.handleChange}/>
           </div>
           <div>
-            <Markdown options={{tables: true}} markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
+            <div>
+              <Markdown options={{tables: true}} markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
+            </div>
           </div>
         </div>
         

@@ -1,4 +1,9 @@
-import { authRef, provider, postsRef } from "../config/firebase.js";
+import { 
+  authRef,
+  provider,
+  postsRef,
+  postDraftsRef
+} from "../config/firebase.js";
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
 import { ADD_TOAST, REMOVE_TOAST } from "./types";
 
@@ -88,6 +93,23 @@ export const fetchPostById = (postId) => async dispatch => {
   })
 };
 
+export const fetchPostDraftById = (postId) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    postDraftsRef.doc(postId).get()
+      .then(doc => {
+        if (!doc.exists) {
+          reject('No such document!');
+        } else {
+          resolve(doc.data());
+        }
+      })
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
 export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
   return new Promise((resolve, reject) => {
     const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug)
@@ -118,13 +140,37 @@ export const savePostById = (postId, payload) => async dispatch => {
 
 export const savePostDraftById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
-    postsRef.doc(postId).update({
-      draft_markdown: payload.body_markdown,
+    postDraftsRef.doc(postId).set({
+      body_markdown: payload.body_markdown,
       date_modified: new Date()
     });
     resolve();
   })
 };
+
+export const publishDraftById = (postId) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    postDraftsRef.doc(postId).get()
+      .then(doc => {
+        if (!doc.exists) {
+          reject('No such document!');
+        } else {
+          const draft = doc.data();
+          postsRef.doc(postId).update({
+            body_markdown: draft.body_markdown,
+            date_modified: new Date()
+          });
+          resolve();
+        }
+      })
+      .then(() => postDraftsRef.doc(postId).delete())
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
 
 export const fetchUser = () => dispatch => {
   authRef.onAuthStateChanged(user => {
