@@ -40,7 +40,7 @@ class NavBar extends Component {
     return (
       <nav>
         <ul>
-          <li><NavLink to={'/'}><img src={logo} height={35}/></NavLink></li>
+          <li><NavLink to={'/'}><img src={logo} height={35} alt="User Profile"/></NavLink></li>
           <li><NavLink to={'/about'}>About</NavLink></li>
             {
               auth 
