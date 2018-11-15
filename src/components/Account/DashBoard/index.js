@@ -68,9 +68,8 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({ data, auth }) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    latestPosts: data.latestPosts,
     uid: auth.uid
   };
 };
