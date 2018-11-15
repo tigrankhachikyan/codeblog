@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import {
-  Link,
   NavLink
 } from "react-router-dom";
 import * as actions from "./actions";
@@ -37,7 +36,7 @@ class NavBar extends Component {
   }
 
   render() {
-    const { data, auth, signOut, signIn } = this.props;
+    const { auth } = this.props;
     return (
       <nav>
         <ul>
@@ -54,9 +53,8 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps = ({ data, auth }) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    data,
     auth
   };
 };
