@@ -31,8 +31,6 @@ class DashBoard extends Component {
   };
 
   render() {
-    const { latestPosts } = this.props;
-    console.log(this.state);
     const actions = [
       <a className="round-button" onClick={this.showModal}>
         <FontAwesomeIcon icon="file" />

@@ -77,7 +77,6 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-  console.log(auth);
   return { auth };
 };
 

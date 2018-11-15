@@ -31,7 +31,6 @@ class PostView extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div className="container">
         {
@@ -42,6 +41,7 @@ class PostView extends Component {
   }
 }
 
+// TODO. do we need redux here??
 const mapStateToProps = ({ auth }) => {
   return { };
 };

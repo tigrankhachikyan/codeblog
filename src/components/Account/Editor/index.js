@@ -67,6 +67,16 @@ class Editor extends Component {
       });
   }
 
+  saveDraftContent = () => {
+    const postId = this.props.match.params.id;
+    const { savePostDraftById, addToast } = this.props;
+    savePostDraftById(postId, {draft_markdown: this.state.markdown})
+      .then(() => {
+        this.setState({isChanged: false});
+        addToast({text: "Saved draft", color: "lightgreen"});
+      });
+  }
+
   render() {
     const actions = [
       <a className="round-button" onClick={this.saveContent}>

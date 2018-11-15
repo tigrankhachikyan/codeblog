@@ -59,7 +59,6 @@ export const createPost = (payload) => async dispatch => {
         payload
       });
       resolve(ref.id);
-      console.log('Added document with ID: ', ref.id, ref, ref.data);
     })
     .catch((err) => {
       reject(err);
@@ -111,6 +110,16 @@ export const savePostById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).update({
       body_markdown: payload.body_markdown,
+      date_modified: new Date()
+    });
+    resolve();
+  })
+};
+
+export const savePostDraftById = (postId, payload) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    postsRef.doc(postId).update({
+      draft_markdown: payload.body_markdown,
       date_modified: new Date()
     });
     resolve();

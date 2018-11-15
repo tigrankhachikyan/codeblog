@@ -9,20 +9,19 @@ import './index.css';
 class Home extends Component {
   
   componentDidMount() {
-    const { data, fetchPosts } = this.props;
-    if (data.latestPosts.length) return;
+    const { latestPosts, fetchPosts } = this.props;
+    if (latestPosts.length) return;
     fetchPosts();
   }
 
   render() {
-    const { data } = this.props;
-    console.log(data);
+    const { latestPosts } = this.props;
     return (
       <div className="Home">
         <h1>Code Blog</h1>
         <ul>
           {
-            data.latestPosts.map((post, i) => {
+            latestPosts.map((post, i) => {
               return <li key={i}>
                 <div>
                   <Link to={`/posts/${post.postId}`}>{post.data.title}</Link>
@@ -40,7 +39,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ data }) => {
   return {
-    data
+    latestPosts: data.latestPosts
   };
 };
 
