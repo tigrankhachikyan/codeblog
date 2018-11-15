@@ -31,8 +31,12 @@
 }
 
 .toasts {
-  bottom: 24px;
-  position: fixed;
   right: 100px;
   width: 240px;
+
+  position:absolute;
+  bottom:0px;
+  right:25%;
+  left:50%;
+  margin-left:-120px;
 }
