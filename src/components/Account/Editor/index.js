@@ -25,23 +25,41 @@ class Editor extends Component {
     }
   }
 
+  fetchPostData = async (postId) => {
+    const {fetchPostById, fetchPostBodyById, fetchPostDraftById} = this.props;
+    
+    const [postHeader, postBody, postDraft] = await Promise.all([
+      fetchPostById(postId),
+      fetchPostBodyById(postId),
+      fetchPostDraftById(postId)
+    ]);
+    const post = {...postHeader, ...postBody };
+
+    if (postDraft) {
+      post.draft = postDraft;
+    }
+
+    return post;
+  }
+
   componentDidMount() {
     const postId = this.props.match.params.id;
-
-    this.props.fetchPostById(postId)
-    .then(doc => doc)
-    .then((post) => {
-      this.props.fetchPostDraftById(postId)
-      .then(doc => this.setState({
-        draftIsEmpty: false,
-        markdown: doc.body_markdown,
-        title: post.title,
-      }))
-      .catch(err => this.setState({
-        markdown: post.body_markdown || "Start typing your post",
-        title: post.title,
-      }))
-    })
+    this.fetchPostData(postId)
+      .then(post => {
+        if (post.draft) {
+          this.setState({
+            draftIsEmpty: false,
+            markdown: post.draft.body_markdown,
+            title: post.title,
+          })
+        } else {
+          this.setState({
+            draftIsEmpty: true,
+            markdown: post.body_markdown,
+            title: post.title,
+          })
+        }
+      });
 
     const timerId = setInterval(() => {
       if (!this.state.isChanged) return;
