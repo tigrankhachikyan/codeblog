@@ -1,23 +1,19 @@
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 
 export default function(ComposedComponent) {
   class Authentication extends Component {
-    static contextTypes = {
-      router: PropTypes.object
-    };
-
     componentDidMount() {
       if (this.props.authenticated === null) {
-        this.context.router.history.push("/signin", {from: { pathname: this.props.match.url }});
+        this.props.history.push("/signin", {from: { pathname: this.props.match.url }});
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        this.context.router.history.push("/signin");
+        this.props.history.push(`/signin`);
       }
     }
 
@@ -33,5 +29,5 @@ export default function(ComposedComponent) {
     return { authenticated: state.auth };
   }
 
-  return connect(mapStateToProps)(Authentication);
+  return withRouter(connect(mapStateToProps)(Authentication));
 }
