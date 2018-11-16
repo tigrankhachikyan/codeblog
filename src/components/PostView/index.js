@@ -38,13 +38,15 @@ class PostView extends Component {
 
   render() {
     return (
-      <div className="PostView container">
+      <div className="PostView">
+        <div className="box">
         { 
           this.state.post 
             ? <Markdown markup={ this.state.post.body_markdown } />
             //? <pre>{ this.state.post.body_markdown } </pre>
             : <Spinner />
         }
+        </div>
       </div>
     );
   }
