@@ -1,7 +1,12 @@
-import { LOAD_POSTS, LOAD_EDIT_POST, CREATE_POST } from "../actions/types";
+import {
+  LOAD_POSTS,
+  LOAD_USER_POSTS,
+  LOAD_EDIT_POST,
+} from "../actions/types";
 
 let initState = {
   latestPosts: [],
+  userPosts: [],
   editPost: null,
 };
 
@@ -11,6 +16,11 @@ export default (state = initState, action) => {
       return {
         ...state, 
         latestPosts: [...action.payload.posts, ...state.latestPosts]
+      }
+    case LOAD_USER_POSTS:
+      return {
+        ...state, 
+        userPosts: [...action.posts, ...state.userPosts]
       }
     case LOAD_EDIT_POST:
       return {

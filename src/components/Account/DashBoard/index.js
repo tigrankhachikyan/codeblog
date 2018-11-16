@@ -7,6 +7,7 @@ import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as actions from "../../../actions";
+import dataReducer from '../../../reducers/dataReducer';
 
 class DashBoard extends Component {
   constructor() {
@@ -16,12 +17,14 @@ class DashBoard extends Component {
       userPosts: []
     }
   }
+
   componentDidMount() {
     const { fetchUserPosts, uid } = this.props;
-    fetchUserPosts(uid).then(posts => {
-      this.setState({userPosts: posts});
-    })
+    if (this.props.userPosts.length) return;
+
+    fetchUserPosts(uid);
   }
+
   showModal = () => {
     this.setState({ showDialog: true });
   };
@@ -52,7 +55,7 @@ class DashBoard extends Component {
         <table>
           <tbody>
           {
-            this.state.userPosts.map((post, i) => {
+            this.props.userPosts.map((post, i) => {
               return <tr key={i}>
                 <td>
                   <Link to={`/posts/${post.postId}`}>{post.title}</Link>
@@ -63,7 +66,7 @@ class DashBoard extends Component {
                     to={`/account/edit/${post.postId}`}
                   >
                     <FontAwesomeIcon icon="edit" />
-                  </Link>                  
+                  </Link>
                 </td>
               </tr>
             })
@@ -75,9 +78,10 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ data, auth }) => {
   return {
-    uid: auth.uid
+    uid: auth.uid,
+    userPosts: data.userPosts
   };
 };
 

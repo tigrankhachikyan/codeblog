@@ -46,7 +46,10 @@ export const fetchUserPosts = (uid) => async dispatch => {
           const data = doc.data();
           docs.push({...data, postId: doc.id});
         });
-
+        dispatch({
+          type: 'LOAD_USER_POSTS',
+          posts: docs
+        })
         resolve(docs);
       })
       .catch((err) => {
