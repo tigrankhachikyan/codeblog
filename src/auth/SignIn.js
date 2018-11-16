@@ -1,12 +1,10 @@
 //import "./SignIn.css";
 import React, { Component } from "react";
 import {
-  Route,
   Redirect,
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { signIn } from "../actions";
-import PropTypes from "prop-types";
 import GoogleSignInButton from "../components/utils/GoogleSignInButton";
 
 class SignIn extends Component {
@@ -18,7 +16,7 @@ class SignIn extends Component {
   }
 
   render() {
-    const { data, auth, signOut, signIn } = this.props;
+    const { auth, signIn } = this.props;
     let { from } = this.props.location.state || { from: { pathname: "/" } };
     let { redirectToReferrer } = this.state;
 

@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, auth, signOut, signIn, fetchUserPostBySlug } = this.props;
+    const { auth, signOut } = this.props;
     return (
       <Router>
         <div>
