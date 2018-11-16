@@ -120,7 +120,7 @@ export const fetchPostDraftById = (postId) => async dispatch => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
         if (!doc.exists) {
-          reject('No such document!');
+          resolve(null);
         } else {
           resolve(doc.data());
         }
