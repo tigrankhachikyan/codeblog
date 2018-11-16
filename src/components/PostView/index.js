@@ -42,7 +42,10 @@ class PostView extends Component {
         <div className="box">
         { 
           this.state.post 
-            ? <Markdown markup={ this.state.post.body_markdown } />
+            ? <div>
+                <h1>{this.state.post.title}</h1>
+                <Markdown markup={ this.state.post.body_markdown } />
+              </div>
             //? <pre>{ this.state.post.body_markdown } </pre>
             : <Spinner />
         }
