@@ -4,11 +4,12 @@ div.PostView {
   flex-wrap:wrap;
   margin:auto;
 }
+
 .box{
-  width:100%;
-  max-width:60%;
+  max-width:50%;
   margin:5px;
 }
+
 @media only screen and ( max-width:768px ){	
   .box{
       width:100%;
@@ -47,9 +48,16 @@ div.PostView .subheader {
 div.PostView p {
   color: #4c4a37;
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 32px;
   margin: 0 0 24px;
+}
+
+div.PostView li {
+  color: #4c4a37;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 22px;
+  line-height: 32px;
 }
 
 div.PostView a {
