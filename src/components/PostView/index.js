@@ -5,10 +5,12 @@ import { Markdown } from 'react-showdown';
 import FloatingBottomToolbox from '../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import Spinner from '../utils/Spinner';
+
 import Prism from "prismjs";
 import "../../css/prism.css";
 
-//import './index.css';
+import './index.css';
 
 class PostView extends Component {
   constructor() {
@@ -36,9 +38,12 @@ class PostView extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="PostView container">
         { 
-          this.state.post && <Markdown markup={ this.state.post.body_markdown } />
+          this.state.post 
+            ? <Markdown markup={ this.state.post.body_markdown } />
+            //? <pre>{ this.state.post.body_markdown } </pre>
+            : <Spinner />
         }
       </div>
     );
