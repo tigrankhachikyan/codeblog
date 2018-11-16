@@ -37,7 +37,7 @@ class PostView extends Component {
     this.fetchPostData(postId)
       .then(post => this.setState({post}))
       // Highlight syntax after content is loaded 
-      .then(() => setTimeout(() => Prism.highlightAll(), 300));
+      .then(() => setTimeout(() => Prism.highlightAll(), 0));
   }
 
   componentDidUpdate(prevProps) {
