@@ -2,6 +2,7 @@ import {
   authRef,
   provider,
   postsRef,
+  postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
@@ -63,6 +64,10 @@ export const createPost = (payload) => async dispatch => {
         type: CREATE_POST,
         payload
       });
+      postsBodyRef.doc(ref.id).set({
+        body_markdown: "",
+        date_modified: new Date()
+      });
       resolve(ref.id);
     })
     .catch((err) => {
@@ -83,6 +88,23 @@ export const fetchPostById = (postId) => async dispatch => {
             type: LOAD_EDIT_POST,
             payload: doc.data()
           });
+          resolve(doc.data());
+        }
+      })
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
+export const fetchPostBodyById = (postId) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    postsBodyRef.doc(postId).get()
+      .then(doc => {
+        if (!doc.exists) {
+          reject('No such document!');
+        } else {
           resolve(doc.data());
         }
       })
@@ -156,7 +178,7 @@ export const publishDraftById = (postId) => async dispatch => {
           reject('No such document!');
         } else {
           const draft = doc.data();
-          postsRef.doc(postId).update({
+          postsBodyRef.doc(postId).update({
             body_markdown: draft.body_markdown,
             date_modified: new Date()
           });

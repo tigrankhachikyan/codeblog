@@ -55,7 +55,6 @@ class DashBoard extends Component {
               return <li key={i}>
                 <div>
                   <h3><Link to={`/account/edit/${post.postId}`}>{post.title}</Link></h3>
-                  <p>{post.body_markdown.substr(0,50) + "..."}</p>
                 </div>
               </li>
             })

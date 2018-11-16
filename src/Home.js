@@ -25,7 +25,6 @@ class Home extends Component {
               return <li key={i}>
                 <div>
                   <Link to={`/posts/${post.postId}`}>{post.data.title}</Link>
-                  <p>{post.data.body_markdown.substr(0, 50)}</p>
                 </div>
               </li>
             })

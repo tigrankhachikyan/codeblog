@@ -19,12 +19,25 @@ class PostView extends Component {
       post: null
     }
   }
+
+  fetchPostData = async (postId) => {
+    const {fetchPostById, fetchPostBodyById} = this.props;
+    
+    const [post, postBody] = await Promise.all([
+      fetchPostById(postId),
+      fetchPostBodyById(postId)
+    ]);
+
+    return {...post, ...postBody};
+  }
+
   componentDidMount() {
     const postId = this.props.match.params.id;
-    this.props.fetchPostById(postId).then(doc => {
-      this.setState({ post: doc });
-      Prism.highlightAll();
-    });
+
+    this.fetchPostData(postId)
+      .then(post => this.setState({post}))
+      // Highlight syntax after content is loaded 
+      .then(() => setTimeout(() => Prism.highlightAll(), 300));
   }
 
   componentDidUpdate(prevProps) {

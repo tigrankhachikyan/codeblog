@@ -1,6 +1,5 @@
 div.PostView {
   display:flex;
-  font-size: 18px;
   justify-content: center;
   flex-wrap:wrap;
   margin:auto;
@@ -18,19 +17,47 @@ div.PostView {
   }
 }
 
-div.PostView  h1 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; }
+div.PostView  h1 { 
+  color: #7c795d;
+  font-family: Helvetica, sans-serif;
+  font-size: 45px;
+  font-weight: normal;
+  font-style: italic;
+  line-height: 48px;
+  margin: 0;
+  margin-bottom: 20px; 
+}
 
+div.PostView h2 {
+  color: #7c795d;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 32px;
+  margin: 0 0 24px; 
+}
 
-div.PostView h2 { color: #7c795d; font-family: 'Source Sans Pro', sans-serif; font-size: 28px; font-weight: 400; line-height: 32px; margin: 0 0 24px; }
+div.PostView .subheader {
+  font-size: 26px;
+  font-weight: 300;
+  color: #ffcc66;
+  margin: 0 0 24px;
+}
 
+div.PostView p {
+  color: #4c4a37;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 20px;
+  line-height: 32px;
+  margin: 0 0 24px;
+}
 
-div.PostView .subheader { font-size: 26px; font-weight: 300; color: #ffcc66; margin: 0 0 24px; }
+div.PostView a {
+  color: #ff9900;
+  text-decoration: none;
+  font-size: 20px;
+}
 
-
-div.PostView p { color: #4c4a37; font-family: 'Source Sans Pro', sans-serif; font-size: 18px; line-height: 32px; margin: 0 0 24px; }
-
-
-div.PostView a { color: #ff9900; text-decoration: none; }
-
-
-div.PostView a:hover { color: #ffcc66 }
+div.PostView a:hover { 
+  color: #ffcc66;
+}

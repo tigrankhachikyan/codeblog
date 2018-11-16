@@ -12,8 +12,8 @@ const settings = {timestampsInSnapshots: true};
 
 firestore.settings(settings);
 
-export const postsRef = firestore.collection('posts');
-
+export const postsRef      = firestore.collection('posts');
+export const postsBodyRef  = firestore.collection('postsBody');
 export const postDraftsRef = firestore.collection('postDrafts');
 
 export const authRef = firebase.auth();
