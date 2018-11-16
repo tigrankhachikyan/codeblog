@@ -5,6 +5,9 @@ import { Markdown } from 'react-showdown';
 import FloatingBottomToolbox from '../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import Prism from "prismjs";
+import "../../css/prism.css";
+
 //import './index.css';
 
 class PostView extends Component {
@@ -18,6 +21,7 @@ class PostView extends Component {
     const postId = this.props.match.params.id;
     this.props.fetchPostById(postId).then(doc => {
       this.setState({ post: doc });
+      Prism.highlightAll();
     });
   }
 
@@ -33,7 +37,7 @@ class PostView extends Component {
   render() {
     return (
       <div className="container">
-        {
+        { 
           this.state.post && <Markdown markup={ this.state.post.body_markdown } />
         }
       </div>
