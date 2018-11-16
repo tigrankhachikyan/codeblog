@@ -18,6 +18,15 @@ code {
 
 .container {
   display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.box{
+  max-width:50%;
+  margin:5px;
 }
 
 .center {

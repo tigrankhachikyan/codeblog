@@ -38,7 +38,7 @@ class DashBoard extends Component {
     ];
 
     return (
-      <div>
+      <div className="container">
         <h1>DashBoard</h1>
 
         <Modal show={this.state.showDialog} handleClose={this.hideModal}>
@@ -49,17 +49,27 @@ class DashBoard extends Component {
           actions={actions}
         />
 
-        <ul>
+        <table>
+          <tbody>
           {
             this.state.userPosts.map((post, i) => {
-              return <li key={i}>
-                <div>
-                  <h3><Link to={`/account/edit/${post.postId}`}>{post.title}</Link></h3>
-                </div>
-              </li>
+              return <tr key={i}>
+                <td>
+                  <Link to={`/posts/${post.postId}`}>{post.title}</Link>
+                </td>
+                <td>
+                  <Link 
+                    style={{marginLeft: 10}}
+                    to={`/account/edit/${post.postId}`}
+                  >
+                    <FontAwesomeIcon icon="edit" />
+                  </Link>                  
+                </td>
+              </tr>
             })
           }
-        </ul>
+          </tbody>
+        </table>
       </div>
     );
   }
