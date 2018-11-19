@@ -1,57 +1,114 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
-import {
-  NavLink
-} from "react-router-dom";
-import * as actions from "../../actions";
-import logo from '../../images/logo.png';
 
-import "./index.css";
+import { withRouter} from "react-router-dom";
+import PropTypes from 'prop-types';
+import { withStyles, NavLink } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
+
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
+
+import * as actions from "../../actions";
+
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+};
 
 class NavBar extends Component {
-  render_profile() {
-    const { auth, signOut } = this.props;
+  state = {
+    anchorEl: null,
+  };
 
-    return <Fragment>
-      <li style={{float: "right"}}>
-        <NavLink to={'/account'}>
-          {auth.displayName || 'Account'}
-        </NavLink>
-      </li>
-      <li style={{float: "right"}}>
-        <NavLink to={'/'} onClick={signOut}>Sign Out</NavLink>
-      </li>
-    </Fragment>
-  }
-  render_signin() {
-    return <Fragment>
-      <li style={{float: "right"}}>
-        <NavLink to={'/signin'}>SignIn</NavLink>
-      </li>
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
 
-      <li style={{float: "right"}}>
-        <NavLink to={'/signup'}>SignUp</NavLink>
-      </li>
-    </Fragment>
-  }
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
 
   render() {
+    const { classes } = this.props;
     const { auth } = this.props;
+
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
+
     return (
-      <nav>
-        <ul>
-          <li><NavLink to={'/'}><img src={logo} height={35} alt="User Profile"/></NavLink></li>
-          <li><NavLink to={'/about'}>About</NavLink></li>
-            {
-              auth 
-                ? this.render_profile()
-                : this.render_signin()
-            }
-        </ul>
-      </nav>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              onClick={() => this.props.history.push('/')}
+              color="inherit"
+            >
+              <HomeIcon />
+            </IconButton>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              ```Code Blog```
+            </Typography>
+            {auth ? (
+              <div>
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={() => {
+                    this.props.history.push('/account');
+                    this.handleClose();
+                  }}>My account</MenuItem>
+                  <MenuItem onClick={this.props.signOut}>Sign Out</MenuItem>
+                </Menu>
+              </div>
+            )
+          :
+            <Button color="inherit" onClick={() => this.props.history.push('/signin')}>Login</Button>
+          }
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }
+
+NavBar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = ({ auth }) => {
   return {
@@ -59,4 +116,7 @@ const mapStateToProps = ({ auth }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(NavBar);
+export default withRouter(
+  connect(mapStateToProps, actions)(withStyles(styles)(NavBar))
+)
+
