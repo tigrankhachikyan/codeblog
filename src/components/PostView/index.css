@@ -70,22 +70,6 @@ div.PostView a:hover {
   color: #ffcc66;
 }
 
-body {
-    padding: 50px;
-    /* background-color: blueviolet; */
-}
-
-.app {
-    /* width: 1200px; */
-    /* height: 600px; */
-    border: 2px solid black;
-    display: flex;
-    align-items: stretch;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-}
-
 .postView {
     width: 70%;
     border: 1px solid green;
