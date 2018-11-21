@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import {
   NavLink
 } from "react-router-dom";
-import * as actions from "./actions";
-import logo from './images/logo.png';
+import * as actions from "../../actions";
+import logo from '../../images/logo.png';
 
-import "./NavBar.css";
+import "./index.css";
 
 class NavBar extends Component {
   render_profile() {
