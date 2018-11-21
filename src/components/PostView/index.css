@@ -26,7 +26,8 @@ div.PostView  h1 {
   font-style: italic;
   line-height: 48px;
   margin: 0;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+
 }
 
 div.PostView h2 {
@@ -51,6 +52,8 @@ div.PostView p {
   font-size: 22px;
   line-height: 32px;
   margin: 0 0 24px;
+  text-align: justify;
+  
 }
 
 div.PostView li {
@@ -72,8 +75,12 @@ div.PostView a:hover {
 
 .postView {
     width: 70%;
-    border: 1px solid green;
+    /* border: 1px solid green; */
+    text-align: center;
+    padding: 10px;
+   
 }
+
 
 .flexContainer {
     display: flex;
@@ -164,4 +171,11 @@ div.PostView a:hover {
     line-height: 50px;
     font-size: 25px;
     cursor: pointer;
+    padding: 5px auto;
+  }
+
+.centerContainer {
+    
+    width: 80%;
+    margin: 10px auto;
   }

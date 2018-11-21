@@ -67,12 +67,12 @@ class Tools extends Component {
                     
                 </button>
                 <button type='button'> 
-                <FontAwesomeIcon icon="facebook"/>
+                {/* <FontAwesomeIcon icon="facebook"/> */}
                 {/* <img src = {fb} alt = 'Image' />  */}
                 </button>
 
                 <button type='button'> 
-                <FontAwesomeIcon icon= 'google' />
+                {/* <FontAwesomeIcon icon= 'google' /> */}
                 {/* <img src = {twitter} alt = 'Image'/>  */}
                 </button>
             </div>

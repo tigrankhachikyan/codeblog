@@ -54,27 +54,29 @@ class PostView extends Component {
 
   render() {
     return (
-      <div>
+      <div 
+      className = 'centerContainer'
+      >
         <div  className = 'app'>
-        <div className = 'test'>
-            <Tools/>
-        { this.state.post
-          ? <PostBody
-              title={this.state.post.title}
-              body={<Markdown markup={ this.state.post.body_markdown } />}
-            />
-          : <Spinner />
-        }
-        </div>
-            <Comments/>
-        </div>
-
-        < hr/>
-        <div className="container">
-          {
-            this.state.post && <Markdown markup={ this.state.post.body_markdown } />
+          <div className = 'test'>
+              <Tools/>
+          { this.state.post
+            ? <PostBody
+                title={this.state.post.title}
+                body={<Markdown markup={ this.state.post.body_markdown } />}
+              />
+            : <Spinner />
           }
-        </div>
+          </div>
+              <Comments/>
+          </div>
+
+          < hr/>
+          {/* <div className="container">
+            {
+              this.state.post && <Markdown markup={ this.state.post.body_markdown } />
+            }
+          </div> */}
       </div>
     );
   }

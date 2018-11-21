@@ -21,7 +21,6 @@ class DashBoard extends Component {
   componentDidMount() {
     const { fetchUserPosts, uid } = this.props;
     if (this.props.userPosts.length) return;
-
     fetchUserPosts(uid);
   }
 
