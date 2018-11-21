@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './index.css';
 
 export default function FloatingBottomToolbox(props) {
-
   return (
     <div className="floating-toolbox">
       {
