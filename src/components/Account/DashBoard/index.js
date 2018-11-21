@@ -81,9 +81,11 @@ class DashBoard extends Component {
 
   render() {
     const actions = [
-      <a className="round-button" onClick={this.showModal}>
-        <FontAwesomeIcon icon="file" />
-      </a>,
+      {
+        title: "Create New Post",
+        icon: "file",
+        action: this.showModal
+      }
     ];
 
     return (

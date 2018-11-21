@@ -5,7 +5,6 @@ import { withRouter } from "react-router";
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './index.css';
 
@@ -116,13 +115,18 @@ class Editor extends Component {
 
   render() {
     const actions = [
-      <a className="round-button" onClick={this.saveDraftContent} title="Save Draft">
-        <FontAwesomeIcon icon="save" />
-      </a>,
-      <a className="round-button" onClick={this.closeEditingHandles}>
-        <FontAwesomeIcon icon="times" />
-      </a>,
+      {
+        action: this.saveDraftContent,
+        title: "Save Draft",
+        icon: "save",
+      },
+      {
+        action: this.closeEditingHandles,
+        title: "Close Editor",
+        icon: "times",
+      }
     ];
+
     return (
       <div>
         <h2 style={{display: 'inline'}}>
