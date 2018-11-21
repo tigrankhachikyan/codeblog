@@ -20,6 +20,10 @@ export default function FloatingBottomToolbox(props) {
   )
 }
 
+FloatingBottomToolbox.propTypes = {
+  actions: PropTypes.object.isRequired
+};
+
 const ActionButton = (props) => {
   return (
     <a 
@@ -32,6 +36,9 @@ const ActionButton = (props) => {
   )
 }
 
-FloatingBottomToolbox.propTypes = {
-  actions: PropTypes.object.isRequired
+ActionButton.propTypes = {
+  title: PropTypes.string,
+  action: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired
 };
+
