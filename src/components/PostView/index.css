@@ -153,3 +153,15 @@ div.PostView a:hover {
 .removeComment {
    margin-left: 1100px;
 }
+
+.icon-button {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    /* border-radius: 20%; */
+    /* background-color: Gainsboro; */
+    text-align: center;
+    line-height: 50px;
+    font-size: 25px;
+    cursor: pointer;
+  }

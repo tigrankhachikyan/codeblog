@@ -25,6 +25,7 @@ class DashBoard extends Component {
     fetchUserPosts(uid);
   }
 
+  
   showModal = () => {
     this.setState({ showDialog: true });
   };

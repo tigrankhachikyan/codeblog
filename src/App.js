@@ -29,16 +29,16 @@ import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faFile, faColumns, faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
+// import {fab } from '@fortawesome/free-brands-svg-icons';
 
-library.add([faSave,faFile, faColumns, faTimes, faEdit]);
+library.add([faSave,faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp]);
 
 class App extends Component {
   
   componentDidMount() {
     const { auth } = this.props;
     if (auth) return;
-
     this.props.fetchUser();
   }
 
