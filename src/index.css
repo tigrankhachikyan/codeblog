@@ -46,3 +46,48 @@ code {
   font-size: 25px;
   cursor: pointer;
 }
+
+.buttonStyle {
+  width: 50px;
+  border-radius: 10px;
+  font-size: 18px;
+  margin-top: 43px;
+  margin-left: 81%;
+  border: 1px solid black;
+  position: absolute;
+}
+
+.listText,.gridText{
+  width: 70%;
+  color:black;
+  border-bottom: 1px solid black;
+   margin-left: 10px;
+}
+.forDateL,.forDateG{
+  margin-left: 84%;
+  color: gray;
+}
+.forDateG{margin-left: 65%;}
+
+.gridText{
+  width: 26%;
+  border-right: 1px solid black;
+  border-bottom: 0px solid black;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 4px;
+  border-radius: 5px;
+}
+.listOrGridStyle{
+  width: 80%;
+  margin-left: 16%;
+  margin-top: 40px;
+  display: inline-block;
+  overflow: hidden;
+}
+
+
+
+
+
+
