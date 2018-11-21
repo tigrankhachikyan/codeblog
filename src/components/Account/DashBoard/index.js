@@ -7,7 +7,6 @@ import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as actions from "../../../actions";
-import dataReducer from '../../../reducers/dataReducer';
 
 class DashBoard extends Component {
   constructor() {
