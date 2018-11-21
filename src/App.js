@@ -3,24 +3,20 @@ import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Redirect,
-  withRouter
 } from "react-router-dom";
-
 
 import * as actions from "./actions";
 
 import Account from "./components/Account";
 import DashBoard from "./components/Account/DashBoard";
-import Editor from "./components/Account/Editor";
 
 import requireAuth from "./auth/requireAuth";
 
 import SignIn from "./auth/SignIn";
 import Home from "./components/Home";
-import About from "./About";
-import NavBar from "./NavBar";
+import About from "./components/About";
+import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
 
 import Toasts from "./components/Toasts";
