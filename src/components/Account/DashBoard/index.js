@@ -13,6 +13,10 @@ class DashBoard extends Component {
   constructor() {
     super();
     this.state = {
+      title: "",
+      slug: "",
+      slugChanged: false,
+      
       showDialog: false,
       userPosts: []
     }
@@ -33,6 +37,49 @@ class DashBoard extends Component {
     this.setState({ showDialog: false });
   };
 
+  handleTitleChange = (e) => {
+    this.setState({
+      title: e.target.value,
+      slug: this.state.slugChanged 
+        ? this.state.slug 
+        : e.target.value.replace(/\s+/g, '-').toLowerCase()
+    })
+  }
+
+  handleSlugChange = (e) => {
+    if (e.target.value) {
+      this.setState({
+        slugChanged: true,
+        slug: e.target.value,
+      });
+    } else {
+      this.setState({
+        slugChanged: false,
+      });
+    }
+  }
+
+  handleCancel = (e) => {
+    this.setState({title: "", slug: ""});
+    this.hideModal();
+  }
+
+  handleCreate = (e) => {
+    const { createPost } = this.props;
+    const { uid } = this.props;
+    e.preventDefault();
+
+    const data = {
+      title: this.state.title,
+      slug: this.state.slug,
+      date_created: new Date(),
+      uid: uid
+    };
+    createPost(data).then((postId) => {
+      this.props.history.push(`/account/edit/${postId}`);
+    })
+  }
+
   render() {
     const actions = [
       <a className="round-button" onClick={this.showModal}>
@@ -45,7 +92,25 @@ class DashBoard extends Component {
         <h1>DashBoard</h1>
 
         <Modal show={this.state.showDialog} handleClose={this.hideModal}>
-          Title: <input />
+        <ul>
+            <li>
+              <label>
+                Title:
+                <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
+              </label>
+            </li>
+            <li>
+              <label>
+                Slug:
+                <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
+                 />
+              </label>
+            </li>
+            <li>
+              <button onClick={this.handleCreate}>Create</button>
+              <button onClick={this.handleCancel}>Cancel</button>
+            </li>
+          </ul>
         </Modal>
         
         <FloatingBottomToolbox 
