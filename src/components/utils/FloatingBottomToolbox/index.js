@@ -21,7 +21,7 @@ export default function FloatingBottomToolbox(props) {
 }
 
 FloatingBottomToolbox.propTypes = {
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.array.isRequired
 };
 
 const ActionButton = (props) => {
