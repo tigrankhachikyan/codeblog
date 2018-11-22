@@ -18,6 +18,7 @@ import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
+import UserPublicPostsList from "./components/UserPublicPostsList";
 import UserSettings from "./components/Account/UserSettings"
 
 import Toasts from "./components/Toasts";
@@ -47,13 +48,8 @@ class App extends Component {
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
-            {/* <Route exact path="/:uid/:slug" render={(props) => {
-              const uid = props.match.params.uid;
-              const slug = props.match.params.slug;
-              fetchUserPostBySlug(uid, slug).then(post => {
+            <Route exact path="/@:username" component={UserPublicPostsList} />
 
-              })
-            }} /> */}
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>

@@ -71,3 +71,23 @@ export const assignUserDefaultSettings = (auth, payload) => async dispatch => {
       });
   })
 }
+
+export const getUserByUserName = (username) => async dispatch => {
+  return new Promise((resolve, reject) => {
+    const userRref = userSettingsRef.where('USER_NAME', '==', username);
+    userRref.get()
+      .then(snapshot => {
+        const users = [];
+        snapshot.forEach(doc => users.push({uid: doc.id}))
+        if (users.length === 1) {
+          resolve(users[0]);
+        } else {
+          reject("No single user found!");
+        }
+      })
+      .catch((err) => {
+        console.log('Error getting documents', err);
+        reject(err);
+      });
+  })
+};

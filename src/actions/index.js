@@ -8,11 +8,11 @@ import {
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
 import { ADD_TOAST, REMOVE_TOAST } from "./types";
 
-export const addPost = newPost => async dispatch => {
+export const addPost = newPost => dispatch => {
   postsRef.push().set(newPost);
 };
 
-export const fetchPosts = () => async dispatch => {
+export const fetchPosts = () => dispatch => {
   postsRef.get()
     .then((snapshot) => {
       const posts = [];
@@ -35,7 +35,7 @@ export const fetchPosts = () => async dispatch => {
     });
 };
 
-export const fetchUserPosts = (uid) => async dispatch => {
+export const fetchUserPosts = (uid) => dispatch => {
   return new Promise((resolve, reject) => {
     const userPostsref = postsRef.where('uid', '==', uid);
     const docs = [];
@@ -59,7 +59,7 @@ export const fetchUserPosts = (uid) => async dispatch => {
   })
 };
 
-export const createPost = (payload) => async dispatch => {
+export const createPost = (payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.add(payload)
       .then(ref => {
@@ -80,7 +80,7 @@ export const createPost = (payload) => async dispatch => {
   })
 };
 
-export const fetchPostById = (postId) => async dispatch => {
+export const fetchPostById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).get()
       .then(doc => {
@@ -101,7 +101,7 @@ export const fetchPostById = (postId) => async dispatch => {
   })
 };
 
-export const fetchPostBodyById = (postId) => async dispatch => {
+export const fetchPostBodyById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsBodyRef.doc(postId).get()
       .then(doc => {
@@ -118,7 +118,7 @@ export const fetchPostBodyById = (postId) => async dispatch => {
   })
 };
 
-export const fetchPostDraftById = (postId) => async dispatch => {
+export const fetchPostDraftById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
@@ -135,7 +135,7 @@ export const fetchPostDraftById = (postId) => async dispatch => {
   })
 };
 
-export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
+export const fetchUserPostBySlug = (uid, slug) => dispatch => {
   return new Promise((resolve, reject) => {
     const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug)
     postRef.get()
@@ -153,7 +153,7 @@ export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
   })
 };
 
-export const savePostById = (postId, payload) => async dispatch => {
+export const savePostById = (postId, payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).update({
       body_markdown: payload.body_markdown,
@@ -163,7 +163,7 @@ export const savePostById = (postId, payload) => async dispatch => {
   })
 };
 
-export const savePostDraftById = (postId, payload) => async dispatch => {
+export const savePostDraftById = (postId, payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).set({
       body_markdown: payload.body_markdown,
@@ -173,7 +173,7 @@ export const savePostDraftById = (postId, payload) => async dispatch => {
   })
 };
 
-export const publishDraftById = (postId) => async dispatch => {
+export const publishDraftById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
