@@ -12,7 +12,8 @@ class Comments extends Component {
         this.state = {
             commmentsArray: [],
             value: '',
-            totalId: -1
+            totalId: -1,
+            user: 'User'
         }
         this.addComment = this.addComment.bind(this);
         this.handelChange = this.handelChange.bind(this);
@@ -45,19 +46,23 @@ class Comments extends Component {
     
     render() {
         return(
-            <div className = 'postComment'> 
+            <div className = 'postComment'>
                 <h3> {this.state.commmentsArray.length} Comments </h3>
-                <div className = 'textContainer'> 
-                    <img src= {person} />
-                    <textarea className = 'commentText' placeholder = 'Add Comments' value = {this.state.value} onChange = {this.handelChange} > </textarea>
-                    <button className = 'commentBtn'type = 'button' onClick = {this.addComment} > Comment </button>
-                </div>
-                <ul>
-                        {
-                            this.state.commmentsArray.map((e) => {
-                                return <NewCommment content = {e.text} key = {e.id} index = {e.id} remove = {this.removeComment} />
-                            })
-                        }
+                <div className = 'newComment'>
+                    <div className = 'textContainer'>
+                        <h3> {this.state.user} </h3>
+                        <img src= {person} />
+                        <textarea className = 'commentText' placeholder = 'Add Comments . . . ' value = {this.state.value} onChange = {this.handelChange} > </textarea>
+                        <button className = 'commentBtn'type = 'button' onClick = {this.addComment} > Comment </button>
+                    </div>
+                   
+                    </div>
+                    <ul>
+                            {
+                                this.state.commmentsArray.map((e) => {
+                                    return <NewCommment content = {e.text} key = {e.id} index = {e.id} remove = {this.removeComment} />
+                                })
+                            }
                     </ul>
             </div>
             

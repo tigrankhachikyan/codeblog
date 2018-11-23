@@ -50,31 +50,42 @@ class Tools extends Component {
         
         return(
             <div className = 'flexContainer'>
-                <button type='button' className = 'icon-button' onClick = {this.addLike} > 
-                <FontAwesomeIcon icon="thumbs-up" className = 'icon-button'  />
-                    {/* <img 
-                        src = {like} 
-                        alt = 'Image'
-                        />  */}
-                    <b>{this.state.like} </b> 
-                </button>
-                <button type='button' onClick = {this.addBookmark} >
-                    <FontAwesomeIcon icon="bookmark" className = 'icon-button' style = {{display: this.state.displayBookmarkCheck }} />
-                    {/* <img src = {bookmark} alt = 'Image' style = {{display: this.state. displayBookmarkCheck }}   /> */}
-                    <FontAwesomeIcon icon="bookmark"  style = {{display: this.state.displayBookmarkUncheck }}/>
-                    {/* <img src = {bookmarkCliked} alt = 'Image' style = {{display: this.state.displayBookmarkUncheck }}   /> */}
-                    
-                    
-                </button>
-                <button type='button'> 
-                {/* <FontAwesomeIcon icon="facebook"/> */}
-                {/* <img src = {fb} alt = 'Image' />  */}
-                </button>
-
-                <button type='button'> 
-                {/* <FontAwesomeIcon icon= 'google' /> */}
-                {/* <img src = {twitter} alt = 'Image'/>  */}
-                </button>
+                    <ul className = 'fixedTools'>
+                    <li>
+                        <button type='button' onClick = {this.addLike} > 
+                            <FontAwesomeIcon icon="thumbs-up" className = 'icon-button'  />
+                                {/* <img 
+                                    src = {like} 
+                                    alt = 'Image'
+                                    />  */} 
+                            <b>{this.state.like} </b> 
+                        </button>
+                    </li>
+                    <li>
+                        <button type='button' onClick = {this.addBookmark}  >
+                            
+                            <FontAwesomeIcon icon="bookmark" className = 'icon-button'  style = {{display: this.state.displayBookmarkCheck, textAlign: "center" }} />
+                            {/* <img src = {bookmark} alt = 'Image' style = {{display: this.state. displayBookmarkCheck }}   /> */}
+                            <FontAwesomeIcon icon="bookmark" className = 'icon-button'  style = {{display: this.state.displayBookmarkUncheck , textAlign: "center"}} />
+                            {/* <img src = {bookmarkCliked} alt = 'Image' style = {{display: this.state.displayBookmarkUncheck }} /> */}
+                        </button>
+                    </li>                        
+                    <li>
+                        <button type='button' > 
+                            <FontAwesomeIcon icon="bookmark" className = 'icon-button' />
+                            
+                            {/* <FontAwesomeIcon icon="facebook"/> */}
+                            {/* <img src = {fb} alt = 'Image' />  */}
+                        </button>
+                    </li>
+                    <li className = 'icon-button'>
+                        <button type='button'  > 
+                            <FontAwesomeIcon icon="bookmark"  />
+                            {/* <FontAwesomeIcon icon= 'google' /> */}
+                            {/* <img src = {twitter} alt = 'Image'/>  */}
+                        </button>
+                    </li>    
+                </ul>
             </div>
         )
     }

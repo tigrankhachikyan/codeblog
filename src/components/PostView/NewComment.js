@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import './index.css'
+import person from '../../images/person.png';
 
 
 class NewComment extends Component {
@@ -8,7 +9,8 @@ class NewComment extends Component {
 
         this.state = {
             user: 'User',
-            date: new Date()
+            date: new Date(),
+
         }
         
        this.deletComment = this.deletComment.bind(this)
@@ -21,11 +23,13 @@ class NewComment extends Component {
     }
 
     render() {
+        
         return(
             <div className = 'newComment'>
-            <h3> {this.state.user} </h3>
-            <p> {this.props.content} </p>
-            <button className = 'removeComment' onClick = {this.deletComment}> Remove </button>
+                <h3> {this.state.user} </h3>
+                <img src= {person} />
+                <p> {this.props.content} </p>
+                {/* <button className = 'removeComment' onClick = {this.deletComment}> Remove </button> */}
             </div>
         )
     }

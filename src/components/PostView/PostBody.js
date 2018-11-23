@@ -11,7 +11,7 @@ class PostBody extends Component {
       {/* <span> {this.props.date.toDateString()} </span> */}
     </div>)
   }
+  
 }
-
 
 export default PostBody;

@@ -58,7 +58,7 @@ class PostView extends Component {
       className = 'centerContainer'
       >
         <div  className = 'app'>
-          <div className = 'test'>
+          <div className = 'containerTools'>
               <Tools/>
           { this.state.post
             ? <PostBody
@@ -67,7 +67,7 @@ class PostView extends Component {
               />
             : <Spinner />
           }
-          </div>
+            </div>
               <Comments/>
           </div>
 
