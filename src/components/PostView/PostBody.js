@@ -6,8 +6,8 @@ class PostBody extends Component {
   render() {
     return (
     <div className = 'postView' >
-      <h1> {this.props.title} </h1>
-      <p> {this.props.body} </p>
+      <h1 className = 'postViewTitle'> {this.props.title} </h1>
+      <p  className = 'postViewBody'> {this.props.body} </p>
       {/* <span> {this.props.date.toDateString()} </span> */}
     </div>)
   }

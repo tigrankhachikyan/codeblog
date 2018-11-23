@@ -27,6 +27,7 @@ div.PostView  h1 {
   line-height: 48px;
   margin: 0;
   margin-bottom: 20px;
+  color: red;
 
 }
 
@@ -73,14 +74,23 @@ div.PostView a:hover {
   color: #ffcc66;
 }
 
-.postView {
-    width: 70%;
-    /* border: 1px solid green; */
+.postViewBody{
+    text-align: justify;
+    font-size: 20px;
+    line-height: 150%;
+    padding: 10px;
+}
+.postViewTitle {
     text-align: center;
     padding: 10px;
-   
+    color: red;
+ 
 }
 
+.postView {
+    text-align: center;
+    width: 70%;
+}
 
 .flexContainer {
     display: flex;
