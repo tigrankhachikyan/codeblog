@@ -23,7 +23,7 @@ class Home extends Component {
         <ul>
           {
             latestPosts.length > 0 && latestPosts.map((post, i) => {
-              const {userName} = post.data.user;
+              const {userName} = post.data.user || 'undefined';
               return <li key={i}>
                 <div style={{
                   height: 50,
