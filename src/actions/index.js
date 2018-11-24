@@ -35,6 +35,10 @@ export const fetchPosts = () => dispatch => {
     });
 };
 
+/**
+ * 
+ * @param {string} uid Auth user uid
+ */
 export const fetchUserPosts = (uid) => dispatch => {
   return new Promise((resolve, reject) => {
     const userPostsref = postsRef.where('uid', '==', uid);
@@ -59,6 +63,10 @@ export const fetchUserPosts = (uid) => dispatch => {
   })
 };
 
+/**
+ * 
+ * @param {Object} payload Post data
+ */
 export const createPost = (payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.add(payload)
