@@ -61,6 +61,9 @@ class DashBoard extends Component {
                   <Link to={`/posts/${post.postId}`}>{post.title}</Link>
                 </td>
                 <td>
+                  <Link to={`/posts/${post.postId}`}>{post.excerpt}</Link>
+                </td>
+                <td>
                   <Link 
                     style={{marginLeft: 10}}
                     to={`/account/edit/${post.postId}`}

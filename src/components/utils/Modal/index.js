@@ -12,6 +12,7 @@ class Modal extends Component {
     this.state = {
       title: "",
       slug: "",
+      excerpt: "",
       slugChanged: false
     }
   }
@@ -29,6 +30,7 @@ class Modal extends Component {
     const data = {
       title: this.state.title,
       slug: this.state.slug,
+      excerpt: this.state.excerpt,
       date_created: new Date(),
       uid: uid
     };
@@ -58,7 +60,14 @@ class Modal extends Component {
         slugChanged: false,
       });
     }
+  } 
+
+  handleExcerptChange = (e) => {
+    this.setState ({
+      excerpt: e.target.value
+    })
   }
+
 
   render() {
   
@@ -79,6 +88,13 @@ class Modal extends Component {
                 Slug:
                 <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
                  />
+              </label>
+            </li>
+            <li>
+              <label>
+              Excerpt:
+                <textarea placeholder = 'Add excerpt' value={this.state.excerpt}  onChange = {this.handleExcerptChange}> </textarea>
+                
               </label>
             </li>
             <li>

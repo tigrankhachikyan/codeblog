@@ -118,8 +118,7 @@ div.PostView a:hover {
 }
 
 .postComment {
-    /* border: 2px solid blue; */
-    padding: 10px;
+    padding: 20px;
     
 }
 
@@ -161,18 +160,25 @@ div.PostView a:hover {
 .textContainer {
     padding: 10px;
     display: flex;
+    
 }
 
 .newComment {
     padding: 10px;
-    border: 1px solid #888888;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 10px;
+    margin-top: 20px;
     box-shadow: 2px 1px 8px 2px #888888;
+    
 }
 
+.newComment h3 {
+    float: left;
+}
 
+.newComment p {
+    text-align: justify;
+    font-size: 20px;
+    margin: 10px;
+}
 
 .removeComment {
    margin-left: 1100px;
@@ -196,14 +202,13 @@ div.PostView a:hover {
     width: 80%;
     margin: 50px auto;
   }
-/*   
+  
   .fixedTools{
       position: fixed;
-      top: 30%;
-      bottom: 30%;
+      top: 200px;
       width: 50px;
      
-  } */
+  }
 
   .flexContainer button {
       width: 60px;
@@ -214,5 +219,4 @@ div.PostView a:hover {
   }
   ul, li {
       list-style: none;
-
   }

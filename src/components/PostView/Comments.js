@@ -46,24 +46,27 @@ class Comments extends Component {
     
     render() {
         return(
+            
             <div className = 'postComment'>
                 <h3> {this.state.commmentsArray.length} Comments </h3>
-                <div className = 'newComment'>
-                    <div className = 'textContainer'>
-                        <h3> {this.state.user} </h3>
-                        <img src= {person} />
-                        <textarea className = 'commentText' placeholder = 'Add Comments . . . ' value = {this.state.value} onChange = {this.handelChange} > </textarea>
-                        <button className = 'commentBtn'type = 'button' onClick = {this.addComment} > Comment </button>
-                    </div>
-                   
-                    </div>
-                    <ul>
-                            {
-                                this.state.commmentsArray.map((e) => {
-                                    return <NewCommment content = {e.text} key = {e.id} index = {e.id} remove = {this.removeComment} />
-                                })
-                            }
-                    </ul>
+                
+                <div className = 'textContainer'>
+                    <h3> {this.state.user} </h3>
+                    <img src= {person} />
+                    <textarea className = 'commentText' placeholder = 'Add Comments . . . ' value = {this.state.value} onChange = {this.handelChange} > </textarea>
+                    <button className = 'commentBtn'type = 'button' onClick = {this.addComment} > Comment </button>
+                </div>
+
+                {/* <ul> */}
+                    {
+                        this.state.commmentsArray.map((e) => {
+                            return (
+                                <NewCommment content = {e.text} key = {e.id} index = {e.id} remove = {this.removeComment} />
+                            )         
+                        })
+                    }
+                {/* </ul> */}
+                    
             </div>
             
         )
