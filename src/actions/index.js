@@ -1,12 +1,13 @@
 import { 
   authRef,
+  userSettingsRef,
   provider,
   postsRef,
   postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
-import { ADD_TOAST, REMOVE_TOAST } from "./types";
+import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS} from "./types";
 
 export const addPost = newPost => dispatch => {
   postsRef.push().set(newPost);
@@ -69,21 +70,24 @@ export const fetchUserPosts = (uid) => dispatch => {
  */
 export const createPost = (payload) => dispatch => {
   return new Promise((resolve, reject) => {
-    postsRef.add(payload)
-      .then(ref => {
+    const newPostRef = postsRef.doc();
+    const id = newPostRef.id;
+    payload.slug = payload.slug + "-" + id;
+
+    newPostRef.set(payload)
+    .then(() => {
       dispatch({
         type: CREATE_POST,
         payload
       });
-      postsBodyRef.doc(ref.id).set({
+      postsBodyRef.doc(id).set({
         body_markdown: "",
         date_modified: new Date()
       });
-      resolve(ref.id);
+      resolve(id);
     })
     .catch((err) => {
       reject(err);
-      console.log('Error getting documents', err);
     });
   })
 };
@@ -142,17 +146,60 @@ export const fetchPostDraftById = (postId) => dispatch => {
       });
   })
 };
-
+/**
+ * 
+ * @param {*} uid 
+ * @param {*} slug 
+ */
 export const fetchUserPostBySlug = (uid, slug) => dispatch => {
   return new Promise((resolve, reject) => {
-    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug)
+    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug);
+    
     postRef.get()
-      .then(doc => {
-        if (!doc.exists) {
-          reject('No such document!');
-        } else {
-          resolve(doc.data());
-        }
+      .then(snapshot => {
+        const posts = [];
+        snapshot.forEach(doc => {
+          const post = {
+            postId: doc.id,
+            data: doc.data()
+          };
+          posts.push(post)
+        });
+        
+        posts.length === 1 
+          ? resolve(posts[0])
+          : reject("No single post found for this query")
+      })
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
+/**
+ * 
+ * @param {*} username 
+ * @param {*} slug 
+ */
+export const fetchUserPostByUsernameAndSlug = (username, slug) => dispatch => {
+  return new Promise((resolve, reject) => {
+    const postRef = postsRef.where("user.userName", "==", username).where("slug", "==", slug);
+    
+    postRef.get()
+      .then(snapshot => {
+        const posts = [];
+        snapshot.forEach(doc => {
+          const post = {
+            postId: doc.id,
+            data: doc.data()
+          };
+          posts.push(post)
+        });
+        
+        posts.length === 1 
+          ? resolve(posts[0])
+          : reject("No single post found for this query")
       })
       .catch((err) => {
         reject(err);
@@ -206,19 +253,40 @@ export const publishDraftById = (postId) => dispatch => {
 
 
 export const fetchUser = () => dispatch => {
-  authRef.onAuthStateChanged(user => {
-    if (user) {
-      dispatch({
-        type: FETCH_USER,
-        payload: user
-      });
-    } else {
-      dispatch({
-        type: FETCH_USER,
-        payload: null
-      });
-    }
-  });
+  return new Promise((resolve, reject) => {
+    authRef.onAuthStateChanged(user => {
+      if (user) {
+        dispatch({
+          type: FETCH_USER,
+          payload: user
+        });
+        // Refactor and move out into function
+        setTimeout(() => {
+          userSettingsRef.doc(user.uid).get()
+          .then(doc => {
+            if (!doc.exists) {
+              throw new Error("No User Settings document found");
+            } else {
+              dispatch({
+                type: LOAD_SETTINGS,
+                payload: doc.data()
+              });
+              resolve();
+            }
+          })
+          .catch((err) => {
+            console.log('Error getting documents', err);
+            reject(err);
+          });
+        }, 0);
+      } else {
+        dispatch({
+          type: FETCH_USER,
+          payload: null
+        });
+      }
+    });
+  })
 };
 
 export const signIn = () => dispatch => {

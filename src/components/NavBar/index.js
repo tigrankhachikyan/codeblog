@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import {
   NavLink
 } from "react-router-dom";
-import * as actions from "../../actions";
 import logo from '../../images/logo.png';
 
 import "./index.css";
@@ -59,4 +58,4 @@ const mapStateToProps = ({ auth }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(NavBar);
+export default connect(mapStateToProps)(NavBar);

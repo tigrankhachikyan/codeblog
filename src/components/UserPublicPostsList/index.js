@@ -13,9 +13,9 @@ class UserPublicPostsList extends Component {
     const {username, slug} = this.props.match.params;
     const {getUserByUserName, fetchUserPosts} = this.props;
 
-      const user = await getUserByUserName(username);
-      const userPosts = await fetchUserPosts(user.uid);
-      this.setState({userPosts});
+    const user = await getUserByUserName(username);
+    const userPosts = await fetchUserPosts(user.uid);
+    this.setState({userPosts});
   }
 
   render() {

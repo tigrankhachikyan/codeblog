@@ -7,12 +7,6 @@ import Editor from './Editor';
 import './index.css';
 
 export default class Account extends Component {
-  constructor() {
-    super();
-    this.state = {
-      activeWindow: 'dashboard',
-    }
-  }
   render() {
     return (
       <div className="Account">

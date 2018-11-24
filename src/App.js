@@ -6,10 +6,13 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import * as actions from "./actions";
+import  {fetchUser} from "./actions";
+import {
+  loadUserSettings,
+  assignUserDefaultSettings
+} from "./actions/modules/userSettings";
 
 import Account from "./components/Account";
-import DashBoard from "./components/Account/DashBoard";
 
 import requireAuth from "./auth/requireAuth";
 
@@ -18,6 +21,7 @@ import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
+import PostViewSlug from "./components/PostViewSlug";
 import UserPublicPostsList from "./components/UserPublicPostsList";
 import UserSettings from "./components/Account/UserSettings"
 
@@ -26,18 +30,32 @@ import Toasts from "./components/Toasts";
 import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faFile, faColumns, faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
-
 library.add([faSave,faFile, faColumns, faTimes, faEdit]);
 
 class App extends Component {
   
-  componentDidMount() {
-    const { auth } = this.props;
-    if (auth) return;
+  async componentDidMount() {
+    if (this.props.auth) return;
+    try {
+      await this.props.fetchUser();
+      await this.loadUserSettings();
+    } catch(err) {
+      console.log(err);
+      console.log("Failed to fetch user info");
+    }
+  }
 
-    this.props.fetchUser();
+  loadUserSettings = async () => {
+    const { auth } = this.props;
+    try {
+      //await this.props.loadUserSettings(auth.uid);
+    } catch {
+      console.log(auth);
+      await this.props.assignUserDefaultSettings(auth, {
+        USER_NAME: auth.email.replace(/\@.*$/, '')
+      })
+    }
   }
 
   render() {
@@ -49,6 +67,7 @@ class App extends Component {
           <div>
             <Route exact path="/" component={Home} />
             <Route exact path="/@:username" component={UserPublicPostsList} />
+            <Route exact path="/@:username/:slug" component={PostViewSlug} />
 
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
@@ -74,4 +93,8 @@ const mapStateToProps = ({ auth }) => {
   return { auth };
 };
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(mapStateToProps, {
+  fetchUser,
+  loadUserSettings,
+  assignUserDefaultSettings
+})(App);

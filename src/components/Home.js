@@ -8,21 +8,30 @@ class Home extends Component {
   
   componentDidMount() {
     const { latestPosts, fetchPosts } = this.props;
-    if (latestPosts.length) return;
-    fetchPosts();
+    if (!latestPosts.length) {
+      fetchPosts();
+    }
   }
 
   render() {
     const { latestPosts } = this.props;
+    if (!latestPosts.length) return null;
+
     return (
       <div className="Home">
         <h1>Code Blog</h1>
         <ul>
           {
-            latestPosts.map((post, i) => {
+            latestPosts.length > 0 && latestPosts.map((post, i) => {
+              const {userName} = post.data.user;
               return <li key={i}>
-                <div>
-                  <Link to={`/posts/${post.postId}`}>{post.data.title}</Link>
+                <div style={{
+                  height: 50,
+                  widows: 200,
+                  marginBottom: 10,
+                }}>
+                  <Link to={`/@${userName}/${post.data.slug}`}>{post.data.title}</Link>
+                  <p>Published by <Link to={`/@${userName}`}>@{userName}</Link></p>
                 </div>
               </li>
             })

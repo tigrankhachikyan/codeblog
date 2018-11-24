@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Modal from '../../utils/Modal';
+import UserInfo from '../../../helpers/UserInfo';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as actions from "../../../actions";
+import { userSettingsRef } from '../../../config/firebase';
 
 class DashBoard extends Component {
   constructor() {
@@ -65,14 +67,17 @@ class DashBoard extends Component {
 
   handleCreate = (e) => {
     const { createPost } = this.props;
-    const { uid } = this.props;
+    const { uid, auth, settings } = this.props;
     e.preventDefault();
 
+    const userInfo = new UserInfo(auth, settings);
+    console.log(userInfo.userInfo())
     const data = {
       title: this.state.title,
       slug: this.state.slug,
       date_created: new Date(),
-      uid: uid
+      uid: uid,
+      user: userInfo.userInfo()
     };
     createPost(data).then((postId) => {
       this.props.history.push(`/account/edit/${postId}`);
@@ -144,8 +149,10 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({ data, auth }) => {
+const mapStateToProps = ({ data, auth, settings }) => {
   return {
+    settings,
+    auth,
     uid: auth.uid,
     userPosts: data.userPosts
   };
