@@ -108,7 +108,7 @@ class DashBoard extends Component {
             <li>
               <label>
                 Slug:
-                <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
+                <input type="text" disabled value={this.state.slug} onChange={this.handleSlugChange}
                  />
               </label>
             </li>
