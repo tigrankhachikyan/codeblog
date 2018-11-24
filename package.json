@@ -25,7 +25,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
@@ -41,6 +41,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "homepage": "."
+  ]
 }
