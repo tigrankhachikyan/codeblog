@@ -47,14 +47,15 @@ class App extends Component {
   }
 
   loadUserSettings = async () => {
-    const { auth } = this.props;
+    const { auth, settings } = this.props;
+    if (settings.USER_NAME) return;
+
     try {
-      //await this.props.loadUserSettings(auth.uid);
-    } catch {
-      console.log(auth);
       await this.props.assignUserDefaultSettings(auth, {
         USER_NAME: auth.email.replace(/\@.*$/, '')
       })
+    } catch {
+      console.log(auth);
     }
   }
 
@@ -89,8 +90,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return { auth };
+const mapStateToProps = ({ auth, settings }) => {
+  return { auth, settings };
 };
 
 export default connect(mapStateToProps, {
