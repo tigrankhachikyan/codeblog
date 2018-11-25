@@ -60,9 +60,9 @@ class DashBoard extends Component {
                 <td>
                   <Link to={`/posts/${post.postId}`}>{post.title}</Link>
                 </td>
-                {/* <td>
+                <td>
                   <Link to={`/posts/${post.postId}`}>{post.excerpt}</Link>
-                </td> */}
+                </td>
                 <td>
                   <Link 
                     style={{marginLeft: 10}}
