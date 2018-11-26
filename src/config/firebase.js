@@ -15,6 +15,7 @@ firestore.settings(settings);
 export const postsRef      = firestore.collection('posts');
 export const postsBodyRef  = firestore.collection('postsBody');
 export const postDraftsRef = firestore.collection('postDrafts');
+export const userSettingsRef = firestore.collection('userSettings');
 
 export const authRef = firebase.auth();
 export const provider = new firebase.auth.GoogleAuthProvider();

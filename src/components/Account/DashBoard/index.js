@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Modal from '../../utils/Modal';
+import UserInfo from '../../../helpers/UserInfo';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as actions from "../../../actions";
-import dataReducer from '../../../reducers/dataReducer';
+import { userSettingsRef } from '../../../config/firebase';
 
 class DashBoard extends Component {
   constructor() {
     super();
     this.state = {
+      title: "",
+      slug: "",
+      excerpt: "",
+      slugChanged: false,
+      
       showDialog: false,
       userPosts: []
     }
@@ -33,11 +39,60 @@ class DashBoard extends Component {
     this.setState({ showDialog: false });
   };
 
+  handleTitleChange = (e) => {
+    this.setState({
+      title: e.target.value,
+      slug: this.state.slugChanged 
+        ? this.state.slug 
+        : e.target.value.replace(/\s+/g, '-').toLowerCase()
+    })
+  }
+
+  handleSlugChange = (e) => {
+    if (e.target.value) {
+      this.setState({
+        slugChanged: true,
+        slug: e.target.value,
+      });
+    } else {
+      this.setState({
+        slugChanged: false,
+      });
+    }
+  }
+
+  handleCancel = (e) => {
+    this.setState({title: "", slug: ""});
+    this.hideModal();
+  }
+
+  handleCreate = (e) => {
+    const { createPost } = this.props;
+    const { uid, auth, settings } = this.props;
+    e.preventDefault();
+
+    const userInfo = new UserInfo(auth, settings);
+    console.log(userInfo.userInfo())
+    const data = {
+      title: this.state.title,
+      slug: this.state.slug,
+      excerpt: this.state.excerpt,
+      date_created: new Date(),
+      uid: uid,
+      user: userInfo.userInfo()
+    };
+    createPost(data).then((postId) => {
+      this.props.history.push(`/account/edit/${postId}`);
+    })
+  }
+
   render() {
     const actions = [
-      <a className="round-button" onClick={this.showModal}>
-        <FontAwesomeIcon icon="file" />
-      </a>,
+      {
+        title: "Create New Post",
+        icon: "file",
+        action: this.showModal
+      }
     ];
 
     return (
@@ -45,7 +100,35 @@ class DashBoard extends Component {
         <h1>DashBoard</h1>
 
         <Modal show={this.state.showDialog} handleClose={this.hideModal}>
-          Title: <input />
+        <ul>
+            <li>
+              <label>
+                Title:
+                <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
+              </label>
+            </li>
+            <li>
+              <label>
+                Slug:
+                <input type="text" disabled value={this.state.slug} onChange={this.handleSlugChange}
+                 />
+              </label>
+            </li>
+            <li>
+              <label>
+              Excerpt:
+                <textarea 
+                  placeholder = 'Add excerpt' 
+                  value={this.state.excerpt}  
+                  onChange={e => this.setState({excerpt: e.target.value})}
+                > </textarea>
+              </label>
+            </li>
+            <li>
+              <button onClick={this.handleCreate}>Create</button>
+              <button onClick={this.handleCancel}>Cancel</button>
+            </li>
+          </ul>
         </Modal>
         
         <FloatingBottomToolbox 
@@ -81,8 +164,10 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({ data, auth }) => {
+const mapStateToProps = ({ data, auth, settings }) => {
   return {
+    settings,
+    auth,
     uid: auth.uid,
     userPosts: data.userPosts
   };

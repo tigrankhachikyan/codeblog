@@ -3,44 +3,60 @@ import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Redirect,
-  withRouter
 } from "react-router-dom";
 
-
-import * as actions from "./actions";
+import  {fetchUser} from "./actions";
+import {
+  loadUserSettings,
+  assignUserDefaultSettings
+} from "./actions/modules/userSettings";
 
 import Account from "./components/Account";
-import DashBoard from "./components/Account/DashBoard";
-import Editor from "./components/Account/Editor";
 
 import requireAuth from "./auth/requireAuth";
 
 import SignIn from "./auth/SignIn";
-import Home from "./Home";
-import About from "./About";
-import NavBar from "./NavBar";
+import Home from "./components/Home";
+import About from "./components/About";
+import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
+import PostViewSlug from "./components/PostViewSlug";
+import UserPublicPostsList from "./components/UserPublicPostsList";
+import UserSettings from "./components/Account/UserSettings"
 
 import Toasts from "./components/Toasts";
 
 import './index.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
-
-// import {fab } from '@fortawesome/free-brands-svg-icons';
-
 library.add([faSave,faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp]);
 
 class App extends Component {
-  
-  componentDidMount() {
-    const { auth } = this.props;
-    if (auth) return;
-    this.props.fetchUser();
+
+  async componentDidMount() {
+    if (this.props.auth) return;
+    try {
+      await this.props.fetchUser();
+      await this.loadUserSettings();
+    } catch(err) {
+      console.log(err);
+      console.log("Failed to fetch user info");
+    }
+  }
+
+  loadUserSettings = async () => {
+    const { auth, settings } = this.props;
+    if (settings.USER_NAME) return;
+
+    try {
+      await this.props.assignUserDefaultSettings(auth, {
+        USER_NAME: auth.email.replace(/\@.*$/, '')
+      })
+    } catch {
+      console.log(auth);
+    }
   }
 
   render() {
@@ -51,17 +67,14 @@ class App extends Component {
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
-            {/* <Route exact path="/:uid/:slug" render={(props) => {
-              const uid = props.match.params.uid;
-              const slug = props.match.params.slug;
-              fetchUserPostBySlug(uid, slug).then(post => {
+            <Route exact path="/@:username" component={UserPublicPostsList} />
+            <Route exact path="/@:username/:slug" component={PostViewSlug} />
 
-              })
-            }} /> */}
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/account" component={requireAuth(Account)}/>
+            <Route path="/user-settings" component={requireAuth(UserSettings)}/>
 
             <Route path="/signout" render={() => {
               if (auth) {
@@ -77,8 +90,12 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return { auth };
+const mapStateToProps = ({ auth, settings }) => {
+  return { auth, settings };
 };
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(mapStateToProps, {
+  fetchUser,
+  loadUserSettings,
+  assignUserDefaultSettings
+})(App);

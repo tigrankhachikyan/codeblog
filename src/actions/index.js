@@ -1,18 +1,19 @@
 import { 
   authRef,
+  userSettingsRef,
   provider,
   postsRef,
   postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
-import { ADD_TOAST, REMOVE_TOAST } from "./types";
+import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS} from "./types";
 
-export const addPost = newPost => async dispatch => {
+export const addPost = newPost => dispatch => {
   postsRef.push().set(newPost);
 };
 
-export const fetchPosts = () => async dispatch => {
+export const fetchPosts = () => dispatch => {
   postsRef.get()
     .then((snapshot) => {
       const posts = [];
@@ -35,7 +36,11 @@ export const fetchPosts = () => async dispatch => {
     });
 };
 
-export const fetchUserPosts = (uid) => async dispatch => {
+/**
+ * 
+ * @param {string} uid Auth user uid
+ */
+export const fetchUserPosts = (uid) => dispatch => {
   return new Promise((resolve, reject) => {
     const userPostsref = postsRef.where('uid', '==', uid);
     const docs = [];
@@ -59,28 +64,35 @@ export const fetchUserPosts = (uid) => async dispatch => {
   })
 };
 
-export const createPost = (payload) => async dispatch => {
+/**
+ * 
+ * @param {Object} payload Post data
+ */
+export const createPost = (payload) => dispatch => {
   return new Promise((resolve, reject) => {
-    postsRef.add(payload)
-      .then(ref => {
+    const newPostRef = postsRef.doc();
+    const id = newPostRef.id;
+    payload.slug = payload.slug + "-" + id;
+
+    newPostRef.set(payload)
+    .then(() => {
       dispatch({
         type: CREATE_POST,
         payload
       });
-      postsBodyRef.doc(ref.id).set({
+      postsBodyRef.doc(id).set({
         body_markdown: "",
         date_modified: new Date()
       });
-      resolve(ref.id);
+      resolve(id);
     })
     .catch((err) => {
       reject(err);
-      console.log('Error getting documents', err);
     });
   })
 };
 
-export const fetchPostById = (postId) => async dispatch => {
+export const fetchPostById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).get()
       .then(doc => {
@@ -101,7 +113,7 @@ export const fetchPostById = (postId) => async dispatch => {
   })
 };
 
-export const fetchPostBodyById = (postId) => async dispatch => {
+export const fetchPostBodyById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsBodyRef.doc(postId).get()
       .then(doc => {
@@ -118,7 +130,7 @@ export const fetchPostBodyById = (postId) => async dispatch => {
   })
 };
 
-export const fetchPostDraftById = (postId) => async dispatch => {
+export const fetchPostDraftById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
@@ -134,17 +146,29 @@ export const fetchPostDraftById = (postId) => async dispatch => {
       });
   })
 };
-
-export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
+/**
+ * 
+ * @param {*} uid 
+ * @param {*} slug 
+ */
+export const fetchUserPostBySlug = (uid, slug) => dispatch => {
   return new Promise((resolve, reject) => {
-    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug)
+    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug);
+    
     postRef.get()
-      .then(doc => {
-        if (!doc.exists) {
-          reject('No such document!');
-        } else {
-          resolve(doc.data());
-        }
+      .then(snapshot => {
+        const posts = [];
+        snapshot.forEach(doc => {
+          const post = {
+            postId: doc.id,
+            data: doc.data()
+          };
+          posts.push(post)
+        });
+        
+        posts.length === 1 
+          ? resolve(posts[0])
+          : reject("No single post found for this query")
       })
       .catch((err) => {
         reject(err);
@@ -153,7 +177,38 @@ export const fetchUserPostBySlug = (uid, slug) => async dispatch => {
   })
 };
 
-export const savePostById = (postId, payload) => async dispatch => {
+/**
+ * 
+ * @param {*} username 
+ * @param {*} slug 
+ */
+export const fetchUserPostByUsernameAndSlug = (username, slug) => dispatch => {
+  return new Promise((resolve, reject) => {
+    const postRef = postsRef.where("user.userName", "==", username).where("slug", "==", slug);
+    
+    postRef.get()
+      .then(snapshot => {
+        const posts = [];
+        snapshot.forEach(doc => {
+          const post = {
+            postId: doc.id,
+            data: doc.data()
+          };
+          posts.push(post)
+        });
+        
+        posts.length === 1 
+          ? resolve(posts[0])
+          : reject("No single post found for this query")
+      })
+      .catch((err) => {
+        reject(err);
+        console.log('Error getting documents', err);
+      });
+  })
+};
+
+export const savePostById = (postId, payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).update({
       body_markdown: payload.body_markdown,
@@ -163,7 +218,7 @@ export const savePostById = (postId, payload) => async dispatch => {
   })
 };
 
-export const savePostDraftById = (postId, payload) => async dispatch => {
+export const savePostDraftById = (postId, payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).set({
       body_markdown: payload.body_markdown,
@@ -173,7 +228,7 @@ export const savePostDraftById = (postId, payload) => async dispatch => {
   })
 };
 
-export const publishDraftById = (postId) => async dispatch => {
+export const publishDraftById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
@@ -198,19 +253,40 @@ export const publishDraftById = (postId) => async dispatch => {
 
 
 export const fetchUser = () => dispatch => {
-  authRef.onAuthStateChanged(user => {
-    if (user) {
-      dispatch({
-        type: FETCH_USER,
-        payload: user
-      });
-    } else {
-      dispatch({
-        type: FETCH_USER,
-        payload: null
-      });
-    }
-  });
+  return new Promise((resolve, reject) => {
+    authRef.onAuthStateChanged(user => {
+      if (user) {
+        dispatch({
+          type: FETCH_USER,
+          payload: user
+        });
+        // Refactor and move out into function
+        setTimeout(() => {
+          userSettingsRef.doc(user.uid).get()
+          .then(doc => {
+            if (!doc.exists) {
+              throw new Error("No User Settings document found");
+            } else {
+              dispatch({
+                type: LOAD_SETTINGS,
+                payload: doc.data()
+              });
+              resolve();
+            }
+          })
+          .catch((err) => {
+            console.log('Error getting documents', err);
+            reject(err);
+          });
+        }, 0);
+      } else {
+        dispatch({
+          type: FETCH_USER,
+          payload: null
+        });
+      }
+    });
+  })
 };
 
 export const signIn = () => dispatch => {
