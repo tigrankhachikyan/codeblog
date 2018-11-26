@@ -31,6 +31,10 @@ class Home extends Component {
                   marginBottom: 10,
                 }}>
                   <Link to={`/@${userName}/${post.data.slug}`}>{post.data.title}</Link>
+                  <p>
+                    <Link to={`/posts/${post.postId}`}>Old Link: {post.data.title}</Link>
+                  </p>
+                  <p></p>
                   <p>Published by <Link to={`/@${userName}`}>@{userName}</Link></p>
                 </div>
               </li>
