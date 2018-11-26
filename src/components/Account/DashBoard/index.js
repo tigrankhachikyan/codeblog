@@ -16,6 +16,7 @@ class DashBoard extends Component {
     this.state = {
       title: "",
       slug: "",
+      excerpt: "",
       slugChanged: false,
       
       showDialog: false,
@@ -26,10 +27,10 @@ class DashBoard extends Component {
   componentDidMount() {
     const { fetchUserPosts, uid } = this.props;
     if (this.props.userPosts.length) return;
-
     fetchUserPosts(uid);
   }
 
+  
   showModal = () => {
     this.setState({ showDialog: true });
   };
@@ -75,6 +76,7 @@ class DashBoard extends Component {
     const data = {
       title: this.state.title,
       slug: this.state.slug,
+      excerpt: this.state.excerpt,
       date_created: new Date(),
       uid: uid,
       user: userInfo.userInfo()
@@ -113,6 +115,16 @@ class DashBoard extends Component {
               </label>
             </li>
             <li>
+              <label>
+              Excerpt:
+                <textarea 
+                  placeholder = 'Add excerpt' 
+                  value={this.state.excerpt}  
+                  onChange={e => this.setState({excerpt: e.target.value})}
+                > </textarea>
+              </label>
+            </li>
+            <li>
               <button onClick={this.handleCreate}>Create</button>
               <button onClick={this.handleCancel}>Cancel</button>
             </li>
@@ -130,6 +142,9 @@ class DashBoard extends Component {
               return <tr key={i}>
                 <td>
                   <Link to={`/posts/${post.postId}`}>{post.title}</Link>
+                </td>
+                <td>
+                  <Link to={`/posts/${post.postId}`}>{post.excerpt}</Link>
                 </td>
                 <td>
                   <Link 

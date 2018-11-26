@@ -9,6 +9,9 @@ import Spinner from '../utils/Spinner';
 
 import Prism from "prismjs";
 import "../../css/prism.css";
+import PostBody from './PostBody';
+import Tools from './Tools';
+import Comments from  './Comments';
 
 import './index.css';
 
@@ -22,7 +25,7 @@ class PostView extends Component {
 
   fetchPostData = async (postId) => {
     const {fetchPostById, fetchPostBodyById} = this.props;
-    
+
     const [post, postBody] = await Promise.all([
       fetchPostById(postId),
       fetchPostBodyById(postId)
@@ -36,7 +39,7 @@ class PostView extends Component {
 
     this.fetchPostData(postId)
       .then(post => this.setState({post}))
-      // Highlight syntax after content is loaded 
+      // Highlight syntax after content is loaded
       .then(() => setTimeout(() => Prism.highlightAll(), 0));
   }
 
@@ -51,18 +54,29 @@ class PostView extends Component {
 
   render() {
     return (
-      <div className="PostView">
-        <div className="box">
-        { 
-          this.state.post 
-            ? <div>
-                <h1>{this.state.post.title}</h1>
-                <Markdown markup={ this.state.post.body_markdown } />
-              </div>
-            //? <pre>{ this.state.post.body_markdown } </pre>
+      <div 
+      className = 'centerContainer'
+      >
+        <div  className = 'app'>
+          <div className = 'containerTools'>
+              <Tools/>
+          { this.state.post
+            ? <PostBody
+                title={this.state.post.title}
+                body={<Markdown markup={ this.state.post.body_markdown } />}
+              />
             : <Spinner />
-        }
-        </div>
+          }
+            </div>
+              <Comments/>
+          </div>
+
+          < hr/>
+          {/* <div className="container">
+            {
+              this.state.post && <Markdown markup={ this.state.post.body_markdown } />
+            }
+          </div> */}
       </div>
     );
   }
