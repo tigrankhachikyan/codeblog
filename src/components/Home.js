@@ -1,11 +1,34 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
+import ListPostCard from "./ListPostCard";
+
 import * as actions from "../actions";
 
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  demo: {
+    height: 240,
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    height: '100%',
+    color: theme.palette.text.secondary,
+  },
+  control: {
+    padding: theme.spacing.unit * 2,
+  },
+});
+
+
 class Home extends Component {
-  
   componentDidMount() {
     const { latestPosts, fetchPosts } = this.props;
     if (!latestPosts.length) {
@@ -14,35 +37,32 @@ class Home extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     const { latestPosts } = this.props;
+
     if (!latestPosts.length) return null;
 
     return (
-      <div className="Home">
-        <h1>Code Blog</h1>
-        <ul>
-          {
-            latestPosts.length > 0 && latestPosts.map((post, i) => {
-              const {userName} = post.data.user || 'undefined';
-              return <li key={i}>
-                <div style={{
-                  height: 50,
-                  widows: 200,
-                  marginBottom: 10,
-                }}>
-                  <Link to={`/@${userName}/${post.data.slug}`}>{post.data.title}</Link>
-                  <p>
-                    <Link to={`/posts/${post.postId}`}>Old Link: {post.data.title}</Link>
-                  </p>
-                  <p></p>
-                  <p>Published by <Link to={`/@${userName}`}>@{userName}</Link></p>
-                </div>
-              </li>
-            })
-          }
-        </ul>
-
-      </div>
+    <div className={classes.root}>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+      >
+        {
+          latestPosts.length > 0 && latestPosts.map((post, i) => {
+            return <Grid key={post.postId}
+              item 
+              xs={12}
+              style={{margin: 10}}
+            >
+              <ListPostCard post={post}/>
+            </Grid>
+          })
+        }
+      </Grid>
+    </div>
     );
   }
 }
@@ -53,4 +73,8 @@ const mapStateToProps = ({ data }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(Home);
+Home.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, actions)(withStyles(styles)(Home));

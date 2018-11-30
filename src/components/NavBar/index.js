@@ -57,7 +57,7 @@ class NavBar extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="default">
           <Toolbar>
             <IconButton
               onClick={() => this.props.history.push('/')}

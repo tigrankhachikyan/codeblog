@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+
 import Modal from '../../utils/Modal';
 import UserInfo from '../../../helpers/UserInfo';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import * as actions from "../../../actions";
-import { userSettingsRef } from '../../../config/firebase';
+import {
+  createPost,
+  fetchUserPosts
+} from "../../../actions";
+
+import UserPostsTable from './UserPostsTable';
 
 class DashBoard extends Component {
   constructor() {
@@ -29,7 +33,6 @@ class DashBoard extends Component {
     if (this.props.userPosts.length) return;
     fetchUserPosts(uid);
   }
-
   
   showModal = () => {
     this.setState({ showDialog: true });
@@ -72,7 +75,7 @@ class DashBoard extends Component {
     e.preventDefault();
 
     const userInfo = new UserInfo(auth, settings);
-    console.log(userInfo.userInfo())
+
     const data = {
       title: this.state.title,
       slug: this.state.slug,
@@ -86,6 +89,15 @@ class DashBoard extends Component {
     })
   }
 
+  editPost = (postId) => {
+    this.props.history.push(`/account/edit/${postId}`)
+  }
+  
+  removePost = (postId) => {
+    window.confirm("Are you sure you want to remove the post") &&
+    this.props.history.push(`/account/edit/${postId}`);
+  }
+  
   render() {
     const actions = [
       {
@@ -98,8 +110,14 @@ class DashBoard extends Component {
     return (
       <div className="container">
         <h1>DashBoard</h1>
+        <UserPostsTable 
+          posts={this.props.userPosts} 
+          editPost={(postId) => this.editPost(postId)}
+          removePost={(postId) => this.removePost(postId)}
+        />
 
         <Modal show={this.state.showDialog} handleClose={this.hideModal}>
+       
         <ul>
             <li>
               <label>
@@ -134,31 +152,6 @@ class DashBoard extends Component {
         <FloatingBottomToolbox 
           actions={actions}
         />
-
-        <table>
-          <tbody>
-          {
-            this.props.userPosts.map((post, i) => {
-              return <tr key={i}>
-                <td>
-                  <Link to={`/posts/${post.postId}`}>{post.title}</Link>
-                </td>
-                <td>
-                  <Link to={`/posts/${post.postId}`}>{post.excerpt}</Link>
-                </td>
-                <td>
-                  <Link 
-                    style={{marginLeft: 10}}
-                    to={`/account/edit/${post.postId}`}
-                  >
-                    <FontAwesomeIcon icon="edit" />
-                  </Link>
-                </td>
-              </tr>
-            })
-          }
-          </tbody>
-        </table>
       </div>
     );
   }
@@ -173,4 +166,7 @@ const mapStateToProps = ({ data, auth, settings }) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(DashBoard);
+export default withRouter(connect(mapStateToProps, {
+  createPost,
+  fetchUserPosts
+})(DashBoard));
