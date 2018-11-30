@@ -38,7 +38,7 @@ const GoogleSignInButton = (props) => {
       <input type="email" placeholder= 'Email' className = 'signInInput' />
       <input type="password" placeholder= 'Password' className = 'signInInput' />
       <button className= 'logInButton'> LOG IN </button>
-      <a> <p> Forget password? </p> </a>
+       <a href = '#'> <p> Forget password? </p> </a>
 
       
     </div>

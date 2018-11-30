@@ -25,7 +25,8 @@
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
   padding: 0;
-  margin-left: 20px;
+  /* margin-left: 20px; */
+  margin: 10px 20px;
 }
 
 .google-button:focus,
@@ -82,18 +83,18 @@
 
 .signInInput {
   width: 300px;
-  height: 50px;
-  padding: 10px;
-  margin-top: 10px;
+  height: 40px;
+  padding-left: 10px;
+  margin: 10px auto;
 }
 
 .logInButton {
-  width: 300px;
-  height: 50px;
-  /* padding: 10px; */
-  margin: 10px 10px;
+  width: 310px;
+  height: 40px;
   background-color: #62b553;
   border: 1px solid #62b553;
   border-radius: 3px;
   color: white;
+  margin: 10px auto;
+
 }
