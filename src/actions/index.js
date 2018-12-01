@@ -289,7 +289,7 @@ export const fetchUser = () => dispatch => {
   })
 };
 
-export const signIn = () => dispatch => {
+export const signInWithGoogle = () => dispatch => {
   authRef
     .signInWithPopup(provider)
     .then(result => {})

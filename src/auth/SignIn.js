@@ -4,7 +4,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { connect } from "react-redux";
-import { signIn } from "../actions";
+import { signInWithGoogle } from "../actions";
 import GoogleSignInButton from "../components/utils/GoogleSignInButton";
 
 class SignIn extends Component {
@@ -16,7 +16,7 @@ class SignIn extends Component {
   }
 
   render() {
-    const { auth, signIn } = this.props;
+    const { auth, signInWithGoogle } = this.props;
     let { from } = this.props.location.state || { from: { pathname: "/" } };
     let { redirectToReferrer } = this.state;
 
@@ -25,9 +25,27 @@ class SignIn extends Component {
     if (redirectToReferrer) return <Redirect to={from} />;
 
     return (
-      <div>
-        <GoogleSignInButton action={signIn}/>
-      </div>
+      <div className = 'conteniner-signin'>
+      <span className = 'signInText'> Login </span> 
+      <span className = 'signInText'> Sign Up </span>
+      <hr/>
+
+      <GoogleSignInButton action={signInWithGoogle}/>
+      
+      <button type="button" className="facebook-button" onClick={() => {}}>
+        <span className="facebook-button__text">LOG IN WITH FACEBOOK </span>
+      </button>
+      
+      <hr/>
+      
+      <input type="email" placeholder= 'Email' className = 'signInInput' />
+      <input type="password" placeholder= 'Password' className = 'signInInput' />
+      
+      <button className= 'logInButton'> LOG IN </button>
+      
+      <a href = '#'> <p> Forget password? </p> </a>
+    </div>
+
     );
   }
 }
@@ -36,4 +54,4 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default connect(mapStateToProps, { signIn })(SignIn);
+export default connect(mapStateToProps, { GoogleSignInButton })(SignIn);

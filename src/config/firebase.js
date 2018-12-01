@@ -18,4 +18,5 @@ export const postDraftsRef = firestore.collection('postDrafts');
 export const userSettingsRef = firestore.collection('userSettings');
 
 export const authRef = firebase.auth();
-export const provider = new firebase.auth.GoogleAuthProvider();
+export const providerGoogle = new firebase.auth.GoogleAuthProvider();
+export const providerFacebook = new firebase.auth.GoogleAuthProvider();
