@@ -87,10 +87,8 @@ class Editor extends Component {
     this.setState({_autoSaveTimerId: timerId});
   }
 
-
   componentWillUnmount() {
     clearInterval(this.state._autoSaveTimerId);
-    window.removeEventListener('resize', this.windowSizeChangeHandler);
   }
 
   closeEditingHandles = () => {

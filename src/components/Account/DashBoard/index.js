@@ -9,7 +9,8 @@ import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 
 import {
   createPost,
-  fetchUserPosts
+  fetchUserPosts,
+  deletePostById
 } from "../../../actions";
 
 import UserPostsTable from './UserPostsTable';
@@ -95,7 +96,7 @@ class DashBoard extends Component {
   
   removePost = (postId) => {
     window.confirm("Are you sure you want to remove the post") &&
-    this.props.history.push(`/account/edit/${postId}`);
+    this.props.deletePostById(postId);
   }
   
   render() {
@@ -168,5 +169,6 @@ const mapStateToProps = ({ data, auth, settings }) => {
 
 export default withRouter(connect(mapStateToProps, {
   createPost,
-  fetchUserPosts
+  fetchUserPosts,
+  deletePostById
 })(DashBoard));

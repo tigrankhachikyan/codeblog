@@ -3,6 +3,8 @@ export const LOAD_EDIT_POST = 'LOAD_EDIT_POST';
 export const LOAD_USER_POSTS = 'LOAD_USER_POSTS';
 
 export const CREATE_POST = 'CREATE_POST';
+export const REMOVE_USER_POST = 'REMOVE_USER_POST';
+
 export const FETCH_USER = 'FETCH_USER';
 export const SIGNOUT = "SIGNOUT";
 
