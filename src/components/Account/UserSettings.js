@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
-
+import './index.css';
+import Switch from '@material-ui/core/Switch';
 
 import {
   loadUserSettings,
@@ -11,11 +12,12 @@ import {
 class UserSettings extends PureComponent {
   render() {
     return (
-      <div>
+      <div className = 'sittingConteiner'>
         <h2>User Settings</h2>
-        <pre>
+        <pre className = 'autoSaveText'>AutoSave</pre>
+        {/* <pre>
           {JSON.stringify(this.props.settings, null , 2)}
-        </pre>
+        </pre> */}
       </div>
     );
   }
