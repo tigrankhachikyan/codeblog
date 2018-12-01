@@ -108,7 +108,7 @@ class DashBoard extends Component {
     ];
 
     return (
-      <div className="container">
+      <div className="container center">
         <h1>DashBoard</h1>
         <UserPostsTable 
           posts={this.props.userPosts} 

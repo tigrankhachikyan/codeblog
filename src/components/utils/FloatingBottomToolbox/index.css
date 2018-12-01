@@ -5,6 +5,7 @@
   
   display: inline-block;
   padding: 10px;
+  float: right;
 }
 
 .floating-toolbox-item {
