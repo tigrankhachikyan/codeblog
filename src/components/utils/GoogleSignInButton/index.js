@@ -24,7 +24,7 @@ const GoogleSignInButton = (props) => {
             fill="#34A853"/>
         </svg>
       </span>
-      <span className="google-button__text">Sign in with Google</span>
+      <span className="google-button__text">Sign in with Google </span>
     </button>
   );
 }

@@ -2,8 +2,8 @@
 .google-button {
   height: 40px;
   border-width: 0;
-  background: white;
-  color: #737373;
+  background: #cb5337;
+  color: white;
   border-radius: 5px;
   white-space: nowrap;
   box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
@@ -12,6 +12,23 @@
   transition-timing-function: ease-in-out;
   padding: 0;
 }
+
+.facebook-button {
+  height: 40px;
+  border-width: 0;
+  background: #4c66a0;
+  color: white;
+  border-radius: 5px;
+  white-space: nowrap;
+  box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+  transition-property: background-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+  padding: 0;
+  /* margin-left: 20px; */
+  margin: 10px 20px;
+}
+
 .google-button:focus,
 .google-button:hover {
   box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
@@ -39,4 +56,45 @@
   font-size: 14px;
   font-weight: bold;
   font-family: 'Roboto',arial,sans-serif;
+}
+
+.facebook-button__text {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 24px;
+  font-size: 14px;
+  /* font-weight: bold; */
+  font-family: 'Roboto', arial, sans-serif;
+}
+
+.conteniner-signin {
+  width: 600px;
+  height: 400px;
+  margin: 100px auto;
+  border: 2px solid #eee;
+  text-align: center;
+  padding: 10px;
+}
+
+.signInText {
+  font-size: 25px;
+  margin: 1px 65px;
+}
+
+.signInInput {
+  width: 300px;
+  height: 40px;
+  padding-left: 10px;
+  margin: 10px auto;
+}
+
+.logInButton {
+  width: 310px;
+  height: 40px;
+  background-color: #62b553;
+  border: 1px solid #62b553;
+  border-radius: 3px;
+  color: white;
+  margin: 10px auto;
+
 }

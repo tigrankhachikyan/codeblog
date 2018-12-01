@@ -1,13 +1,14 @@
 import { 
   authRef,
   userSettingsRef,
-  provider,
+  providerGoogle,
+  providerFacebook,
   postsRef,
   postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
-import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS} from "./types";
+import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS, SIGNOUT} from "./types";
 
 export const addPost = newPost => dispatch => {
   postsRef.push().set(newPost);
@@ -289,9 +290,27 @@ export const fetchUser = () => dispatch => {
   })
 };
 
-export const signIn = () => dispatch => {
+export const signInWithGoogle = () => dispatch => {
   authRef
-    .signInWithPopup(provider)
+    .signInWithPopup(providerGoogle)
+    .then(result => {})
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const signInWithFacebook = () => dispatch => {
+  authRef
+    .signInWithPopup(providerFacebook)
+    .then(result => {})
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const signInWithEmailAndPassword = (email, password) => dispatch => {
+  authRef
+    .signInWithEmailAndPassword(email, password)
     .then(result => {})
     .catch(error => {
       console.log(error);
@@ -302,7 +321,9 @@ export const signOut = () => dispatch => {
   authRef
     .signOut()
     .then(() => {
-      // Sign-out successful.
+      dispatch({
+        type: SIGNOUT
+      })
     })
     .catch(error => {
       console.log(error);
