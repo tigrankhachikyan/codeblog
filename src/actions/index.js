@@ -7,8 +7,10 @@ import {
   postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
-import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST } from "./types";
+import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST } from "./types";
 import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS, SIGNOUT} from "./types";
+
+import uid from "uid";
 
 export const addPost = newPost => dispatch => {
   postsRef.push().set(newPost);
@@ -44,10 +46,10 @@ export const fetchPosts = () => dispatch => {
 export const fetchUserPosts = (uid) => dispatch => {
   return new Promise((resolve, reject) => {
     const userPostsref = postsRef.where('uid', '==', uid);
-    const docs = [];
 
-    userPostsref.get()
-      .then((snapshot) => {
+    userPostsref.onSnapshot((snapshot) => {
+        const docs = [];
+
         snapshot.forEach((doc, i) => {
           const data = doc.data();
           docs.push({...data, postId: doc.id});
@@ -57,10 +59,6 @@ export const fetchUserPosts = (uid) => dispatch => {
           posts: docs
         })
         resolve(docs);
-      })
-      .catch((err) => {
-        console.log('Error getting documents', err);
-        reject(err);
       });
   })
 };
@@ -209,6 +207,19 @@ export const fetchUserPostByUsernameAndSlug = (username, slug) => dispatch => {
   })
 };
 
+export const deletePostById = postId => async dispatch => {
+  await Promise.all([
+    postDraftsRef.doc(postId).delete(),
+    postsRef.doc(postId).delete(),
+    postsBodyRef.doc(postId).delete(),
+  ]);
+
+  dispatch({
+    type: REMOVE_USER_POST,
+    payload: { postId }
+  })
+};
+
 export const savePostById = (postId, payload) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).update({
@@ -253,39 +264,65 @@ export const publishDraftById = (postId) => dispatch => {
 };
 
 
-export const fetchUser = () => dispatch => {
+
+const assignDefaultUserSettings = async (dispatch, auth) => {
+  let userNamePrefix = uid(3);
+  if (auth.email) {
+    const result = /^([^@]+).+$/.exec(auth.email);
+    const emailPrefix = result[1];
+    userNamePrefix = emailPrefix + userNamePrefix;
+  } else if (auth.displayName) {
+    const userNameStipped = auth.displayName.replace(/\s+/, '').toLowerCase();
+    userNamePrefix = userNameStipped + userNamePrefix;
+  }
+
+  const settings = {
+    USER_NAME: userNamePrefix
+  };
+
+  try {
+    userSettingsRef.doc(auth.uid).set(settings);
+    dispatch({
+      type: LOAD_SETTINGS,
+      payload: settings
+    })
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+const loadUserSettings = async (dispatch, auth) => {
+  try {
+    const doc = await userSettingsRef.doc(auth.uid).get();
+
+    if (!doc.exists) {
+      assignDefaultUserSettings(dispatch, auth);
+    } else {
+      dispatch({
+        type: LOAD_SETTINGS,
+        payload: doc.data()
+      });
+      return doc.data();
+    }
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+export const fetchUser = () => async dispatch => {
   return new Promise((resolve, reject) => {
     authRef.onAuthStateChanged(user => {
-      if (user) {
-        dispatch({
-          type: FETCH_USER,
-          payload: user
-        });
-        // Refactor and move out into function
-        setTimeout(() => {
-          userSettingsRef.doc(user.uid).get()
-          .then(doc => {
-            if (!doc.exists) {
-              throw new Error("No User Settings document found");
-            } else {
-              dispatch({
-                type: LOAD_SETTINGS,
-                payload: doc.data()
-              });
-              resolve();
-            }
-          })
-          .catch((err) => {
-            console.log('Error getting documents', err);
-            reject(err);
-          });
-        }, 0);
-      } else {
-        dispatch({
-          type: FETCH_USER,
-          payload: null
-        });
+      if (!user) {
+        reject('No User found');
+        return;
       }
+
+      dispatch({
+        type: FETCH_USER,
+        payload: user
+      });
+
+      setTimeout(() => { loadUserSettings(dispatch, user) }, 0);
     });
   })
 };

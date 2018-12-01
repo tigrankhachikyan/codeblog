@@ -2,6 +2,7 @@ import {
   LOAD_POSTS,
   LOAD_USER_POSTS,
   LOAD_EDIT_POST,
+  REMOVE_USER_POST
 } from "../actions/types";
 
 let initState = {
@@ -17,10 +18,15 @@ export default (state = initState, action) => {
         ...state, 
         latestPosts: [...action.payload.posts, ...state.latestPosts]
       }
+    case REMOVE_USER_POST:
+      return {
+        ...state, 
+        userPosts: state.userPosts.filter(post => post.postId !== action.payload.postId)
+      }
     case LOAD_USER_POSTS:
       return {
         ...state, 
-        userPosts: [...action.posts, ...state.userPosts]
+        userPosts: [...action.posts]
       }
     case LOAD_EDIT_POST:
       return {
