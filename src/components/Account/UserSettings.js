@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 
+
 import {
   loadUserSettings,
   updateUserSettings,
@@ -13,7 +14,7 @@ class UserSettings extends PureComponent {
       <div>
         <h2>User Settings</h2>
         <pre>
-          {JSON.stringify(this.props.settings, null, 2)}
+          {JSON.stringify(this.props.settings, null , 2)}
         </pre>
       </div>
     );
