@@ -1,12 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
 import './index.css';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    height: "100%"
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    height: '100vh',
+    color: theme.palette.text.secondary,
+  },
+  control: {
+    padding: theme.spacing.unit * 2,
+  },
+});
+
 
 class Editor extends Component {
   constructor(props) {
@@ -15,8 +36,6 @@ class Editor extends Component {
       isChanged: false,
       _autoSaveTimerId: null,
     
-      _editorHeight: window.innerHeight,
-
       markdown: "",
       title: "",
 
@@ -66,13 +85,8 @@ class Editor extends Component {
       this.saveDraftContent();
     }, 7000)
     this.setState({_autoSaveTimerId: timerId});
-
-    window.addEventListener('resize', this.windowSizeChangeHandler);
   }
 
-  windowSizeChangeHandler = (e) => {
-    this.setState({_editorHeight: window.innerHeight})
-  }
 
   componentWillUnmount() {
     clearInterval(this.state._autoSaveTimerId);
@@ -128,35 +142,41 @@ class Editor extends Component {
     ];
 
     return (
-      <div>
-        <h2 style={{display: 'inline'}}>
-          {this.state.title}
-        </h2>
-        <hr />
-        { this.state.isChanged && <span>(Unsaved Changes)</span>}
-        { !this.state.draftIsEmpty && <h4>Loaded Draft content</h4> }
-        <div style={{float: "right"}}>
-          <button
-            onClick={this.publishDraft}
-          >
-            Publish
-          </button>
-        </div>
+      <div className={this.props.classes.root}>
+      <Grid 
+        container
+        direction="row"
+      >
+        <Grid item xs={12}>
+          <Paper>
+          <h2 style={{display: 'inline'}}>
+              {this.state.title}
+            </h2>
+            <hr />
+            { this.state.isChanged && <span>(Unsaved Changes)</span>}
+            { !this.state.draftIsEmpty && <h4>Loaded Draft content</h4> }
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <textarea
+            style={{
+              margin: 5,
+              fontSize: 18,
+            }}
+            value={this.state.markdown}
+            onChange={this.handleChange}
+            />
+        </Grid>
+        <Grid item xs={6} grow>
+            <Markdown 
+              options={{tables: true}}
+              markup={ this.state.markdown }
+              style={{overflow: "auto"}} 
+            />
+        </Grid>
 
-        <div className="editor-container">
-          <div>
-            <textarea 
-              style={{overflow: "auto", resize: "none", height: window.innerHeight - 90 }}
-              value={this.state.markdown}
-              onChange={this.handleChange}/>
-          </div>
-          <div>
-            <div>
-              <Markdown options={{tables: true}} markup={ this.state.markdown } style={{overflow: "auto", resize: "none" }} />
-            </div>
-          </div>
-        </div>
-        
+      </Grid>
+
         <FloatingBottomToolbox 
             actions={actions}
         />
@@ -172,4 +192,8 @@ const mapStateToProps = ({ data }) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, actions)(Editor));
+Editor.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withRouter(connect(mapStateToProps, actions)(withStyles(styles)(Editor)));

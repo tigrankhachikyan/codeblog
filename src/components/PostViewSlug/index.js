@@ -21,38 +21,31 @@ class PostViewSlug extends Component {
     }
   }
 
-  // fetchPostData = async (username, slug) => {
-  //   const {fetchPostById, fetchPostBodyById} = this.props;
-    
-  //   const [post, postBody] = await Promise.all([
-  //     fetchUserPostByUsernameAndSlug(postId),
-  //     fetchPostBodyById(postId)
-  //   ]);
+  fetchPostData = async (username, slug) => {
+    const result = /-([^-]+)$/.exec(slug);
+    const postId = result[1];
 
-  //   return {...post, ...postBody};
-  // }
+    const [post, postBody] = await Promise.all([
+      this.props.fetchUserPostByUsernameAndSlug(username, slug),
+      this.props.fetchPostBodyById(postId)
+    ]);
+
+    return {
+      postId: post.postId,
+      ...post.data,
+      ...postBody
+    };
+  }
 
   async componentDidMount() {
     const {username, slug} = this.props.match.params;
-
-    const {
-      fetchPostBodyById,
-      fetchUserPostByUsernameAndSlug
-    } = this.props;
-
     try {
-      const post = await fetchUserPostByUsernameAndSlug(username, slug);
-      const postBody = await fetchPostBodyById(post.postId);
-      this.setState({postData: {
-        postId: post.postId,
-        ...post.data,
-        ...postBody
-      }});
+      const post = await this.fetchPostData(username, slug);
+      this.setState({postData: post});
     } catch(err) {
       console.log(err);
     }
   }
-
 
   render() {
     return (
@@ -64,7 +57,6 @@ class PostViewSlug extends Component {
                 <h1>{this.state.postData.title}</h1>
                 <Markdown markup={ this.state.postData.body_markdown } />
               </div>
-            //? <pre>{ this.state.post.body_markdown } </pre>
             : <Spinner />
         }
         </div>

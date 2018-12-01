@@ -1,28 +1,17 @@
+textarea {
+  display: block;
+  border: 1px solid black;
+  height: 100%;
+  min-height: auto;
+  width: 98%;
 
-.editor-container {
-  display: flex;
-  width: 100%;
-  flex-direction: wrap;
-  justify-content: center;
-}
-
-.editor-container > div {
-  flex: 50%;
-}
-
-.editor-container > div > textarea {
-  background-color: gainsboro;
-  font-size: 16px;
-  border-left: none;
-  border-top: none;
-  border-bottom: none;
-  border-right: 5px dashed #4c4a37;
-  width: 100%;
-  resize: none;
+  border: none;
   overflow: auto;
-  padding: 10px;
-}
+  outline: none;
 
-.editor-container > div > div {
-  padding: 0 10px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
 }
