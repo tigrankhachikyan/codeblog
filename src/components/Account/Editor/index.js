@@ -10,6 +10,7 @@ import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import './index.css';
 
@@ -153,6 +154,7 @@ class Editor extends Component {
             <hr />
             { this.state.isChanged && <span>(Unsaved Changes)</span>}
             { !this.state.draftIsEmpty && <h4>Loaded Draft content</h4> }
+            <Button variant="contained" color="primary" onClick={this.publishDraft} >Publish Draft Changes</Button>
           </Paper>
         </Grid>
         <Grid item xs={6}>
