@@ -1,7 +1,7 @@
 
 
 .sittingConteiner {
-  width: 400px;
+  width: 600px;
   height: 600px;
   margin: 100px auto;
   border: 1px solid #dddddd;
@@ -14,7 +14,7 @@
  .switchStyle {
   margin-top: 30px;
   margin-bottom: 15px;
-  margin-left: 75px ;
+  margin-left: 130px ;
   
   
   
@@ -27,8 +27,8 @@
 }
 
 .SecondsInput {
-    width: 215px;
-    height: 30px;
+    width: 310px;
+    height: 40px;
     border: 1px solid #3f51b5;
     padding-left: 10px;
     background-color: #dddddd;
@@ -36,14 +36,36 @@
 
 }
 
-.userButton {
-  width: 230px;
-  height: 30px;
-  margin-top: 20px;
+.titleAutosave{ 
+    margin-left: -200px;
+    margin-bottom: 3px;
+}
+
+.userName {
+  width: 300px;
+  height: 20px;
+  /* margin-left: 120px; */
   border: 1px solid #3f51b5;
   border-radius: 3px;
-  color: #3f51b5;
-  font-weight: bold;
+  padding: 10px;
+  background-color: #dddddd;
+}
+
+
+/* .userName span {
+  float:left;
+} */
+
+/* 
+.userName button {
+  width: 80px;
+  float: right;
+} */
+
+.title {
+  margin-left: -210px;
+  margin-bottom: 3px;
+  
 }
 
 .saveSetting {
@@ -51,8 +73,9 @@
   height: 30px;
   border: 1px solid #3f51b5;
   border-radius: 3px;
-  /* display: block; */
-  margin-top: 250px;
+  margin: 180px auto;
   background-color: #3f51b5;
   font-size: 20px;
+  display: block;
+  
 }
