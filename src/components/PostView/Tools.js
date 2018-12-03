@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import './index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class Tools extends Component {
     constructor(props) {
@@ -75,7 +74,7 @@ class Tools extends Component {
                     </li>
                     <li className = 'icon-button'>
                         <button type='button'  > 
-                            <FontAwesomeIcon icon="bookmark"  />
+                                    Bookmark
                             {/* <FontAwesomeIcon icon= 'google' /> */}
                             {/* <img src = {twitter} alt = 'Image'/>  */}
                         </button>
