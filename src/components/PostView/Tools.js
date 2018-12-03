@@ -47,29 +47,18 @@ class Tools extends Component {
                     <ul className = 'fixedTools'>
                     <li>
                         <button type='button' onClick = {this.addLike} > 
-                            <FontAwesomeIcon icon="thumbs-up" className = 'icon-button'  />
-                                {/* <img 
-                                    src = {like} 
-                                    alt = 'Image'
-                                    />  */} 
+                            Like
                             <b>{this.state.like} </b> 
                         </button>
                     </li>
                     <li>
                         <button type='button' onClick = {this.addBookmark}  >
-                            
-                            <FontAwesomeIcon icon="bookmark" className = 'icon-button'  style = {{display: this.state.displayBookmarkCheck, textAlign: "center" }} />
-                            {/* <img src = {bookmark} alt = 'Image' style = {{display: this.state. displayBookmarkCheck }}   /> */}
-                            <FontAwesomeIcon icon="bookmark" className = 'icon-button'  style = {{display: this.state.displayBookmarkUncheck , textAlign: "center"}} />
-                            {/* <img src = {bookmarkCliked} alt = 'Image' style = {{display: this.state.displayBookmarkUncheck }} /> */}
+                            Bookmark
                         </button>
                     </li>                        
                     <li>
                         <button type='button' > 
-                            <FontAwesomeIcon icon="bookmark" className = 'icon-button' />
-                            
-                            {/* <FontAwesomeIcon icon="facebook"/> */}
-                            {/* <img src = {fb} alt = 'Image' />  */}
+                            Bookmark
                         </button>
                     </li>
                     <li className = 'icon-button'>
