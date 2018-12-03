@@ -1,25 +1,25 @@
-
+// import "./signUp.css";
 import React, { Component } from "react";
-import {
-  Redirect,
-  Link
-} from "react-router-dom";
+// import {
+//   Redirect,
+//   Link
+// } from "react-router-dom";
 import { connect } from "react-redux";
 import { 
-  signInWithGoogle,
-  signInWithFacebook,
+//   signInWithGoogle,
+//   signInWithFacebook,
   signInWithEmailAndPassword
  } from "../actions";
 
-import GoogleSignInButton from "../components/utils/GoogleSignInButton";
 
-class SignIn extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirectToReferrer: false,
       email: null,
-      password: null
+      password: null,
+      name: null,
+      surname: null
     };
   }
   
@@ -28,28 +28,32 @@ class SignIn extends Component {
   }
   
   render() {
-    const { auth, signInWithGoogle, signInWithFacebook } = this.props;
-    let { from } = this.props.location.state || { from: { pathname: "/" } };
-    let { redirectToReferrer } = this.state;
+    // const { auth, signInWithGoogle, signInWithFacebook } = this.props;
+    // let { from } = this.props.location.state || { from: { pathname: "/" } };
+    // let { redirectToReferrer } = this.state;
 
-    if (auth) return <Redirect to={from} />;
+    // if (auth) return <Redirect to={from} />;
 
-    if (redirectToReferrer) return <Redirect to={from} />;
+    // if (redirectToReferrer) return <Redirect to={from} />;
 
     return (
       <div className='conteniner-signin'>
-      <span className='signInText'>Login</span> 
-      <span className='signInText'>Sign Up</span>
+      <span className='signInText'>Create your Account</span>
       <hr/>
+      
+      <input 
+        type="text" 
+        placeholder='Name'
+        className = 'signInInput'
+        onChange={e => this.setState({name: e.target.value})}
+      />
+      <input 
+        type="text" 
+        placeholder='Surname'
+        className = 'signInInput'
+        onChange={e => this.setState({surname: e.target.value})}
+      />
 
-      <GoogleSignInButton action={signInWithGoogle}/>
-      
-      <button type="button" className="facebook-button" onClick={signInWithFacebook}>
-        <span className="facebook-button__text">Log in with Facebook </span>
-      </button>
-      
-      <hr/>
-      
       <input 
         type="email" 
         placeholder='Email'
@@ -62,13 +66,11 @@ class SignIn extends Component {
         className='signInInput'
         onChange={e => this.setState({password: e.target.value})}
       />
-      
       <button 
         className='logInButton' 
         onClick={this.logInwithEmailAndPassword}
-      > LOG IN </button>
+      > Sign Up </button>
       
-      <p><Link to={'/'}>Forget password?</Link></p>
     </div>
 
     );
@@ -80,7 +82,7 @@ function mapStateToProps({ auth }) {
 }
 
 export default connect(mapStateToProps, { 
-  signInWithGoogle,
-  signInWithFacebook,
+//   signInWithGoogle,
+//   signInWithFacebook,
   signInWithEmailAndPassword
- })(SignIn);
+ })(SignUp);

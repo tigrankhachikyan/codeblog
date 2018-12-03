@@ -23,7 +23,8 @@ import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
 import PostViewSlug from "./components/PostViewSlug";
 import UserPublicPostsList from "./components/UserPublicPostsList";
-import UserSettings from "./components/Account/Settings/UserSettings"
+import UserSettings from "./components/Account/Settings/UserSettings";
+import SignUp from "./auth/SignUp";
 
 import Toasts from "./components/Toasts";
 
@@ -73,6 +74,7 @@ class App extends Component {
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
+            <Route path="/signup" component={SignUp}/>
             <Route path="/account" component={requireAuth(Account)}/>
             <Route path="/user-settings" component={requireAuth(UserSettings)}/>
 
