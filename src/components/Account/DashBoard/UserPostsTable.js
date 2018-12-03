@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -49,9 +50,8 @@ function UserPostsTable(props) {
         <TableHead>
           <TableRow>
             <CustomTableCell>Title</CustomTableCell>
-            <CustomTableCell>Excerpt</CustomTableCell>
+            <CustomTableCell>Slug</CustomTableCell>
             <CustomTableCell>Date Created</CustomTableCell>
-            <CustomTableCell>Date Modified</CustomTableCell>
             <CustomTableCell>Actions</CustomTableCell>
           </TableRow>
         </TableHead>
@@ -59,10 +59,11 @@ function UserPostsTable(props) {
           {props.posts.map(post => {
             return (
               <TableRow className={classes.row} key={post.postId}>
-                <CustomTableCell>{post.title}</CustomTableCell>
-                <CustomTableCell>{post.excerpt}</CustomTableCell>
+                <CustomTableCell>
+                  <Link to={`/@${post.user.userName}/${post.slug}`}>{post.title}</Link>
+                </CustomTableCell>
+                <CustomTableCell>{post.slug}</CustomTableCell>
                 <CustomTableCell>{post.date_created.toDate().toLocaleString()}</CustomTableCell>
-                <CustomTableCell>{post.date_modified}</CustomTableCell>
                 <CustomTableCell>
                   <IconButton aria-label="Delete" className={classes.margin}
                     onClick = {() => removePost(post.postId)}

@@ -4,11 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import ListPostCard from "./ListPostCard";
 
-import * as actions from "../actions";
+import {fetchLatestPosts} from "../actions";
 
 const styles = theme => ({
   root: {
@@ -30,9 +29,9 @@ const styles = theme => ({
 
 class Home extends Component {
   componentDidMount() {
-    const { latestPosts, fetchPosts } = this.props;
+    const { latestPosts, fetchLatestPosts } = this.props;
     if (!latestPosts.length) {
-      fetchPosts();
+      fetchLatestPosts();
     }
   }
 
@@ -77,4 +76,6 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(Home));
+export default connect(mapStateToProps, {
+  fetchLatestPosts
+})(withStyles(styles)(Home));

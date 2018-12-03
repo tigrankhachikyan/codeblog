@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
@@ -6,23 +6,35 @@ import { withStyles } from '@material-ui/core/styles';
 
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
+import Diff from 'react-stylable-diff';
+
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
+import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
+
 import './index.css';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: "100%"
+  },
+  paperToolbox: {
+    padding: theme.spacing.unit * 2,
+    margin: theme.spacing.unit,
+    color: theme.palette.text.secondary,
   },
   paper: {
     padding: theme.spacing.unit * 2,
-    height: '100vh',
+    margin: theme.spacing.unit,
     color: theme.palette.text.secondary,
+    overflowWrap: "break-word",
+    height: '80vh',
+    minHeight: '80vh'
   },
   control: {
     padding: theme.spacing.unit * 2,
@@ -35,12 +47,13 @@ class Editor extends Component {
     super(props);
     this.state = {
       isChanged: false,
-      _autoSaveTimerId: null,
-    
       markdown: "",
       title: "",
 
       draftIsEmpty: true,
+      _autoSaveTimerId: null,
+
+      displayContent: null
     }
   }
 
@@ -61,25 +74,29 @@ class Editor extends Component {
     return post;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const postId = this.props.match.params.id;
-    this.fetchPostData(postId)
-      .then(post => {
-        if (post.draft) {
-          this.setState({
-            draftIsEmpty: false,
-            markdown: post.draft.body_markdown,
-            title: post.title,
-          })
-        } else {
-          this.setState({
-            draftIsEmpty: true,
-            markdown: post.body_markdown,
-            title: post.title,
-          })
-        }
-      });
+    try {
+      const post = await this.fetchPostData(postId);
+      const data = {
+        title: post.title,
+        markdownPublished: post.body_markdown,
+        markdown: post.body_markdown,
+      };
+      if (post.draft) {
+        data.draftIsEmpty  = false;
+        data.markdownDraft = post.draft.body_markdown;
+        data.markdown      = post.draft.body_markdown;
+      } else {
+        data.displayContent = this.renderEditor();
+      }
 
+      this.setState({...data});
+    } catch(e) {
+      console.log("Error:", e);
+    }
+
+    // TODO: use autodave interval from settings
     const timerId = setInterval(() => {
       if (!this.state.isChanged) return;
 
@@ -90,6 +107,18 @@ class Editor extends Component {
 
   componentWillUnmount() {
     clearInterval(this.state._autoSaveTimerId);
+  }
+
+  showDiff = () => {
+    this.setState({
+      displayContent: this.renderDraftDiff()
+    })
+  }
+
+  showEditor = () => {
+    this.setState({
+      displayContent: this.renderEditor()
+    })
   }
 
   closeEditingHandles = () => {
@@ -120,23 +149,66 @@ class Editor extends Component {
   publishDraft = () => {
     const postId = this.props.match.params.id;
     const { publishDraftById, addToast } = this.props;
-    publishDraftById(postId).then(() => {
-      this.setState({isChanged: false});
+    publishDraftById(postId).then((postBody) => {
+      this.setState({
+        isChanged: false,
+        markdownPublished: postBody
+      });
       addToast({text: "Successfully published latest draft changes", color: "lightgreen"});
     });
   }
 
+  renderDraftDiff = () => {
+    return (
+      <Grid item xs={10}>
+        <Paper className={this.props.classes.paper}>
+          <pre>
+            <Diff inputA={this.state.markdown} inputB={this.state.markdownDraft} type="words" />
+          </pre>
+        </Paper>
+      </Grid>
+    );
+  }
+
+  renderEditor = () => {
+    return <Fragment>
+      <Grid item xs={6}>
+        <Paper className={this.props.classes.paper}>
+          <textarea
+            style={{
+              margin: 5,
+              fontSize: 18,
+            }}
+            value={this.state.markdown}
+            onChange={this.handleChange}
+          />
+        </Paper>
+      </Grid>
+      <Grid item xs={6}>
+        <Paper className={this.props.classes.paper}>
+          <Markdown 
+            options={{tables: true}}
+            markup={ this.state.markdown }
+            style={{overflow: "auto"}} 
+          />
+        </Paper>
+      </Grid>
+    </Fragment>
+  }
+
   render() {
+    if (!this.state.markdown) return null;
+
     const actions = [
       {
         action: this.saveDraftContent,
         title: "Save Draft",
-        icon: "save",
+        icon: <SaveIcon />,
       },
       {
         action: this.closeEditingHandles,
         title: "Close Editor",
-        icon: "times",
+        icon: <CloseIcon />,
       }
     ];
 
@@ -147,39 +219,67 @@ class Editor extends Component {
         direction="row"
       >
         <Grid item xs={12}>
-          <Paper>
-          <h2 style={{display: 'inline'}}>
-              {this.state.title}
+          <Paper className={this.props.classes.paperToolbox}>
+            <h2 style={{display: 'inline'}}>
+              Post Title: <em>
+                {this.state.title}
+                { this.state.isChanged && <span>(Unsaved Changes)</span>}
+              </em>
             </h2>
-            <hr />
-            { this.state.isChanged && <span>(Unsaved Changes)</span>}
-            { !this.state.draftIsEmpty && <h4>Loaded Draft content</h4> }
-            <Button variant="contained" color="primary" onClick={this.publishDraft} >Publish Draft Changes</Button>
+
+            { 
+              // !this.state.draftIsEmpty && 
+              //   <div>
+              //     <span>Detected Content from draft</span>
+              //     <Button 
+              //       variant="contained" 
+              //       color="primary" 
+              //       onClick={this.showDiff}
+              //     >
+              //       View Diff
+              //     </Button>
+              //   </div>
+            }
+
+            {
+              this.state.markdownPublished !== this.state.markdown &&
+              ! this.state.isChanged &&
+              <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={this.publishDraft}
+                style={{float: "right"}}
+              >
+                Publish Draft Changes
+              </Button>
+            }
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <textarea
-            style={{
-              margin: 5,
-              fontSize: 18,
-            }}
-            value={this.state.markdown}
-            onChange={this.handleChange}
+          <Paper className={this.props.classes.paper}>
+            <textarea
+              style={{
+                margin: 5,
+                fontSize: 18,
+              }}
+              value={this.state.markdown}
+              onChange={this.handleChange}
             />
+          </Paper>
         </Grid>
-        <Grid item xs={6} grow>
+        <Grid item xs={6}>
+          <Paper className={this.props.classes.paper} style={{overflowY: "auto"}}>
             <Markdown 
               options={{tables: true}}
               markup={ this.state.markdown }
-              style={{overflow: "auto"}} 
             />
+          </Paper>
         </Grid>
-
       </Grid>
 
-        <FloatingBottomToolbox 
-            actions={actions}
-        />
+      <FloatingBottomToolbox 
+        actions={actions}
+      />
 
       </div>
     );

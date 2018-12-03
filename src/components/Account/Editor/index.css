@@ -2,11 +2,9 @@ textarea {
   display: block;
   border: 1px solid black;
   height: 100%;
-  min-height: auto;
-  width: 98%;
+  width: 100%;
 
   border: none;
-  overflow: auto;
   outline: none;
 
   -webkit-box-shadow: none;

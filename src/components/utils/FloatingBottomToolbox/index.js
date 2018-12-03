@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Fab from '@material-ui/core/Fab';
 
 import './index.css';
 
@@ -26,19 +26,19 @@ FloatingBottomToolbox.propTypes = {
 
 const ActionButton = (props) => {
   return (
-    <a 
-      title={props.title || ''}
-      className="round-button" 
+    <Fab 
+      color="primary"
+      aria-label={props.title || ''}
       onClick={props.action}
     >
-      <FontAwesomeIcon icon={props.icon} />
-    </a>
+      {props.icon}
+    </Fab>
   )
 }
 
 ActionButton.propTypes = {
   title: PropTypes.string,
   action: PropTypes.func.isRequired,
-  icon: PropTypes.string.isRequired
+//  icon: PropTypes.com
 };
 
