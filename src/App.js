@@ -17,22 +17,19 @@ import Account from "./components/Account";
 import requireAuth from "./auth/requireAuth";
 
 import SignIn from "./auth/SignIn";
+import ForgetPassword from "./auth/ForgetPassword";
 import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
 import PostViewSlug from "./components/PostViewSlug";
 import UserPublicPostsList from "./components/UserPublicPostsList";
-import UserSettings from "./components/Account/UserSettings"
+import UserSettings from "./components/Account/UserSettings";
+import SignUp from "./auth/SignUp";
 
 import Toasts from "./components/Toasts";
 
 import './index.css';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSave, faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
-import ForgetPassword from './auth/ForgetPassword';
-library.add([faSave,faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp]);
 
 class App extends Component {
 
@@ -75,6 +72,7 @@ class App extends Component {
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/forget-password" component={ForgetPassword}/>
+            <Route path="/signup" component={SignUp}/>
             <Route path="/account" component={requireAuth(Account)}/>
             <Route path="/user-settings" component={requireAuth(UserSettings)}/>
 

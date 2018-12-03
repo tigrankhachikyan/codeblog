@@ -1,4 +1,4 @@
-//import "./SignIn.css";
+
 import React, { Component } from "react";
 import {
   Redirect,
@@ -39,7 +39,6 @@ class SignIn extends Component {
     return (
       <div className='conteniner-signin'>
       <span className='signInText'>Login</span> 
-      <span className='signInText'>Sign Up</span>
       <hr/>
 
       <GoogleSignInButton action={signInWithGoogle}/>

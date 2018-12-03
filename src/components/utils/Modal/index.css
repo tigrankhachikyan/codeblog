@@ -12,14 +12,11 @@
   background: white;
   border-radius: 10px;
   padding: 20px;
-  width: 50%;
-  /* height: 150px; */
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
   /* border: 2px solid blue; */
   text-align: right;
-  padding-right: 30%
 }
 
 .display-block {

@@ -16,7 +16,7 @@ export default (state = initState, action) => {
     case LOAD_POSTS:
       return {
         ...state, 
-        latestPosts: [...action.payload.posts, ...state.latestPosts]
+        latestPosts: [...action.payload.posts]
       }
     case REMOVE_USER_POST:
       return {
