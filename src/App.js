@@ -29,10 +29,6 @@ import Toasts from "./components/Toasts";
 
 import './index.css';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSave, faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
-library.add([faSave,faFile, faColumns, faTimes, faEdit, faBookmark, faThumbsUp]);
-
 class App extends Component {
 
   async componentDidMount() {

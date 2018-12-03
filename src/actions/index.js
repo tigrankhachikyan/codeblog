@@ -12,12 +12,9 @@ import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS, SIGNOUT} from "./types";
 
 import uid from "uid";
 
-export const addPost = newPost => dispatch => {
-  postsRef.push().set(newPost);
-};
-
-export const fetchPosts = () => dispatch => {
-  postsRef.get()
+export const fetchLatestPosts = () => dispatch => {
+  const latestPostsRef = postsRef.orderBy("date_created").limit(10);
+  latestPostsRef.get()
     .then((snapshot) => {
       const posts = [];
 
@@ -129,6 +126,10 @@ export const fetchPostBodyById = (postId) => dispatch => {
   })
 };
 
+/**
+ * 
+ * @param {String} postId 
+ */
 export const fetchPostDraftById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
@@ -230,7 +231,7 @@ export const savePostById = (postId, payload) => dispatch => {
   })
 };
 
-export const savePostDraftById = (postId, payload) => dispatch => {
+export const savePostDraftById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).set({
       body_markdown: payload.body_markdown,
@@ -240,7 +241,7 @@ export const savePostDraftById = (postId, payload) => dispatch => {
   })
 };
 
-export const publishDraftById = (postId) => dispatch => {
+export const publishDraftById = (postId) => async dispatch => {
   return new Promise((resolve, reject) => {
     postDraftsRef.doc(postId).get()
       .then(doc => {
@@ -252,7 +253,7 @@ export const publishDraftById = (postId) => dispatch => {
             body_markdown: draft.body_markdown,
             date_modified: new Date()
           });
-          resolve();
+          resolve(draft.body_markdown);
         }
       })
       .then(() => postDraftsRef.doc(postId).delete())
@@ -327,7 +328,7 @@ export const fetchUser = () => async dispatch => {
   })
 };
 
-export const signInWithGoogle = () => dispatch => {
+export const signInWithGoogle = () => async dispatch => {
   authRef
     .signInWithPopup(providerGoogle)
     .then(result => {})
@@ -336,7 +337,7 @@ export const signInWithGoogle = () => dispatch => {
     });
 };
 
-export const signInWithFacebook = () => dispatch => {
+export const signInWithFacebook = () => async dispatch => {
   authRef
     .signInWithPopup(providerFacebook)
     .then(result => {})
@@ -345,7 +346,7 @@ export const signInWithFacebook = () => dispatch => {
     });
 };
 
-export const signInWithEmailAndPassword = (email, password) => dispatch => {
+export const signInWithEmailAndPassword = (email, password) => async dispatch => {
   authRef
     .signInWithEmailAndPassword(email, password)
     .then(result => {})
@@ -367,7 +368,7 @@ export const signOut = () => dispatch => {
     });
 };
 
-export const addToast = (options = {}) => (dispatch, getState) => {
+export const addToast = (options = {}) => async (dispatch, getState) => {
   const { toasts } = getState();
   dispatch({
     payload: options,
@@ -381,7 +382,7 @@ export const addToast = (options = {}) => (dispatch, getState) => {
   }, 2000);
 }
 
-export const removeToast = (id) => dispatch => {
+export const removeToast = (id) => async dispatch => {
   dispatch({
     payload: id,
     type: REMOVE_TOAST

@@ -48,7 +48,7 @@ function ListPostCard(props) {
       </CardContent>
       <CardActions>
         <Button size="small" onClick={e => props.history.push(`/@${post.data.user.userName}/${post.data.slug}`)}>
-          Read more...
+          Read...
         </Button>
       </CardActions>
     </Card>
