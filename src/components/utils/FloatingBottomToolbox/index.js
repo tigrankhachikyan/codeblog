@@ -39,6 +39,6 @@ const ActionButton = (props) => {
 ActionButton.propTypes = {
   title: PropTypes.string,
   action: PropTypes.func.isRequired,
-  icon: PropTypes.string.isRequired
+//  icon: PropTypes.com
 };
 
