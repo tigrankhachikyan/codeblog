@@ -119,8 +119,7 @@ class DashBoard extends Component {
         />
 
         <Modal show={this.state.showDialog} handleClose={this.hideModal}>
-       
-        <ul>
+          <ul>
             <li>
               <label>
                 Title:
@@ -130,7 +129,7 @@ class DashBoard extends Component {
             <li>
               <label>
                 Slug:
-                <input type="text" disabled value={this.state.slug} onChange={this.handleSlugChange}
+                <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
                  />
               </label>
             </li>
@@ -141,7 +140,7 @@ class DashBoard extends Component {
                   placeholder = 'Add excerpt' 
                   value={this.state.excerpt}  
                   onChange={e => this.setState({excerpt: e.target.value})}
-                > </textarea>
+                />
               </label>
             </li>
             <li>
