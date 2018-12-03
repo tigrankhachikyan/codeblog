@@ -33,8 +33,8 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     color: theme.palette.text.secondary,
     overflowWrap: "break-word",
-    height: '75vh',
-    minHeight: '75vh'
+    height: '80vh',
+    minHeight: '80vh'
   },
   control: {
     padding: theme.spacing.unit * 2,
@@ -149,8 +149,11 @@ class Editor extends Component {
   publishDraft = () => {
     const postId = this.props.match.params.id;
     const { publishDraftById, addToast } = this.props;
-    publishDraftById(postId).then(() => {
-      this.setState({isChanged: false});
+    publishDraftById(postId).then((postBody) => {
+      this.setState({
+        isChanged: false,
+        markdownPublished: postBody
+      });
       addToast({text: "Successfully published latest draft changes", color: "lightgreen"});
     });
   }
@@ -194,6 +197,8 @@ class Editor extends Component {
   }
 
   render() {
+    if (!this.state.markdown) return null;
+
     const actions = [
       {
         action: this.saveDraftContent,
@@ -212,7 +217,6 @@ class Editor extends Component {
       <Grid 
         container
         direction="row"
-        alignItems="stretch"
       >
         <Grid item xs={12}>
           <Paper className={this.props.classes.paperToolbox}>
@@ -222,28 +226,29 @@ class Editor extends Component {
                 { this.state.isChanged && <span>(Unsaved Changes)</span>}
               </em>
             </h2>
-            <hr />
 
             { 
-              !this.state.draftIsEmpty && 
-                <div>
-                  <span>"Detected Content from draft"</span>
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={this.showDiff}
-                  >
-                    View Diff
-                  </Button>
-                </div>
+              // !this.state.draftIsEmpty && 
+              //   <div>
+              //     <span>Detected Content from draft</span>
+              //     <Button 
+              //       variant="contained" 
+              //       color="primary" 
+              //       onClick={this.showDiff}
+              //     >
+              //       View Diff
+              //     </Button>
+              //   </div>
             }
 
             {
-              this.state.isChanged &&
+              this.state.markdownPublished !== this.state.markdown &&
+              ! this.state.isChanged &&
               <Button 
                 variant="contained" 
                 color="primary" 
                 onClick={this.publishDraft}
+                style={{float: "right"}}
               >
                 Publish Draft Changes
               </Button>
@@ -263,7 +268,7 @@ class Editor extends Component {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <Paper className={this.props.classes.paper} style={{overflowY: "scroll"}}>
+          <Paper className={this.props.classes.paper} style={{overflowY: "auto"}}>
             <Markdown 
               options={{tables: true}}
               markup={ this.state.markdown }
