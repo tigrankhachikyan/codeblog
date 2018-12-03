@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 
 import ListPostCard from "./ListPostCard";
 
-import * as actions from "../actions";
+import {fetchPosts} from "../actions";
 
 const styles = theme => ({
   root: {
@@ -76,4 +76,4 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(Home));
+export default connect(mapStateToProps, {fetchPosts})(withStyles(styles)(Home));
