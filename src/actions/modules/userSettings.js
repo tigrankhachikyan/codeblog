@@ -33,16 +33,20 @@ export const loadUserSettings = (uid) => async dispatch => {
       });
   })
 }
-
+/**
+ * 
+ * @param {*} uid 
+ * @param {*} payload 
+ */
 export const updateUserSettings = (uid, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
     userSettingsRef.doc(uid).update({...payload})
-      .then(doc => {
-        console.log(doc.data());
+      .then(() => {
         dispatch({
           type: UPDATE_SETTINGS,
-          payload: doc.data()
+          payload: {...payload}
         });
+        resolve(payload);
       })
       .catch((err) => {
         reject(err);

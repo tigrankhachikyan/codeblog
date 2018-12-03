@@ -1,5 +1,6 @@
 import { 
   LOAD_SETTINGS,
+  UPDATE_SETTINGS,
   ASSIGN_DEFAULT_SETTINGS,
 } from "../actions/types";
 
@@ -13,7 +14,11 @@ export default function settings(state = {}, action) {
         ...state,
         ...payload
       };
-
+    case UPDATE_SETTINGS:
+      return {
+        ...state,
+        ...payload
+      };
     case ASSIGN_DEFAULT_SETTINGS:
       return {
         ...payload,
