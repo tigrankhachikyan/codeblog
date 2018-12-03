@@ -23,7 +23,7 @@ import NavBar from "./components/NavBar";
 import PostView from "./components/PostView";
 import PostViewSlug from "./components/PostViewSlug";
 import UserPublicPostsList from "./components/UserPublicPostsList";
-import UserSettings from "./components/Account/Settings/UserSettings";
+import UserSettings from "./components/Account/UserSettings";
 import SignUp from "./auth/SignUp";
 
 import Toasts from "./components/Toasts";
