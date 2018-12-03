@@ -17,6 +17,7 @@ import Account from "./components/Account";
 import requireAuth from "./auth/requireAuth";
 
 import SignIn from "./auth/SignIn";
+import ForgetPassword from "./auth/ForgetPassword";
 import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
@@ -70,6 +71,7 @@ class App extends Component {
             <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
+            <Route path="/forget-password" component={ForgetPassword}/>
             <Route path="/signup" component={SignUp}/>
             <Route path="/account" component={requireAuth(Account)}/>
             <Route path="/user-settings" component={requireAuth(UserSettings)}/>

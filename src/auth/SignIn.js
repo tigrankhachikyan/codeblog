@@ -67,7 +67,7 @@ class SignIn extends Component {
         onClick={this.logInwithEmailAndPassword}
       > LOG IN </button>
       
-      <p><Link to={'/'}>Forget password?</Link></p>
+      <p><Link to = {'/forget-password'} >Forget password?</Link></p>
     </div>
 
     );

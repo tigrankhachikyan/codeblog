@@ -114,6 +114,7 @@ class NavBar extends Component {
   }
 }
 
+
 NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
