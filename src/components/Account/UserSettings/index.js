@@ -77,6 +77,13 @@ class UserSettings extends Component {
               {/* USER_NAME */}
               <TableRow className={classes.row}>
                 <TableCell>
+                  User Display Name
+                </TableCell>
+                <TableCell>{this.props.displayName}</TableCell>
+              </TableRow>
+
+              <TableRow className={classes.row}>
+                <TableCell>
                   User Name
                 </TableCell>
                 <TableCell>
@@ -104,7 +111,7 @@ class UserSettings extends Component {
               {/* AUTO_SAVE_DRAFT_INTERVAL */}
               <TableRow className={classes.row}>
                 <TableCell>
-                  Auto Save?
+                  Auto Save Interval in secconds
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -151,6 +158,7 @@ class UserSettings extends Component {
 const mapStateToProps = ({ auth, settings }) => {
   return {
     uid: auth.uid,
+    displayName: auth.displayName,
     settings
   };
 };
