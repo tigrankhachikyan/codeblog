@@ -12,7 +12,6 @@ import {
  } from "../actions";
 
 import GoogleSignInButton from "../components/utils/GoogleSignInButton";
-import ForgetPassword from './ForgetPassword'
 
 class SignIn extends Component {
   constructor(props) {

@@ -1,32 +1,22 @@
 //import "./SignIn.css";
 import React, { Component } from "react";
-import {
-  Redirect,
-  Link
-} from "react-router-dom";
+import '../index.css'
 
 
 class ForgetPassword extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       redirectToReferrer: false,
-//       email: null,
-//       password: null
-//     };
-//   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirectToReferrer: false,
+      email: null,
+      password: null
+    };
+  }
   
   render() {
-    
-    // let { from } = this.props.location.state || { from: { pathname: "/" } };
-    // let { redirectToReferrer } = this.state;
-
-    // if (auth) return <Redirect to={from} />;
-
-    // if (redirectToReferrer) return <Redirect to={from} />;
 
     return (
-      <div className='conteniner-signin'>
+      <div className='conteniner-forget'>
       <span className='signInText'>Forget Pasword</span> 
       <hr/>
       <input 
@@ -35,24 +25,16 @@ class ForgetPassword extends Component {
         className = 'signInInput'
         onChange={e => this.setState({email: e.target.value})}
       />
-
-      
-      <hr/>
-      
-    
-      
       <button 
         className='logInButton' 
-        onClick={this.logInwithEmailAndPassword}
-      > Submit </button>
+      > Reset Password </button>
+      <p className = 'resetPasswordText'>*Password reset link will be sent to your email. 
+        You will have 24 hours to reset your passwordPassword reset link will be sent to your email. 
+        You will have 24 hours to reset your password </p>
     </div>
 
     );
   }
-}
-
-function mapStateToProps({ auth }) {
-  return { auth };
 }
 
 export default ForgetPassword;

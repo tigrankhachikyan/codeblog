@@ -45,3 +45,18 @@ code {
   font-size: 25px;
   cursor: pointer;
 }
+
+.resetPasswordText {
+  text-align: left;
+  margin: 40px 10px;
+  
+}
+
+.conteniner-forget {
+  width: 600px;
+  height: 300px;
+  margin: 100px auto;
+  border: 2px solid #eee;
+  text-align: center;
+  padding: 10px;
+}
