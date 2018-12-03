@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import Modal from '../../utils/Modal';
 import UserInfo from '../../../helpers/UserInfo';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 
@@ -103,7 +104,7 @@ class DashBoard extends Component {
     const actions = [
       {
         title: "Create New Post",
-        icon: "file",
+        icon: <AddBoxIcon />,
         action: this.showModal
       }
     ];

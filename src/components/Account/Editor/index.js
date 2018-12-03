@@ -12,6 +12,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
+import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
+
 import './index.css';
 
 const styles = theme => ({
@@ -131,12 +134,12 @@ class Editor extends Component {
       {
         action: this.saveDraftContent,
         title: "Save Draft",
-        icon: "save",
+        icon: <SaveIcon />,
       },
       {
         action: this.closeEditingHandles,
         title: "Close Editor",
-        icon: "times",
+        icon: <CloseIcon />,
       }
     ];
 
