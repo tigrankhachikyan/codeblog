@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import {
   withRouter
@@ -102,7 +102,10 @@ class NavBar extends Component {
               </div>
             )
           :
-            <Button color="inherit" onClick={() => this.props.history.push('/signin')}>Login</Button>
+            <Fragment>
+              <Button color="inherit" onClick={() => this.props.history.push('/signup')}>SignUp</Button>
+              <Button color="inherit" onClick={() => this.props.history.push('/signin')}>Login</Button>
+            </Fragment>
           }
           </Toolbar>
         </AppBar>
