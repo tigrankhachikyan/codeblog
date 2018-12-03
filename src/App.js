@@ -52,7 +52,7 @@ class App extends Component {
 
     try {
       await this.props.assignUserDefaultSettings(auth, {
-        USER_NAME: auth.email.replace(/\@.*$/, '')
+        USER_NAME: auth.email.replace(/@.*$/, '')
       })
     } catch {
       console.log(auth);

@@ -10,7 +10,7 @@ class UserPublicPostsList extends Component {
   };
 
   async componentDidMount() {
-    const {username, slug} = this.props.match.params;
+    const {username} = this.props.match.params;
     const {getUserByUserName, fetchUserPosts} = this.props;
 
     const user = await getUserByUserName(username);

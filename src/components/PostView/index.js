@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import { Markdown } from 'react-showdown';
-import FloatingBottomToolbox from '../utils/FloatingBottomToolbox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import Spinner from '../utils/Spinner';
 

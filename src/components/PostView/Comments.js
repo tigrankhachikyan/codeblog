@@ -52,7 +52,7 @@ class Comments extends Component {
                 
                 <div className = 'textContainer'>
                     <h3> {this.state.user} </h3>
-                    <img src= {person} />
+                    <img src= {person} alt="person" />
                     <textarea className = 'commentText' placeholder = 'Add Comments . . . ' value = {this.state.value} onChange = {this.handelChange} > </textarea>
                     <button className = 'commentBtn'type = 'button' onClick = {this.addComment} > Comment </button>
                 </div>
