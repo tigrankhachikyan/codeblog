@@ -1,16 +1,10 @@
-// import "./signUp.css";
 import React, { Component } from "react";
-// import {
-//   Redirect,
-//   Link
-// } from "react-router-dom";
 import { connect } from "react-redux";
-import { 
-//   signInWithGoogle,
-//   signInWithFacebook,
-  signInWithEmailAndPassword
- } from "../actions";
+import {withRouter} from 'react-router-dom';
 
+import { 
+  signUpWithEmailAndPassword
+ } from "../actions";
 
 class SignUp extends Component {
   constructor(props) {
@@ -18,41 +12,18 @@ class SignUp extends Component {
     this.state = {
       email: null,
       password: null,
-      name: null,
-      surname: null
     };
   }
-  
-  logInwithEmailAndPassword = (e) => {
-    this.props.signInWithEmailAndPassword(this.state.email, this.state.password);
-  }
-  
+
   render() {
-    // const { auth, signInWithGoogle, signInWithFacebook } = this.props;
-    // let { from } = this.props.location.state || { from: { pathname: "/" } };
-    // let { redirectToReferrer } = this.state;
-
-    // if (auth) return <Redirect to={from} />;
-
-    // if (redirectToReferrer) return <Redirect to={from} />;
-
+    if (this.props.auth) {
+      this.props.history.push('account');
+    }
+    
     return (
       <div className='conteniner-signin'>
       <span className='signInText'>Create your Account</span>
       <hr/>
-      
-      <input 
-        type="text" 
-        placeholder='Name'
-        className = 'signInInput'
-        onChange={e => this.setState({name: e.target.value})}
-      />
-      <input 
-        type="text" 
-        placeholder='Surname'
-        className = 'signInInput'
-        onChange={e => this.setState({surname: e.target.value})}
-      />
 
       <input 
         type="email" 
@@ -68,7 +39,11 @@ class SignUp extends Component {
       />
       <button 
         className='logInButton' 
-        onClick={this.logInwithEmailAndPassword}
+        onClick={() => {
+          this.props.signUpWithEmailAndPassword(this.state.email, this.state.password)
+            .then(() => this.props.history.push('/account'))
+            .catch(alert)
+        }}
       > Sign Up </button>
       
     </div>
@@ -81,8 +56,6 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default connect(mapStateToProps, { 
-//   signInWithGoogle,
-//   signInWithFacebook,
-  signInWithEmailAndPassword
- })(SignUp);
+export default withRouter(connect(mapStateToProps, { 
+  signUpWithEmailAndPassword
+ })(SignUp));

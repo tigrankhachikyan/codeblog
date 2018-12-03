@@ -68,7 +68,6 @@ class NavBar extends Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               ```Code Blog```
             </Typography>
-            <Button color="inherit" onClick={() => this.props.history.push('/signup')}>SignUp</Button>
             {auth ? (
               <div>
                 <IconButton
@@ -106,7 +105,10 @@ class NavBar extends Component {
               </div>
             )
           :
-            <Button color="inherit" onClick={() => this.props.history.push('/signin')}>Login</Button>
+            <Fragment>
+              <Button color="inherit" onClick={() => this.props.history.push('/signup')}>SignUp</Button>
+              <Button color="inherit" onClick={() => this.props.history.push('/signin')}>Login</Button>
+            </Fragment>
           }
           </Toolbar>
         </AppBar>

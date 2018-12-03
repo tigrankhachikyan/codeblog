@@ -327,6 +327,15 @@ export const fetchUser = () => async dispatch => {
   })
 };
 
+export const signUpWithEmailAndPassword = (email, password) => dispatch => {
+  authRef.createUserWithEmailAndPassword(email, password).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+};
+
 export const signInWithGoogle = () => dispatch => {
   authRef
     .signInWithPopup(providerGoogle)
