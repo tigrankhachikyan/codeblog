@@ -39,8 +39,7 @@ class App extends Component {
       await this.props.fetchUser();
       await this.loadUserSettings();
     } catch(err) {
-      console.log(err);
-      console.log("Failed to fetch user info");
+      console.log("Failed to fetch user info", err);
     }
   }
 
@@ -50,7 +49,7 @@ class App extends Component {
 
     try {
       await this.props.assignUserDefaultSettings(auth, {
-        USER_NAME: auth.email.replace(/@.*$/, '')
+        USER_NAME: auth.email.replace(/@.+$/, '')
       })
     } catch {
       console.log(auth);

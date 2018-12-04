@@ -2,6 +2,7 @@ import {
   LOAD_SETTINGS,
   UPDATE_SETTINGS,
   ASSIGN_DEFAULT_SETTINGS,
+  REMOVE_USER_SETTINGS
 } from "../actions/types";
 
 
@@ -23,7 +24,8 @@ export default function settings(state = {}, action) {
       return {
         ...payload,
       };
-
+    case REMOVE_USER_SETTINGS:
+      return {};
     default:
       return state;
   }

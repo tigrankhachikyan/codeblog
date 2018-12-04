@@ -82,14 +82,12 @@ class Editor extends Component {
       const data = {
         title: post.title,
         markdownPublished: post.body_markdown,
-        markdown: post.body_markdown,
+        markdown: post.body_markdown || `#${post.title}`,
       };
       if (post.draft) {
         data.draftIsEmpty  = false;
         data.markdownDraft = post.draft.body_markdown;
         data.markdown      = post.draft.body_markdown;
-      } else {
-        data.displayContent = this.renderEditor();
       }
 
       this.setState({...data});

@@ -7,8 +7,9 @@ import {
   postsBodyRef,
   postDraftsRef
 } from "../config/firebase.js";
-import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST } from "./types";
-import { ADD_TOAST, REMOVE_TOAST , LOAD_SETTINGS, SIGNOUT} from "./types";
+import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST, REMOVE_USER_POSTS } from "./types";
+import { ADD_TOAST, REMOVE_TOAST , SIGNOUT} from "./types";
+import { LOAD_SETTINGS, REMOVE_USER_SETTINGS} from "./types";
 
 import uid from "uid";
 
@@ -64,27 +65,24 @@ export const fetchUserPosts = (uid) => dispatch => {
  * 
  * @param {Object} payload Post data
  */
-export const createPost = (payload) => dispatch => {
-  return new Promise((resolve, reject) => {
+export const createPost = (payload) => async dispatch => {
+  return new Promise(async (resolve, reject) => {
     const newPostRef = postsRef.doc();
     const id = newPostRef.id;
     payload.slug = payload.slug + "-" + id;
-
-    newPostRef.set(payload)
-    .then(() => {
-      dispatch({
-        type: CREATE_POST,
-        payload
-      });
-      postsBodyRef.doc(id).set({
-        body_markdown: "",
-        date_modified: new Date()
-      });
+    
+    try {
+      const [post, postBody] = await Promise.all([
+        newPostRef.set(payload),
+        postsBodyRef.doc(id).set({
+          body_markdown: "",
+          date_modified: new Date()
+        })
+      ]);
       resolve(id);
-    })
-    .catch((err) => {
-      reject(err);
-    });
+    } catch(e) {
+      reject(e)
+    }
   })
 };
 
@@ -114,7 +112,7 @@ export const fetchPostBodyById = (postId) => dispatch => {
     postsBodyRef.doc(postId).get()
       .then(doc => {
         if (!doc.exists) {
-          reject('No such document!');
+          reject('No such post body document!');
         } else {
           resolve(doc.data());
         }
@@ -278,7 +276,9 @@ const assignDefaultUserSettings = async (dispatch, auth) => {
   }
 
   const settings = {
-    USER_NAME: userNamePrefix
+    USER_NAME: userNamePrefix,
+    AUTO_SAVE_DRAFT: true,
+    AUTO_SAVE_DRAFT_INTERVAL: 10 * 1000, // 10 sec
   };
 
   try {
@@ -366,7 +366,13 @@ export const signOut = () => dispatch => {
     .then(() => {
       dispatch({
         type: SIGNOUT
-      })
+      });
+      dispatch({
+        type: REMOVE_USER_POSTS
+      });
+      dispatch({
+        type: REMOVE_USER_SETTINGS
+      });
     })
     .catch(error => {
       console.log(error);
