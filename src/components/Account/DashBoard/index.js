@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import Modal from '../../utils/Modal';
 import UserInfo from '../../../helpers/UserInfo';
@@ -15,6 +19,13 @@ import {
 } from "../../../actions";
 
 import UserPostsTable from './UserPostsTable';
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+  },
+});
 
 class DashBoard extends Component {
   constructor() {
@@ -101,6 +112,8 @@ class DashBoard extends Component {
   }
   
   render() {
+    const { classes } = this.props;
+
     const actions = [
       {
         title: "Create New Post",
@@ -110,49 +123,60 @@ class DashBoard extends Component {
     ];
 
     return (
-      <div className="container center">
-        <h1>DashBoard</h1>
-        <UserPostsTable 
-          posts={this.props.userPosts} 
-          editPost={(postId) => this.editPost(postId)}
-          removePost={(postId) => this.removePost(postId)}
-        />
-
-        <Modal show={this.state.showDialog} handleClose={this.hideModal}>
-          <ul>
-            <li>
-              <label>
-                Title:
-                <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
-              </label>
-            </li>
-            <li>
-              <label>
-                Slug:
-                <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
-                 />
-              </label>
-            </li>
-            <li>
-              <label>
-              Excerpt:
-                <textarea 
-                  placeholder = 'Add excerpt' 
-                  value={this.state.excerpt}  
-                  onChange={e => this.setState({excerpt: e.target.value})}
-                />
-              </label>
-            </li>
-            <li>
-              <button onClick={this.handleCreate}>Create</button>
-              <button onClick={this.handleCancel}>Cancel</button>
-            </li>
-          </ul>
-        </Modal>
-        
-        <FloatingBottomToolbox 
-          actions={actions}
-        />
+      <div className={classes.root}>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          alignContent="center"
+        >
+          <Typography variant="h3" gutterBottom>
+            DashBoard
+          </Typography>
+          <Grid item xs={12} md={8}>
+              <UserPostsTable 
+                posts={this.props.userPosts} 
+                editPost={(postId) => this.editPost(postId)}
+                removePost={(postId) => this.removePost(postId)}
+              />
+          </Grid>
+          <Modal show={this.state.showDialog} handleClose={this.hideModal}>
+            <ul>
+              <li>
+                <label>
+                  Title:
+                  <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
+                </label>
+              </li>
+              <li>
+                <label>
+                  Slug:
+                  <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
+                  />
+                </label>
+              </li>
+              <li>
+                <label>
+                Excerpt:
+                  <textarea 
+                    placeholder = 'Add excerpt' 
+                    value={this.state.excerpt}  
+                    onChange={e => this.setState({excerpt: e.target.value})}
+                  />
+                </label>
+              </li>
+              <li>
+                <button onClick={this.handleCreate}>Create</button>
+                <button onClick={this.handleCancel}>Cancel</button>
+              </li>
+            </ul>
+          </Modal>
+          
+          <FloatingBottomToolbox 
+            actions={actions}
+          />
+        </Grid>
       </div>
     );
   }
@@ -171,4 +195,4 @@ export default withRouter(connect(mapStateToProps, {
   createPost,
   fetchUserPosts,
   deletePostById
-})(DashBoard));
+})(withStyles(styles)(DashBoard)));

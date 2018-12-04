@@ -54,103 +54,106 @@ class UserSettings extends Component {
 
     return (
       <div className={classes.root}>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        alignContent="center"
-      >
-      <Grid item xs={8}>
-        <Typography variant="h3" gutterBottom>
-          User Settings
-         </Typography>
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Setting</TableCell>
-                <TableCell>Value</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {/* USER_NAME */}
-              <TableRow className={classes.row}>
-                <TableCell>
-                  User Display Name
-                </TableCell>
-                <TableCell>{this.props.displayName}</TableCell>
-              </TableRow>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          alignContent="center"
+        >
+          <Typography variant="h3" gutterBottom>
+            User Settings
+          </Typography>
+          <Grid item xs={12} md={8}>
+             <Paper className={classes.root}>
+              <Table className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Setting</TableCell>
+                    <TableCell>Value</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* USER_NAME */}
+                  <TableRow className={classes.row}>
+                    <TableCell>
+                      User Display Name
+                    </TableCell>
+                    <TableCell>{this.props.displayName}</TableCell>
+                  </TableRow>
 
-              <TableRow className={classes.row}>
-                <TableCell>
-                  User Name
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    defaultValue={settings.USER_NAME}
-                    onChange={(e) => {this.setState({settings: {...this.state.settings, USER_NAME: e.target.value}})}}
-                  />
-                </TableCell>
-              </TableRow>
+                  <TableRow className={classes.row}>
+                    <TableCell>
+                      User Name
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        defaultValue={settings.USER_NAME}
+                        onChange={(e) => {this.setState({settings: {...this.state.settings, USER_NAME: e.target.value}})}}
+                      />
+                    </TableCell>
+                  </TableRow>
 
-              {/* AUTO_SAVE_DRAFT */}
-              <TableRow className={classes.row}>
-                <TableCell>
-                  Auto Save?
-                </TableCell>
-                <TableCell>
-                  <Switch
-                    checked={settings.AUTO_SAVE_DRAFT}
-                    onChange={(e) => {this.setState({settings: {...this.state.settings, AUTO_SAVE_DRAFT: e.target.checked}})}}
-                    color="primary"
-                  />
-                </TableCell>
-              </TableRow>
+                  {/* AUTO_SAVE_DRAFT */}
+                  <TableRow className={classes.row}>
+                    <TableCell>
+                      Auto Save?
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={settings.AUTO_SAVE_DRAFT}
+                        onChange={(e) => {this.setState({settings: {...this.state.settings, AUTO_SAVE_DRAFT: e.target.checked}})}}
+                        color="primary"
+                      />
+                    </TableCell>
+                  </TableRow>
 
-              {/* AUTO_SAVE_DRAFT_INTERVAL */}
-              <TableRow className={classes.row}>
-                <TableCell>
-                  Auto Save Interval in secconds
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    label="Seconds"
-                    value={settings.AUTO_SAVE_DRAFT_INTERVAL / 1000}
-                    onChange={(e) => {this.setState({settings: {...this.state.settings, AUTO_SAVE_DRAFT_INTERVAL: e.target.value * 1000}})}}
-                    type="number"
-                    disabled={!settings.AUTO_SAVE_DRAFT}
-                  />
-                  </TableCell>
-              </TableRow>
-
-            </TableBody>
-          </Table>
-        </Paper>
+                  {/* AUTO_SAVE_DRAFT_INTERVAL */}
+                  <TableRow className={classes.row}>
+                    <TableCell>
+                      Auto Save Interval in secconds
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        label="Seconds"
+                        value={settings.AUTO_SAVE_DRAFT_INTERVAL / 1000}
+                        onChange={(e) => {this.setState({settings: {...this.state.settings, AUTO_SAVE_DRAFT_INTERVAL: e.target.value * 1000}})}}
+                        type="number"
+                        disabled={!settings.AUTO_SAVE_DRAFT}
+                      />
+                      </TableCell>
+                  </TableRow>
+                  {
+                  ! isEqual(settings, this.props.settings) &&
+                    <TableRow className={classes.row}>
+                      <TableCell>
+                        <Button 
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          onClick={() => {this.props.updateUserSettings(this.props.uid, this.state.settings)}}
+                        >
+                          Save Changes
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          variant="contained" 
+                          color="secondary" 
+                          className={classes.button}
+                          onClick={() => {this.setState({settings: this.props.settings})}}
+                        >
+                          Discard Changes
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  }
+                </TableBody>
+              </Table>
+            </Paper>
+          </Grid>
         </Grid>
-          {
-            ! isEqual(settings, this.props.settings) &&
-            <div>
-              <Button 
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={() => {this.props.updateUserSettings(this.props.uid, this.state.settings)}}
-              >
-                Save Changes
-              </Button>
-              <Button 
-                variant="contained" 
-                color="secondary" 
-                className={classes.button}
-                onClick={() => {this.setState({settings: this.props.settings})}}
-              >
-                Discard Changes
-              </Button>
-            </div>
-          }
-        </Grid>
-        </div>
+      </div>
     );
   }
 }

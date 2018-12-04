@@ -25,12 +25,12 @@ const CustomTableCell = withStyles(theme => ({
 
 const styles = theme => ({
   root: {
-    width: '90%',
+    width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   table: {
-    minWidth: 700,
+    minWidth: '40vw',
   },
   row: {
     '&:nth-of-type(odd)': {
