@@ -152,7 +152,7 @@ class DashBoard extends Component {
               <li>
                 <label>
                   Slug:
-                  <input className='modal-input' type="text" value={this.state.slug} onChange={this.handleSlugChange disabled }
+                  <input  disabled={true} className='modal-input' type="text" value={this.state.slug} onChange={this.handleSlugChange }
                   />
                 </label>
               </li>
