@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 
 import * as actions from "../../actions";
 
@@ -73,7 +74,11 @@ class NavBar extends Component {
                   onClick={this.handleMenu}
                   color="inherit"
                 >
-                  <AccountCircle />
+                {
+                  this.props.auth.photoURL 
+                    ? <Avatar alt="Remy Sharp" src={this.props.auth.photoURL} className={classes.avatar} />
+                    : <AccountCircle />
+                }
                 </IconButton>
                 <Menu
                   id="menu-appbar"
