@@ -9,6 +9,7 @@ import { Markdown } from 'react-showdown';
 import Diff from 'react-stylable-diff';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
+import Typography from '@material-ui/core/Typography';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -96,30 +97,33 @@ class Editor extends Component {
       console.log("Error:", e);
     }
 
-    // TODO: use autodave interval from settings
-    const timerId = setInterval(() => {
-      if (!this.state.isChanged) return;
-
-      this.saveDraftContent();
-    }, 7000)
-    this.setState({_autoSaveTimerId: timerId});
+    if (this.props.settings.AUTO_SAVE_DRAFT) {
+      const timerId = setInterval(() => {
+        if (!this.state.isChanged) return;
+  
+        this.saveDraftContent();
+      }, this.props.settings.AUTO_SAVE_DRAFT_INTERVAL)
+      this.setState({_autoSaveTimerId: timerId});
+    }
   }
 
   componentWillUnmount() {
+    if (!this.state._autoSaveTimerId) return;
+
     clearInterval(this.state._autoSaveTimerId);
   }
 
-  showDiff = () => {
-    this.setState({
-      displayContent: this.renderDraftDiff()
-    })
-  }
+  // showDiff = () => {
+  //   this.setState({
+  //     displayContent: this.renderDraftDiff()
+  //   })
+  // }
 
-  showEditor = () => {
-    this.setState({
-      displayContent: this.renderEditor()
-    })
-  }
+  // showEditor = () => {
+  //   this.setState({
+  //     displayContent: this.renderEditor()
+  //   })
+  // }
 
   closeEditingHandles = () => {
     if (this.state.isChanged) {
@@ -158,43 +162,43 @@ class Editor extends Component {
     });
   }
 
-  renderDraftDiff = () => {
-    return (
-      <Grid item xs={10}>
-        <Paper className={this.props.classes.paper}>
-          <pre>
-            <Diff inputA={this.state.markdown} inputB={this.state.markdownDraft} type="words" />
-          </pre>
-        </Paper>
-      </Grid>
-    );
-  }
+  // renderDraftDiff = () => {
+  //   return (
+  //     <Grid item xs={10}>
+  //       <Paper className={this.props.classes.paper}>
+  //         <pre>
+  //           <Diff inputA={this.state.markdown} inputB={this.state.markdownDraft} type="words" />
+  //         </pre>
+  //       </Paper>
+  //     </Grid>
+  //   );
+  // }
 
-  renderEditor = () => {
-    return <Fragment>
-      <Grid item xs={6}>
-        <Paper className={this.props.classes.paper}>
-          <textarea
-            style={{
-              margin: 5,
-              fontSize: 18,
-            }}
-            value={this.state.markdown}
-            onChange={this.handleChange}
-          />
-        </Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={this.props.classes.paper}>
-          <Markdown 
-            options={{tables: true}}
-            markup={ this.state.markdown }
-            style={{overflow: "auto"}} 
-          />
-        </Paper>
-      </Grid>
-    </Fragment>
-  }
+  // renderEditor = () => {
+  //   return <Fragment>
+  //     <Grid item xs={6}>
+  //       <Paper className={this.props.classes.paper}>
+  //         <textarea
+  //           style={{
+  //             margin: 5,
+  //             fontSize: 18,
+  //           }}
+  //           value={this.state.markdown}
+  //           onChange={this.handleChange}
+  //         />
+  //       </Paper>
+  //     </Grid>
+  //     <Grid item xs={6}>
+  //       <Paper className={this.props.classes.paper}>
+  //         <Markdown 
+  //           options={{tables: true}}
+  //           markup={ this.state.markdown }
+  //           style={{overflow: "auto"}} 
+  //         />
+  //       </Paper>
+  //     </Grid>
+  //   </Fragment>
+  // }
 
   render() {
     if (!this.state.markdown) return null;
@@ -211,6 +215,9 @@ class Editor extends Component {
         icon: <CloseIcon />,
       }
     ];
+    if (this.props.settings.AUTO_SAVE_DRAFT) {
+      actions[0].hint = `*${this.props.settings.AUTO_SAVE_DRAFT_INTERVAL / 1000} sec`;
+    }
 
     return (
       <div className={this.props.classes.root}>
@@ -223,7 +230,12 @@ class Editor extends Component {
             <h2 style={{display: 'inline'}}>
               Post Title: <em>
                 {this.state.title}
-                { this.state.isChanged && <span>(Unsaved Changes)</span>}
+                { 
+                  this.state.isChanged && 
+                  <Typography variant="caption" gutterBottom color="secondary" style={{display: "inline"}}>
+                    (Unsaved Changes)
+                  </Typography>
+                }
               </em>
             </h2>
 
@@ -255,7 +267,7 @@ class Editor extends Component {
             }
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Paper className={this.props.classes.paper}>
             <textarea
               style={{
@@ -267,7 +279,7 @@ class Editor extends Component {
             />
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Paper className={this.props.classes.paper} style={{overflowY: "auto"}}>
             <Markdown 
               options={{tables: true}}
@@ -286,9 +298,10 @@ class Editor extends Component {
   }
 }
 
-const mapStateToProps = ({ data }) => {
+const mapStateToProps = ({ data, settings }) => {
   return {
-    post: data.editPost
+    post: data.editPost, // TODO: not used yet, move to redux or not?
+    settings
   };
 };
 

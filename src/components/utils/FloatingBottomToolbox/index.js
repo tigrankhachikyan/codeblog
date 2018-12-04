@@ -27,11 +27,13 @@ FloatingBottomToolbox.propTypes = {
 const ActionButton = (props) => {
   return (
     <Fab 
+    variant={props.hint? "extended" : 'round'}
       color="primary"
       aria-label={props.title || ''}
       onClick={props.action}
     >
       {props.icon}
+      {props.hint}
     </Fab>
   )
 }
@@ -39,6 +41,7 @@ const ActionButton = (props) => {
 ActionButton.propTypes = {
   title: PropTypes.string,
   action: PropTypes.func.isRequired,
-//  icon: PropTypes.com
+  hint: PropTypes.string
+//  icon: PropTypes.node // ??
 };
 
