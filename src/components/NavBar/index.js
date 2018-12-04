@@ -76,7 +76,7 @@ class NavBar extends Component {
                 >
                 {
                   this.props.auth.photoURL 
-                    ? <Avatar alt="Remy Sharp" src={this.props.auth.photoURL} className={classes.avatar} />
+                    ? <Avatar alt={this.props.auth.displayName} src={this.props.auth.photoURL} className={classes.avatar} />
                     : <AccountCircle />
                 }
                 </IconButton>
