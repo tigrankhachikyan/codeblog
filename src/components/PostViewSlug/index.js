@@ -1,76 +1,103 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 import { Markdown } from 'react-showdown';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../utils/Spinner';
+import Hidden from '@material-ui/core/Hidden';
+import Comments from './Comments';
+import Toolbox from './Toolbox';
 
 import { 
-  fetchPostBodyById,
-  fetchUserPostByUsernameAndSlug
+  likePost,
+  fetchPostBySlug,
+  cleanCurrentpost,
+  viewPost
 } from "../../actions";
 
 import "../../css/prism.css";
 
-import './index.css';
+const styles = theme => ({
+  root: {
+    width: '100%',
+    padding: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 3,
+  },
+  fab: {
+    marginBottom: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
+    marginRight: 0,
+  },
+});
 
-class PostViewSlug extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      postData: null
-    }
-  }
-
-  fetchPostData = async (username, slug) => {
-    const result = /-([^-]+)$/.exec(slug);
-    const postId = result[1];
-
-    const [post, postBody] = await Promise.all([
-      this.props.fetchUserPostByUsernameAndSlug(username, slug),
-      this.props.fetchPostBodyById(postId)
-    ]);
-
-    return {
-      postId: post.postId,
-      ...post.data,
-      ...postBody
-    };
-  }
+class PostViewSlug extends PureComponent {
 
   async componentDidMount() {
     const {username, slug} = this.props.match.params;
     try {
-      const post = await this.fetchPostData(username, slug);
-      this.setState({postData: post});
+      this.props.fetchPostBySlug(slug);
     } catch(err) {
       console.log(err);
     }
   }
 
+  componentWillUnmount() {
+    this.props.cleanCurrentpost();
+  }
+
   render() {
+    const { classes } = this.props;
+    if (!this.props.currentPost.post) return null;
+
+    const { post, postBody } = this.props.currentPost;
+
     return (
-      <div className="PostView">
-        <div className="box">
+      <div className={classes.root}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+      >
+        <Hidden smDown>
+          <Toolbox />
+        </Hidden>
+        <Grid item sm={12} md={8} lg={6}>
         { 
-          this.state.postData 
+          post 
             ? <div>
-                <h1>{this.state.postData.title}</h1>
-                <Markdown markup={ this.state.postData.body_markdown } />
+                <h1>{post.title}</h1>
+                <Markdown style={{
+                    overflowWrap: "break-word",
+                  }}
+                  markup={ postBody.body_markdown } />
+                <Comments />
               </div>
             : <Spinner />
         }
-        </div>
+        </Grid>
+      </Grid>
       </div>
     );
   }
 }
 
-// TODO. do we need redux here??
-const mapStateToProps = ({ auth }) => {
-  return { };
+const mapStateToProps = ({ auth, currentPost }) => {
+  return {
+    uid: auth.uid,
+    currentPost: {
+      post: currentPost.post,
+      postBody: currentPost.postBody
+    }
+  };
 };
 
 export default connect(mapStateToProps, {
-  fetchUserPostByUsernameAndSlug,
-  fetchPostBodyById,
-})(PostViewSlug);
+  likePost,
+  viewPost,
+  fetchPostBySlug,
+  cleanCurrentpost
+})(withStyles(styles)(PostViewSlug));

@@ -27,7 +27,7 @@ FloatingBottomToolbox.propTypes = {
 const ActionButton = (props) => {
   return (
     <Fab 
-    variant={props.hint? "extended" : 'round'}
+      variant={props.hint? "extended" : 'round'}
       color="primary"
       aria-label={props.title || ''}
       onClick={props.action}

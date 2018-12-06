@@ -7,13 +7,15 @@ import 'firebase/firestore'
 import { FirebaseConfig } from "./keys";
 firebase.initializeApp(FirebaseConfig);
 
-const firestore = firebase.firestore();
+export const firestore = firebase.firestore();
 const settings = {timestampsInSnapshots: true};
 
 firestore.settings(settings);
 
 export const postsRef      = firestore.collection('posts');
 export const postsBodyRef  = firestore.collection('postsBody');
+export const postCommentsRef = firestore.collection('postComments');
+
 export const postDraftsRef = firestore.collection('postDrafts');
 export const userSettingsRef = firestore.collection('userSettings');
 

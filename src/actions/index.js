@@ -1,20 +1,29 @@
 import { 
+  firestore,
   authRef,
   userSettingsRef,
   providerGoogle,
   providerFacebook,
   postsRef,
   postsBodyRef,
+  postCommentsRef,
   postDraftsRef
 } from "../config/firebase.js";
+
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST, REMOVE_USER_POSTS } from "./types";
 import { ADD_TOAST, REMOVE_TOAST , SIGNOUT} from "./types";
 import { LOAD_SETTINGS, REMOVE_USER_SETTINGS} from "./types";
 
+import { 
+  LOAD_CURRENT_POST,
+  LOAD_CURRENT_POST_COMMENTS,
+  REMOVE_CURRENT_POST
+} from "./types";
+
 import uid from "uid";
 
 export const fetchLatestPosts = () => dispatch => {
-  const latestPostsRef = postsRef.orderBy("date_created").limit(10);
+  const latestPostsRef = postsRef.orderBy("date_created").limit(20);
   latestPostsRef.get()
     .then((snapshot) => {
       const posts = [];
@@ -68,6 +77,9 @@ export const fetchUserPosts = (uid) => dispatch => {
 export const createPost = (payload) => async dispatch => {
   return new Promise(async (resolve, reject) => {
     const newPostRef = postsRef.doc();
+    createCounter(newPostRef, 10, "likes");
+    createCounter(newPostRef, 10, "views");
+
     const id = newPostRef.id;
     payload.slug = payload.slug + "-" + id;
     
@@ -85,6 +97,23 @@ export const createPost = (payload) => async dispatch => {
     }
   })
 };
+/**
+ * 
+ * @param {*} postId 
+ * @param {*} payload 
+ */
+export const addPostComment = (postId, payload) => async dispatch => {
+  try {
+    postCommentsRef.doc().set({
+      ...payload,
+      postId,
+      dateCreated: new Date()
+    });
+  } catch(e) {
+    console.log(e);
+  }
+};
+
 
 export const fetchPostById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
@@ -111,10 +140,17 @@ export const fetchPostBodyById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsBodyRef.doc(postId).get()
       .then(doc => {
+        const post = doc.data();
         if (!doc.exists) {
           reject('No such post body document!');
         } else {
-          resolve(doc.data());
+          postsBodyRef.doc(postId).collection('comments').get()
+          .then(snapshot => {
+            const comments = [];
+            snapshot.forEach(doc => comments.push(doc.data()))
+            post.comments = comments;
+            resolve(post);
+          });
         }
       })
       .catch((err) => {
@@ -397,5 +433,145 @@ export const removeToast = (id) => async dispatch => {
   dispatch({
     payload: id,
     type: REMOVE_TOAST
+  });
+}
+
+export const cleanCurrentpost = () => async dispatch => {
+  dispatch({
+    type: REMOVE_CURRENT_POST
+  })
+}
+
+/**
+ * Fetch Current post data
+ * loads post meta and body in parallel
+ * and then comments if any
+ * 
+ * @param {*} slug 
+ */
+export const fetchPostBySlug = (slug) => async dispatch => {
+  const matched = /-([^-]+)$/.exec(slug);
+  const postId = matched[1];
+
+  const postRef     = postsRef.doc(postId);
+  const postBodyRef = postsBodyRef.doc(postId);
+  
+  let post     = null;
+  let postBody = null;
+
+  try {
+    const [
+      postSnapshot,
+      postBodySnapshot
+    ] = await Promise.all([
+      postRef.get(),
+      postBodyRef.get()
+    ]);
+    if (postSnapshot.exists && postBodySnapshot.exists) {
+      post = {postId, ...postSnapshot.data()};
+      postBody = {postId, ...postBodySnapshot.data()};
+
+      const [likes, views] = await Promise.all([
+        getCount(postRef, 'likes'),
+        getCount(postRef, 'views')
+      ]);
+
+      dispatch({
+        type: LOAD_CURRENT_POST,
+        payload: {
+          likes,
+          views
+        }
+      });
+
+      postCommentsRef.where('postId', '==', postId).orderBy('dateCreated')
+        .onSnapshot(function(querySnapshot) {
+          const comments = [];
+          querySnapshot.forEach(doc => comments.push({...doc.data(), id: doc.id}));
+
+          dispatch({
+            type: LOAD_CURRENT_POST_COMMENTS,
+            payload: {
+              comments
+            }
+          })
+        });
+      
+    } else {
+      throw new Error(`No Post found with postId: ${postId}`);
+    }
+    dispatch({
+      type: LOAD_CURRENT_POST,
+      payload: {
+        post, postBody,
+      }
+    })
+    postRef.onSnapshot(doc => 
+      dispatch({
+        type: LOAD_CURRENT_POST,
+        payload: {
+          post,
+        }
+      })
+    );
+    incrementCounter(firestore, postRef, 10, "views");
+
+  } catch(e) {
+    console.log(e);
+    dispatch({
+      type: REMOVE_CURRENT_POST
+    })
+  }
+}
+
+export const likePost = (postId) => async dispatch => {
+  const postRef = postsRef.doc(postId);
+  incrementCounter(firestore, postRef, 10, "likes");
+};
+
+export const viewPost = (postId) => async dispatch => {
+  const postRef = postsRef.doc(postId);
+  incrementCounter(firestore, postRef, 10, "views");
+};
+
+function createCounter(ref, num_shards, key) {
+  var batch = firestore.batch();
+
+  // Initialize the counter document
+  batch.set(ref, { num_shards: num_shards });
+
+  // Initialize each shard with count=0
+  for (let i = 0; i < num_shards; i++) {
+      let shardRef = ref.collection(key).doc(i.toString());
+      batch.set(shardRef, { count: 0 });
+  }
+
+  // Commit the write batch
+  return batch.commit();
+}
+
+function incrementCounter(db, ref, num_shards, key) {
+  // Select a shard of the counter at random
+  const shard_id = Math.floor(Math.random() * num_shards).toString();
+  const shard_ref = ref.collection(key).doc(shard_id);
+
+  // Update count in a transaction
+  return db.runTransaction(t => {
+      return t.get(shard_ref).then(doc => {
+          const new_count = doc.data().count + 1;
+          t.update(shard_ref, { count: new_count });
+      });
+  });
+}
+
+function getCount(ref, key) {
+  // Sum the count of each shard in the subcollection
+  return ref.collection(key).get().then(snapshot => {
+    let total_count = 0;
+    snapshot.forEach(doc => {
+        total_count += doc.data().count;
+    });
+
+    return total_count;
   });
 }

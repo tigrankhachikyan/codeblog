@@ -21,7 +21,6 @@ import ForgetPassword from "./auth/ForgetPassword";
 import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
-import PostView from "./components/PostView";
 import PostViewSlug from "./components/PostViewSlug";
 import UserPublicPostsList from "./components/UserPublicPostsList";
 import UserSettings from "./components/Account/UserSettings";
@@ -67,7 +66,6 @@ class App extends Component {
             <Route exact path="/@:username" component={UserPublicPostsList} />
             <Route exact path="/@:username/:slug" component={PostViewSlug} />
 
-            <Route exact path="/posts/:id" component={PostView} />
             <Route path="/about" component={About} />
             <Route path="/signin" component={SignIn}/>
             <Route path="/forget-password" component={ForgetPassword}/>
