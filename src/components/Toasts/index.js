@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import { removeToast } from "../../actions/toasts";
 
 import Toast from "./Toast";
 import './index.css';
@@ -24,4 +24,6 @@ const mapStateToProps = ({ toasts }) => {
   return { toasts: toasts.toasts };
 };
 
-export default connect(mapStateToProps, actions)(Toasts);
+export default connect(mapStateToProps, {
+  removeToast
+})(Toasts);

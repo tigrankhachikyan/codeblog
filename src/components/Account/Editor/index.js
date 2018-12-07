@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import * as actions from "../../../actions";
 import { Markdown } from 'react-showdown';
-import Diff from 'react-stylable-diff';
 
 import FloatingBottomToolbox from '../../utils/FloatingBottomToolbox';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +16,10 @@ import Button from '@material-ui/core/Button';
 
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
+
+import {
+  addToast
+} from "../../../actions/toasts";
 
 import './index.css';
 
@@ -307,4 +310,7 @@ Editor.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(connect(mapStateToProps, actions)(withStyles(styles)(Editor)));
+export default withRouter(connect(mapStateToProps, {
+  ...actions,
+  addToast
+})(withStyles(styles)(Editor)));

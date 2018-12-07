@@ -1,4 +1,4 @@
-import { ADD_TOAST, REMOVE_TOAST } from "../actions/types";
+import { ADD_TOAST, REMOVE_TOAST } from "../actions/toasts/types";
 
 const initState = {
   toasts: [],
