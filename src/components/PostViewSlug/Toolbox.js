@@ -54,7 +54,7 @@ class Toolbox extends PureComponent {
     return (
       <div className={classes.root}>
           <div className={classes.pair}>
-            <VisibilityIcon />
+            <VisibilityIcon color="action"/>
             <Typography component="h5" variant="h5" className={classes.fab}>
               {this.props.views}
             </Typography>
@@ -64,7 +64,7 @@ class Toolbox extends PureComponent {
             <ButtonBase aria-label="Like"
               onClick={() => this.props.likePost(post.postId)}
             >
-              <ThumbUpIcon />
+              <ThumbUpIcon color="action"/>
             </ButtonBase>
             <Typography component="h5" variant="h5" className={classes.fab}>
               {this.props.likes}
@@ -75,7 +75,7 @@ class Toolbox extends PureComponent {
             aria-label="bookmark" className={classes.pair}
             onClick={() => this.props.bookmarkPost(uid, post)}
           >
-            <BookmarkIcon />
+            <BookmarkIcon color="action"/>
           </ButtonBase>
 
       </div>
