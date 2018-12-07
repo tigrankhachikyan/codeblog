@@ -4,7 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ListPostCard from "../ListPostCard";
 
-import { fetchCurrentUserPosts } from "../../actions/currentChannel";
+import { 
+  fetchCurrentUserPosts
+} from "../../actions/currentChannel";
 
 const styles = theme => ({
   root: {

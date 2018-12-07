@@ -3,7 +3,7 @@ import {
   userSettingsRef
 } from "../../config/firebase";
 
-import { LOAD_CURRENT_CHANNEL_POSTS } from './types';
+import { LOAD_CURRENT_CHANNEL_POSTS, REMOVE_CURRENT_CHANNEL_POSTS } from './types';
 
 
 export const fetchCurrentUserPosts = (username) => async dispatch => {
@@ -24,6 +24,13 @@ export const fetchCurrentUserPosts = (username) => async dispatch => {
     })
   });
 };
+
+export const cleanCurrentChannelPosts = () => async dispatch => {
+  dispatch({
+    type: REMOVE_CURRENT_CHANNEL_POSTS,
+  })
+};
+
 
 export const getUserByUserName = (username) => {
   return new Promise((resolve, reject) => {
