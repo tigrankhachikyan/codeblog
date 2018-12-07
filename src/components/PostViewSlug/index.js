@@ -35,7 +35,7 @@ const styles = theme => ({
 class PostViewSlug extends PureComponent {
 
   async componentDidMount() {
-    const {username, slug} = this.props.match.params;
+    const { slug } = this.props.match.params;
     try {
       this.props.fetchPostBySlug(slug);
     } catch(err) {
@@ -87,7 +87,6 @@ class PostViewSlug extends PureComponent {
 
 const mapStateToProps = ({ auth, currentPost }) => {
   return {
-    uid: auth.uid,
     currentPost: {
       post: currentPost.post,
       postBody: currentPost.postBody

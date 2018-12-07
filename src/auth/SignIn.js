@@ -9,7 +9,7 @@ import {
   signInWithGoogle,
   signInWithFacebook,
   signInWithEmailAndPassword
- } from "../actions";
+ } from "../actions/auth";
 
 import GoogleSignInButton from "../components/utils/GoogleSignInButton";
 

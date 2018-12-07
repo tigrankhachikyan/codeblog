@@ -47,25 +47,26 @@ class Comments extends Component {
       <div className = 'postComment'>
         <h3> {comments.length} Comments </h3>
           
-        <div className = 'textContainer'>
-          {
-            this.props.user.photoURL 
-              ? <Avatar alt={this.props.user.displayName} src={this.props.user.photoURL}/>
-              : <AccountCircle />
-          }
-          <textarea 
-            className='commentText' 
-            placeholder='Add Comments...'
-            value={this.state.newCommentText}
-            onChange = {this.handelChange} 
-          />
-          <button 
-            className = 'commentBtn'
-            type = 'button'
-            onClick={this.addComment}
-          > Comment </button>
-        </div>
-
+        { this.props.user &&
+          <div className = 'textContainer'>
+            {
+              this.props.user.photoURL 
+                ? <Avatar alt={this.props.user.displayName} src={this.props.user.photoURL}/>
+                : <AccountCircle />
+            }
+            <textarea 
+              className='commentText' 
+              placeholder='Add Comments...'
+              value={this.state.newCommentText}
+              onChange = {this.handelChange} 
+            />
+            <button 
+              className = 'commentBtn'
+              type = 'button'
+              onClick={this.addComment}
+            > Comment </button>
+          </div>
+        }
         {
           comments.map(comment => <CommentCard key={comment.id} comment={comment}/>)
         }

@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import { 
   signUpWithEmailAndPassword
- } from "../actions";
+ } from "../actions/auth";
 
 class SignUp extends Component {
   constructor(props) {

@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import '../index.css'
 
-
 class ForgetPassword extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +13,6 @@ class ForgetPassword extends Component {
   }
   
   render() {
-
     return (
       <div className='conteniner-forget'>
       <span className='signInText'>Forget Pasword</span> 

@@ -106,7 +106,7 @@ class NavBar extends Component {
                     this.props.history.push('/user-settings');
                     this.handleClose();
                   }}>Settings</MenuItem>
-                  <MenuItem onClick={this.props.signOut}>Sign Out</MenuItem>
+                  <MenuItem onClick={() => this.props.history.push('/signout')}>Sign Out</MenuItem>
                 </Menu>
               </div>
             )
@@ -135,6 +135,8 @@ const mapStateToProps = ({ auth }) => {
 };
 
 export default withRouter(
-  connect(mapStateToProps, actions)(withStyles(styles)(NavBar))
+  connect(mapStateToProps, {
+    ...actions,
+  })(withStyles(styles)(NavBar))
 )
 

@@ -1,9 +1,5 @@
 import { 
   firestore,
-  authRef,
-  userSettingsRef,
-  providerGoogle,
-  providerFacebook,
   postsRef,
   postsBodyRef,
   postCommentsRef,
@@ -11,9 +7,7 @@ import {
   userBookmarksRef
 } from "../config/firebase.js";
 
-import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST, REMOVE_USER_POSTS } from "./types";
-import { ADD_TOAST, REMOVE_TOAST , SIGNOUT} from "./types";
-import { LOAD_SETTINGS, REMOVE_USER_SETTINGS} from "./types";
+import { LOAD_POSTS, LOAD_EDIT_POST, REMOVE_USER_POST } from "./types";
 import { 
   LOAD_USER_BOOKMARKS,
   LOAD_USER_POSTS
@@ -24,8 +18,6 @@ import {
   LOAD_CURRENT_POST_COMMENTS,
   REMOVE_CURRENT_POST
 } from "./types";
-
-import uid from "uid";
 
 export const fetchLatestPosts = () => dispatch => {
   const latestPostsRef = postsRef.orderBy("date_created").limit(20);
@@ -90,27 +82,25 @@ export const fetchUserBookmarks = (uid) => dispatch => {
  * @param {Object} payload Post data
  */
 export const createPost = (payload) => async dispatch => {
-  return new Promise(async (resolve, reject) => {
-    const newPostRef = postsRef.doc();
-    createCounter(newPostRef, 10, "likes");
-    createCounter(newPostRef, 10, "views");
+  const newPostRef = postsRef.doc();
+  createCounter(newPostRef, 10, "likes");
+  createCounter(newPostRef, 10, "views");
 
-    const id = newPostRef.id;
-    payload.slug = payload.slug + "-" + id;
-    
-    try {
-      const [post, postBody] = await Promise.all([
-        newPostRef.set(payload),
-        postsBodyRef.doc(id).set({
-          body_markdown: "",
-          date_modified: new Date()
-        })
-      ]);
-      resolve(id);
-    } catch(e) {
-      reject(e)
-    }
-  })
+  const id = newPostRef.id;
+  payload.slug = payload.slug + "-" + id;
+  
+  try {
+    await Promise.all([
+      newPostRef.set(payload),
+      postsBodyRef.doc(id).set({
+        body_markdown: "",
+        date_modified: new Date()
+      })
+    ]);
+    return(id);
+  } catch(e) {
+    Promise.reject(e)
+  }
 };
 
 /**
@@ -244,122 +234,6 @@ export const publishDraftById = (postId) => async dispatch => {
   })
 };
 
-
-const assignDefaultUserSettings = async (dispatch, auth) => {
-  let userNamePrefix = uid(3);
-  if (auth.email) {
-    const result = /^([^@]+).+$/.exec(auth.email);
-    const emailPrefix = result[1];
-    userNamePrefix = emailPrefix + userNamePrefix;
-  } else if (auth.displayName) {
-    const userNameStipped = auth.displayName.replace(/\s+/, '').toLowerCase();
-    userNamePrefix = userNameStipped + userNamePrefix;
-  }
-
-  const settings = {
-    USER_NAME: userNamePrefix,
-    AUTO_SAVE_DRAFT: true,
-    AUTO_SAVE_DRAFT_INTERVAL: 10 * 1000, // 10 sec
-  };
-
-  try {
-    userSettingsRef.doc(auth.uid).set(settings);
-    dispatch({
-      type: LOAD_SETTINGS,
-      payload: settings
-    })
-  } catch(e) {
-    console.log(e);
-  }
-}
-
-const loadUserSettings = async (dispatch, auth) => {
-  try {
-    const doc = await userSettingsRef.doc(auth.uid).get();
-
-    if (!doc.exists) {
-      assignDefaultUserSettings(dispatch, auth);
-    } else {
-      dispatch({
-        type: LOAD_SETTINGS,
-        payload: doc.data()
-      });
-      return doc.data();
-    }
-  } catch(e) {
-    console.log(e);
-  }
-}
-
-export const fetchUser = () => async dispatch => {
-  return new Promise((resolve, reject) => {
-    authRef.onAuthStateChanged(user => {
-      if (!user) {
-        reject('No User found');
-        return;
-      }
-
-      dispatch({
-        type: FETCH_USER,
-        payload: user
-      });
-
-      setTimeout(() => { loadUserSettings(dispatch, user) }, 0);
-    });
-  })
-};
-
-export const signUpWithEmailAndPassword = (email, password) => async dispatch => {
-  authRef.createUserWithEmailAndPassword(email, password).catch(function(error) {
-  });
-};
-
-export const signInWithGoogle = () => async dispatch => {
-  authRef
-    .signInWithPopup(providerGoogle)
-    .then(result => {})
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-export const signInWithFacebook = () => async dispatch => {
-  authRef
-    .signInWithPopup(providerFacebook)
-    .then(result => {})
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-export const signInWithEmailAndPassword = (email, password) => async dispatch => {
-  authRef
-    .signInWithEmailAndPassword(email, password)
-    .then(result => {})
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-export const signOut = () => dispatch => {
-  authRef
-    .signOut()
-    .then(() => {
-      dispatch({
-        type: SIGNOUT
-      });
-      dispatch({
-        type: REMOVE_USER_POSTS
-      });
-      dispatch({
-        type: REMOVE_USER_SETTINGS
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
 export const cleanCurrentpost = () => async dispatch => {
   dispatch({
     type: REMOVE_CURRENT_POST
@@ -448,7 +322,13 @@ export const fetchPostBySlug = (slug) => async dispatch => {
   }
 }
 
-export const likePost = (postId) => async dispatch => {
+export const likePost = (postId) => async (dispatch, getState) => {
+  const { auth } = getState();
+  if (!auth) {
+    console.log("Unauthorized users can't like the post");
+    return;
+  };
+
   const postRef = postsRef.doc(postId);
   incrementCounter(firestore, postRef, 10, "likes")
     .then(likes => dispatch({

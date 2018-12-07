@@ -45,7 +45,7 @@ class Toolbox extends PureComponent {
     const { classes } = this.props;
     if (!this.props.post) return null;
 
-    const { uid, post } = this.props;
+    const { auth, post } = this.props;
 
     return (
       <div className={classes.root}>
@@ -58,6 +58,7 @@ class Toolbox extends PureComponent {
 
           <div className={classes.pair}>
             <ButtonBase aria-label="Like"
+              disabled={!auth}
               onClick={() => this.props.likePost(post.postId)}
             >
               <ThumbUpIcon color="action"/>
@@ -69,7 +70,8 @@ class Toolbox extends PureComponent {
 
           <ButtonBase 
             aria-label="bookmark" className={classes.pair}
-            onClick={() => this.props.bookmarkPost(uid, post)}
+            disabled={!auth}
+            onClick={() => this.props.bookmarkPost(auth.uid, post)}
           >
             <BookmarkIcon color="action"/>
           </ButtonBase>
@@ -81,7 +83,7 @@ class Toolbox extends PureComponent {
 
 const mapStateToProps = ({ auth, currentPost }) => {
   return {
-    uid: auth.uid,
+    auth,
     post: currentPost.post,
     likes: currentPost.likes,
     views: currentPost.views

@@ -6,27 +6,26 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import  {fetchUser} from "./actions";
+import  { fetchUser, signOut } from "./actions/auth";
 import {
   loadUserSettings,
   assignUserDefaultSettings
 } from "./actions/modules/userSettings";
 
-import Account from "./components/Account";
-
-import requireAuth from "./auth/requireAuth";
-
-import SignIn from "./auth/SignIn";
-import ForgetPassword from "./auth/ForgetPassword";
 import Home from "./components/Home";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
 import PostViewSlug from "./components/PostViewSlug";
-import UserPublicPostsList from "./components/UserPublicPostsList";
-import UserSettings from "./components/Account/UserSettings";
-import SignUp from "./auth/SignUp";
-
 import Toasts from "./components/Toasts";
+
+import UserPublicPostsList from "./components/UserPublicPostsList";
+
+import SignUp from "./auth/SignUp";
+import SignIn from "./auth/SignIn";
+import ForgetPassword from "./auth/ForgetPassword";
+import requireAuth from "./auth/requireAuth";
+import UserSettings from "./components/Account/UserSettings";
+import Account from "./components/Account";
 
 import './index.css';
 
@@ -50,13 +49,14 @@ class App extends Component {
       await this.props.assignUserDefaultSettings(auth, {
         USER_NAME: auth.email.replace(/@.+$/, '')
       })
-    } catch {
-      console.log(auth);
+    } catch(e) {
+      //console.log(e);
     }
   }
 
   render() {
     const { auth, signOut } = this.props;
+
     return (
       <Router>
         <div>
@@ -77,7 +77,7 @@ class App extends Component {
               if (auth) {
                 signOut();
               }
-              return <Redirect to="/"/>
+              return <Redirect to={'/'}/>
             }}/>
           </div>
           <Toasts />
@@ -92,6 +92,7 @@ const mapStateToProps = ({ auth, settings }) => {
 };
 
 export default connect(mapStateToProps, {
+  signOut,
   fetchUser,
   loadUserSettings,
   assignUserDefaultSettings
