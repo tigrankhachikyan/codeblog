@@ -63,7 +63,7 @@ class NavBar extends Component {
             >
               <HomeIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <Typography variant="overline" color="inherit" className={classes.grow}>
               ```Code Blog```
             </Typography>
             {auth ? (

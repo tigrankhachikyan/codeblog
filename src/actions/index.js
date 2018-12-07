@@ -83,8 +83,8 @@ export const fetchUserBookmarks = (uid) => async dispatch => {
  */
 export const createPost = (payload) => async dispatch => {
   const newPostRef = postsRef.doc();
-  createCounter(newPostRef, 10, "likes");
-  createCounter(newPostRef, 10, "views");
+  createCounter(newPostRef, 1, "likes");
+  createCounter(newPostRef, 1, "views");
 
   const id = newPostRef.id;
   payload.slug = payload.slug + "-" + id;
@@ -188,16 +188,35 @@ export const fetchPostDraftById = (postId) => dispatch => {
 };
 
 export const deletePostById = postId => async dispatch => {
-  await Promise.all([
-    postDraftsRef.doc(postId).delete(),
-    postsRef.doc(postId).delete(),
-    postsBodyRef.doc(postId).delete(),
-  ]);
+  let batch = firestore.batch();
+  batch.delete(postDraftsRef.doc(postId));
+  batch.delete(postsRef.doc(postId));
+  
+  batch.delete(postsRef.doc(postId).collection('likes').doc('0'));
+  batch.delete(postsRef.doc(postId).collection('views').doc('0'));
+  batch.delete(postsBodyRef.doc(postId));
 
-  dispatch({
-    type: REMOVE_USER_POST,
-    payload: { postId }
-  })
+    // Commit the batch
+  batch.commit().then(function () {
+    dispatch({
+      type: REMOVE_USER_POST,
+      payload: { postId }
+    })
+  });
+
+  postCommentsRef.where('postId', '==', postId).get()
+  .then(function(querySnapshot) {
+    // Once we get the results, begin a batch
+    var batch = firestore.batch();
+
+    querySnapshot.forEach(function(doc) {
+        // For each doc, add a delete operation to the batch
+        batch.delete(doc.ref);
+    });
+      // Commit the batch
+      return batch.commit();
+    }).then(function() {
+    }); 
 };
 
 
@@ -306,7 +325,7 @@ export const fetchPostBySlug = (slug) => async dispatch => {
         }
       })
     );
-    incrementCounter(firestore, postRef, 10, "views");
+    incrementCounter(firestore, postRef, 0, "views");
 
   } catch(e) {
     console.log(e);
@@ -324,7 +343,7 @@ export const likePost = (postId) => async (dispatch, getState) => {
   };
 
   const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 1, "likes")
+  incrementCounter(firestore, postRef, 0, "likes")
     .then(likes => dispatch({
         type: LOAD_CURRENT_POST,
         payload: { likes }
@@ -334,7 +353,7 @@ export const likePost = (postId) => async (dispatch, getState) => {
 
 export const viewPost = (postId) => async dispatch => {
   const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 10, "views");
+  incrementCounter(firestore, postRef, 0, "views");
 };
 
 /**

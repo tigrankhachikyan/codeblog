@@ -6,8 +6,11 @@ import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../utils/Spinner';
 import Hidden from '@material-ui/core/Hidden';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import Comments from './Comments';
 import Toolbox from './Toolbox';
+import "./index.css";
 
 import { 
   likePost,
@@ -22,9 +25,11 @@ import "../../css/prism.css";
 const styles = theme => ({
   root: {
     width: '100%',
+  },
+  container: {
     padding: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit * 3,
-  },
+    },
   fab: {
     marginBottom: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit,
@@ -51,26 +56,29 @@ class PostViewSlug extends PureComponent {
 
   render() {
     const { classes } = this.props;
-    if (!this.props.currentPost.post) return null;
+    //if (!this.props.currentPost.post) return null;
 
     const { post, postBody } = this.props.currentPost;
 
     return (
       <div className={classes.root}>
+      {
+        !post && <LinearProgress />
+      }
       <Grid
         container
         direction="row"
         justify="center"
         alignItems="center"
         alignContent="center"
+        className={classes.container}
       >
         <Hidden smDown>
           <Toolbox />
         </Hidden>
         <Grid item sm={12} md={8} lg={6}>
         { 
-          post 
-            ? <div>
+          post && <div>
                 <h1>{post.title}</h1>
                 <Markdown style={{
                     overflowWrap: "break-word",
@@ -78,7 +86,6 @@ class PostViewSlug extends PureComponent {
                   markup={ postBody.body_markdown } />
                 <Comments />
               </div>
-            : <Spinner />
         }
         </Grid>
       </Grid>
