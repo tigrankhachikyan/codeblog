@@ -140,34 +140,40 @@ class DashBoard extends Component {
                 removePost={(postId) => this.removePost(postId)}
               />
           </Grid>
-          <Modal show={this.state.showDialog} handleClose={this.hideModal}>
-            <ul>
+          <Modal show={this.state.showDialog} handleClose={this.hideModal}  className='modal-contaner' >
+            <ul className='modal-contaner'>
               <li>
                 <label>
                   Title:
-                  <input type="text" value={this.state.title} onChange={this.handleTitleChange} />
+                  <input type="text" value={this.state.title} onChange={this.handleTitleChange}  className='modal-input' />
                 </label>
               </li>
               <li>
                 <label>
                   Slug:
-                  <input type="text" value={this.state.slug} onChange={this.handleSlugChange}
+                  <input  disabled={true} className='modal-input' type="text" value={this.state.slug} onChange={this.handleSlugChange }
                   />
                 </label>
               </li>
               <li>
+
                 <label>
                 Excerpt:
-                  <textarea 
+                  <input className='excerpt-input' 
+                  placeholder = 'Add excerpt' 
+                  value={this.state.excerpt}  
+                  onChange={e => this.setState({excerpt: e.target.value})} />
+                  {/* <textarea
+                    className='modal-input' 
                     placeholder = 'Add excerpt' 
                     value={this.state.excerpt}  
                     onChange={e => this.setState({excerpt: e.target.value})}
-                  />
+                  /> */}
                 </label>
               </li>
               <li>
-                <button onClick={this.handleCreate}>Create</button>
-                <button onClick={this.handleCancel}>Cancel</button>
+                <button className='creat-cancel' onClick={this.handleCreate}>Create</button>
+                <button className='creat-cancel' onClick={this.handleCancel}>Cancel</button>
               </li>
             </ul>
           </Modal>
