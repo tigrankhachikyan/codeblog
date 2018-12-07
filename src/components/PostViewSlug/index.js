@@ -16,6 +16,7 @@ import {
   viewPost
 } from "../../actions";
 
+import Prism from "prismjs";
 import "../../css/prism.css";
 
 const styles = theme => ({
@@ -37,7 +38,8 @@ class PostViewSlug extends PureComponent {
   async componentDidMount() {
     const { slug } = this.props.match.params;
     try {
-      this.props.fetchPostBySlug(slug);
+      await this.props.fetchPostBySlug(slug);
+      setTimeout(() => Prism.highlightAll(), 0)
     } catch(err) {
       console.log(err);
     }
