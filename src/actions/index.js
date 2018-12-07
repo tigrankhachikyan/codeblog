@@ -202,36 +202,30 @@ export const deletePostById = postId => async dispatch => {
 
 
 export const savePostDraftById = (postId, payload) => async dispatch => {
-  return new Promise((resolve, reject) => {
-    postDraftsRef.doc(postId).set({
-      body_markdown: payload.body_markdown,
-      date_modified: new Date()
-    });
-    resolve();
-  })
+  postDraftsRef.doc(postId).set({
+    body_markdown: payload.body_markdown,
+    date_modified: new Date()
+  });
 };
 
 export const publishDraftById = (postId) => async dispatch => {
-  return new Promise((resolve, reject) => {
-    postDraftsRef.doc(postId).get()
-      .then(doc => {
-        if (!doc.exists) {
-          reject('No such document!');
-        } else {
-          const draft = doc.data();
-          postsBodyRef.doc(postId).update({
-            body_markdown: draft.body_markdown,
-            date_modified: new Date()
-          });
-          resolve(draft.body_markdown);
-        }
-      })
-      .then(() => postDraftsRef.doc(postId).delete())
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
+  postDraftsRef.doc(postId).get()
+    .then(doc => {
+      if (!doc.exists) {
+        Promise.reject('No such document!');
+      } else {
+        const draft = doc.data();
+        postsBodyRef.doc(postId).update({
+          body_markdown: draft.body_markdown,
+          date_modified: new Date()
+        });
+        return(draft.body_markdown);
+      }
+    })
+    .then(() => postDraftsRef.doc(postId).delete())
+    .catch((err) => {
+      Promise.reject(err);
+    });
 };
 
 export const cleanCurrentpost = () => async dispatch => {
