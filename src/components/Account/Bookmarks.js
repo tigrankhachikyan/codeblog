@@ -39,7 +39,7 @@ class Bookmarks extends Component {
           </Typography>
           {
             userBookmarks.length > 0 && userBookmarks.map((bookmark, i) => {
-              return <ListPostCard post={bookmark.post} />
+              return <ListPostCard post={bookmark.post} key={bookmark.post.postId}/>
             })
           }
         </Grid>

@@ -82,6 +82,11 @@ class Editor extends Component {
     const postId = this.props.match.params.id;
     try {
       const post = await this.fetchPostData(postId);
+
+      if (post.uid !== this.props.uid) {
+        this.props.history.push('/');
+      }
+
       const data = {
         title: post.title,
         markdownPublished: post.body_markdown,
@@ -299,8 +304,9 @@ class Editor extends Component {
   }
 }
 
-const mapStateToProps = ({ data, settings }) => {
+const mapStateToProps = ({ auth, data, settings }) => {
   return {
+    uid: auth.uid,
     post: data.editPost, // TODO: not used yet, move to redux or not?
     settings
   };

@@ -4,8 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ListPostCard from "../ListPostCard";
 
-import { getUserByUserName } from "../../actions/settings";
-import { fetchUserPosts } from "../../actions";
+import { fetchCurrentUserPosts } from "../../actions/currentChannel";
 
 const styles = theme => ({
   root: {
@@ -31,19 +30,17 @@ class UserPublicPostsList extends Component {
   };
 
   async componentDidMount() {
-    const {username} = this.props.match.params;
-    const {getUserByUserName, fetchUserPosts} = this.props;
+    const { username } = this.props.match.params;
+    const { fetchCurrentUserPosts } = this.props;
 
-    const user = await getUserByUserName(username);
-    const userPosts = await fetchUserPosts(user.uid);
+    const userPosts = await fetchCurrentUserPosts(username);
     this.setState({userPosts});
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, posts } = this.props;
     const { username } = this.props.match.params;
-
-    if (!this.state.userPosts.length) return null;
+    if (!posts) return null;
 
     return (
       <div className={classes.root}>
@@ -55,13 +52,13 @@ class UserPublicPostsList extends Component {
         >
           <h2>Welcome to {username}'s channel</h2>
           {
-            this.state.userPosts.length > 0 && this.state.userPosts.map((post, i) => {
+            posts && posts.map((post, i) => {
               return <Grid key={post.postId}
                 item 
                 xs={12}
                 style={{margin: 10}}
               >
-                <ListPostCard post={{data: post}}/>
+                <ListPostCard post={post}/>
               </Grid>
             })
           }
@@ -71,11 +68,13 @@ class UserPublicPostsList extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return { auth };
+const mapStateToProps = ({ auth, currentChannel }) => {
+  return { 
+    auth,
+    posts: currentChannel.posts
+  };
 };
 
 export default connect(mapStateToProps, {
-  getUserByUserName,
-  fetchUserPosts
+  fetchCurrentUserPosts
 })(withStyles(styles)(UserPublicPostsList))

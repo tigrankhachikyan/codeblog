@@ -47,7 +47,7 @@ export const fetchLatestPosts = () => dispatch => {
  * 
  * @param {string} uid Auth user uid
  */
-export const fetchUserPosts = (uid) => dispatch => {
+export const fetchUserPosts = (uid) => async dispatch => {
   const userPostsref = postsRef.where('uid', '==', uid);
 
   userPostsref.onSnapshot((snapshot) => {
@@ -64,7 +64,7 @@ export const fetchUserPosts = (uid) => dispatch => {
   });
 };
 
-export const fetchUserBookmarks = (uid) => dispatch => {
+export const fetchUserBookmarks = (uid) => async dispatch => {
   const userPostsref = userBookmarksRef.where('uid', '==', uid);
   userPostsref.onSnapshot((snapshot) => {
     const docs = [];
