@@ -324,7 +324,7 @@ export const likePost = (postId) => async (dispatch, getState) => {
   };
 
   const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 10, "likes")
+  incrementCounter(firestore, postRef, 1, "likes")
     .then(likes => dispatch({
         type: LOAD_CURRENT_POST,
         payload: { likes }

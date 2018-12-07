@@ -5,12 +5,8 @@ import {
   providerFacebook,
 } from "../../config/firebase";
 
-import { 
-  REMOVE_USER_POSTS,
-  LOAD_SETTINGS,
-  REMOVE_USER_SETTINGS
-} from "../types";
-
+import { REMOVE_USER_POSTS } from "../types";
+import { LOAD_SETTINGS, REMOVE_USER_SETTINGS } from "../settings/types";
 import { FETCH_USER, SIGNOUT } from "./types";
 
 import uid from "uid";

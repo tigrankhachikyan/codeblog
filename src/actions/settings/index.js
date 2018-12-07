@@ -1,12 +1,12 @@
 import { 
   userSettingsRef
-} from "../../config/firebase.js";
+} from "../../config/firebase";
 
 import {
   LOAD_SETTINGS,
   ASSIGN_DEFAULT_SETTINGS,
   UPDATE_SETTINGS
-} from "../types";
+} from "./types";
 
 const initState = {
   AUTO_SAVE_DRAFT: true,

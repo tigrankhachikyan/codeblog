@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 
 import {
   updateUserSettings,
-} from "../../../actions/modules/userSettings";
+} from "../../../actions/settings";
 
 import isEqual from 'lodash/isEqual';
 

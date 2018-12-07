@@ -7,10 +7,6 @@ import {
 } from "react-router-dom";
 
 import  { fetchUser, signOut } from "./actions/auth";
-import {
-  loadUserSettings,
-  assignUserDefaultSettings
-} from "./actions/modules/userSettings";
 
 import Home from "./components/Home";
 import About from "./components/About";
@@ -35,24 +31,11 @@ class App extends Component {
     if (this.props.auth) return;
     try {
       await this.props.fetchUser();
-      await this.loadUserSettings();
     } catch(err) {
       console.log("Failed to fetch user info", err);
     }
   }
 
-  loadUserSettings = async () => {
-    const { auth, settings } = this.props;
-    if (settings.USER_NAME) return;
-
-    try {
-      await this.props.assignUserDefaultSettings(auth, {
-        USER_NAME: auth.email.replace(/@.+$/, '')
-      })
-    } catch(e) {
-      //console.log(e);
-    }
-  }
 
   render() {
     const { auth, signOut } = this.props;
@@ -66,10 +49,10 @@ class App extends Component {
             <Route exact path="/@:username" component={UserPublicPostsList} />
             <Route exact path="/@:username/:slug" component={PostViewSlug} />
 
-            <Route path="/about" component={About} />
-            <Route path="/signin" component={SignIn}/>
+            <Route path="/about"   component={About} />
+            <Route path="/signin"  component={SignIn}/>
             <Route path="/forget-password" component={ForgetPassword}/>
-            <Route path="/signup" component={SignUp}/>
+            <Route path="/signup"  component={SignUp}/>
             <Route path="/account" component={requireAuth(Account)}/>
             <Route path="/user-settings" component={requireAuth(UserSettings)}/>
 
@@ -94,6 +77,4 @@ const mapStateToProps = ({ auth, settings }) => {
 export default connect(mapStateToProps, {
   signOut,
   fetchUser,
-  loadUserSettings,
-  assignUserDefaultSettings
 })(App);

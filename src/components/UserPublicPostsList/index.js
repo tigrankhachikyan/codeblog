@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ListPostCard from "../ListPostCard";
 
-import { getUserByUserName } from "../../actions/modules/userSettings";
+import { getUserByUserName } from "../../actions/settings";
 import { fetchUserPosts } from "../../actions";
 
 const styles = theme => ({
