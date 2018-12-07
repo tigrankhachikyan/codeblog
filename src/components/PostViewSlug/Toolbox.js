@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Badge from '@material-ui/core/Badge';
+import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 import { 
   likePost,
@@ -19,15 +20,27 @@ import "../../css/prism.css";
 
 const styles = theme => ({
   root: {
-    width: 15,
-    marginTop: theme.spacing.unit * 3,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justify: "flex-start",
+    position: "fixed",
+    left: "5vw",
+    top: "45vh"
   },
   fab: {
-    marginBottom: theme.spacing.unit * 2,
-    marginTop: 0,
+    marginRight: theme.spacing.unit,
     marginLeft: theme.spacing.unit,
-    marginRight: 0,
   },
+  pair: {
+    margin: theme.spacing.unit,
+    display: "flex",
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justify: "center"
+  },
+  
 });
 
 class Toolbox extends PureComponent {
@@ -39,39 +52,28 @@ class Toolbox extends PureComponent {
 
     return (
       <div className={classes.root}>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        alignContent="center"
-      >
-        <Grid item style={{
-          position: "fixed",
-          top: "45vh",
-          left: "5vw",
-          width: 30
-        }}>
+          <div className={classes.pair}>
+            <VisibilityIcon />
+            <Typography component="h5" variant="h5" className={classes.fab}>
+              {this.props.views}
+            </Typography>
+          </div>
 
-          <Badge color="secondary" badgeContent={this.props.views}>
-            <IconButton aria-label="Views" className={classes.fab}>
-              <VisibilityIcon />
-            </IconButton>
-          </Badge>
-
-          <Badge color="secondary" badgeContent={this.props.likes}>
-            <IconButton aria-label="Like" className={classes.fab}
+          <div className={classes.pair}>
+            <ButtonBase aria-label="Like"
               onClick={() => this.props.likePost(post.postId)}
             >
               <ThumbUpIcon />
-            </IconButton>
-          </Badge>
-          
-          <IconButton aria-label="Like" className={classes.fab}>
+            </ButtonBase>
+            <Typography component="h5" variant="h5" className={classes.fab}>
+              {this.props.likes}
+            </Typography>
+          </div>
+
+          <ButtonBase aria-label="bookmark" className={classes.pair}>
             <BookmarkIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
+          </ButtonBase>
+
       </div>
     );
   }
