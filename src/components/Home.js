@@ -56,7 +56,7 @@ class Home extends Component {
               xs={12}
               style={{margin: 10}}
             >
-              <ListPostCard post={post}/>
+              <ListPostCard post={post.data}/>
             </Grid>
           })
         }

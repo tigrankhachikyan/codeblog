@@ -18,6 +18,7 @@ export const postCommentsRef = firestore.collection('postComments');
 
 export const postDraftsRef = firestore.collection('postDrafts');
 export const userSettingsRef = firestore.collection('userSettings');
+export const userBookmarksRef = firestore.collection('userBookmarks');
 
 export const authRef = firebase.auth();
 export const providerGoogle   = new firebase.auth.GoogleAuthProvider();

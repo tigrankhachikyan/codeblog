@@ -14,6 +14,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 
 import { 
   likePost,
+  bookmarkPost
 } from "../../actions";
 
 import "../../css/prism.css";
@@ -48,7 +49,7 @@ class Toolbox extends PureComponent {
     const { classes } = this.props;
     if (!this.props.post) return null;
 
-    const { post } = this.props;
+    const { uid, post } = this.props;
 
     return (
       <div className={classes.root}>
@@ -70,7 +71,10 @@ class Toolbox extends PureComponent {
             </Typography>
           </div>
 
-          <ButtonBase aria-label="bookmark" className={classes.pair}>
+          <ButtonBase 
+            aria-label="bookmark" className={classes.pair}
+            onClick={() => this.props.bookmarkPost(uid, post)}
+          >
             <BookmarkIcon />
           </ButtonBase>
 
@@ -79,8 +83,9 @@ class Toolbox extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ currentPost }) => {
+const mapStateToProps = ({ auth, currentPost }) => {
   return {
+    uid: auth.uid,
     post: currentPost.post,
     likes: currentPost.likes,
     views: currentPost.views
@@ -89,4 +94,5 @@ const mapStateToProps = ({ currentPost }) => {
 
 export default connect(mapStateToProps, {
   likePost,
+  bookmarkPost
 })(withStyles(styles)(Toolbox));

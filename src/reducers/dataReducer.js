@@ -3,12 +3,15 @@ import {
   LOAD_USER_POSTS,
   LOAD_EDIT_POST,
   REMOVE_USER_POST,
-  REMOVE_USER_POSTS
+  REMOVE_USER_POSTS,
+  REMOVE_USER_BOOKMARKS,
+  LOAD_USER_BOOKMARKS
 } from "../actions/types";
 
 let initState = {
   latestPosts: [],
   userPosts: [],
+  userBookmarks : [],
   editPost: null,
 };
 
@@ -33,6 +36,16 @@ export default (state = initState, action) => {
       return {
         ...state, 
         userPosts: [...action.posts]
+      }
+    case LOAD_USER_BOOKMARKS:
+      return {
+        ...state, 
+        userBookmarks: action.bookmarks
+      }
+    case REMOVE_USER_BOOKMARKS:
+      return {
+        ...state, 
+        userBookmarks: []
       }
     case LOAD_EDIT_POST:
       return {

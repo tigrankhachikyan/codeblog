@@ -27,27 +27,26 @@ const styles = {
 };
 
 function ListPostCard(props) {
-  const { classes } = props;
-  const post = props.post;
+  const { classes, post } = props;
 
   return (
     <Card className={classes.card}>
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          <Link to={`/@${post.data.user.userName}`}>@{post.data.user.userName}</Link>
+          <Link to={`/@${post.user.userName}`}>@{post.user.userName}</Link>
         </Typography>
         <Typography variant="h5" component="h2">
-          {post.data.title}
+          {post.title}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {post.data.date_created.toDate().toLocaleString()}
+          {post.date_created.toDate().toLocaleString()}
         </Typography>
         <Typography component="p">
-          {post.data.excerpt || "NO EXCERPT"}
+          {post.excerpt || "NO EXCERPT"}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={e => props.history.push(`/@${post.data.user.userName}/${post.data.slug}`)}>
+        <Button size="small" onClick={e => props.history.push(`/@${post.user.userName}/${post.slug}`)}>
           Read...
         </Button>
       </CardActions>

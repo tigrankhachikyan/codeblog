@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from "react-router-dom";
 
 import DashBoard from './DashBoard';
+import Bookmarks from './Bookmarks';
 import Editor from './Editor';
 
 export default class Account extends Component {
@@ -9,6 +10,7 @@ export default class Account extends Component {
     return (
       <div>
         <Route exact path={`/account/`} component={DashBoard}/>
+        <Route exact path={`/account/bookmarks`} component={Bookmarks}/>
         <Route exact path={'/account/edit/:id'} component={Editor}/>
       </div>
     );

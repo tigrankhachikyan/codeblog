@@ -7,12 +7,17 @@ import {
   postsRef,
   postsBodyRef,
   postCommentsRef,
-  postDraftsRef
+  postDraftsRef,
+  userBookmarksRef
 } from "../config/firebase.js";
 
 import { LOAD_POSTS, LOAD_EDIT_POST, FETCH_USER, CREATE_POST, REMOVE_USER_POST, REMOVE_USER_POSTS } from "./types";
 import { ADD_TOAST, REMOVE_TOAST , SIGNOUT} from "./types";
 import { LOAD_SETTINGS, REMOVE_USER_SETTINGS} from "./types";
+import { 
+  LOAD_USER_BOOKMARKS,
+  LOAD_USER_POSTS
+} from "./types";
 
 import { 
   LOAD_CURRENT_POST,
@@ -51,23 +56,33 @@ export const fetchLatestPosts = () => dispatch => {
  * @param {string} uid Auth user uid
  */
 export const fetchUserPosts = (uid) => dispatch => {
-  return new Promise((resolve, reject) => {
-    const userPostsref = postsRef.where('uid', '==', uid);
+  const userPostsref = postsRef.where('uid', '==', uid);
 
-    userPostsref.onSnapshot((snapshot) => {
-        const docs = [];
+  userPostsref.onSnapshot((snapshot) => {
+    const docs = [];
 
-        snapshot.forEach((doc, i) => {
-          const data = doc.data();
-          docs.push({...data, postId: doc.id});
-        });
-        dispatch({
-          type: 'LOAD_USER_POSTS',
-          posts: docs
-        })
-        resolve(docs);
-      });
-  })
+    snapshot.forEach((doc, i) => {
+      const data = doc.data();
+      docs.push({...data, postId: doc.id});
+    });
+    dispatch({
+      type: LOAD_USER_POSTS,
+      posts: docs
+    })
+  });
+};
+
+export const fetchUserBookmarks = (uid) => dispatch => {
+  const userPostsref = userBookmarksRef.where('uid', '==', uid);
+  userPostsref.onSnapshot((snapshot) => {
+    const docs = [];
+    snapshot.forEach(doc => docs.push(doc.data()))
+
+    dispatch({
+      type: LOAD_USER_BOOKMARKS,
+      bookmarks: docs
+    })
+  });
 };
 
 /**
@@ -526,12 +541,28 @@ export const fetchPostBySlug = (slug) => async dispatch => {
 
 export const likePost = (postId) => async dispatch => {
   const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 10, "likes");
+  incrementCounter(firestore, postRef, 10, "likes")
+    .then(likes => dispatch({
+        type: LOAD_CURRENT_POST,
+        payload: { likes }
+      })
+    )
 };
 
 export const viewPost = (postId) => async dispatch => {
   const postRef = postsRef.doc(postId);
   incrementCounter(firestore, postRef, 10, "views");
+};
+
+/**
+ * 
+ * @param {*} uid 
+ * @param {*} post 
+ */
+export const bookmarkPost = (uid, post) => async dispatch => {
+  const userBookmarkRef = userBookmarksRef.doc();
+
+  userBookmarkRef.set({uid, post})
 };
 
 function createCounter(ref, num_shards, key) {
@@ -542,8 +573,8 @@ function createCounter(ref, num_shards, key) {
 
   // Initialize each shard with count=0
   for (let i = 0; i < num_shards; i++) {
-      let shardRef = ref.collection(key).doc(i.toString());
-      batch.set(shardRef, { count: 0 });
+    let shardRef = ref.collection(key).doc(i.toString());
+    batch.set(shardRef, { count: 0 });
   }
 
   // Commit the write batch
@@ -557,10 +588,11 @@ function incrementCounter(db, ref, num_shards, key) {
 
   // Update count in a transaction
   return db.runTransaction(t => {
-      return t.get(shard_ref).then(doc => {
-          const new_count = doc.data().count + 1;
-          t.update(shard_ref, { count: new_count });
-      });
+    return t.get(shard_ref).then(doc => {
+      const new_count = doc.data().count + 1;
+      t.update(shard_ref, { count: new_count });
+      return new_count;
+    });
   });
 }
 
