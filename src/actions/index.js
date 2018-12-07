@@ -112,6 +112,7 @@ export const createPost = (payload) => async dispatch => {
     }
   })
 };
+
 /**
  * 
  * @param {*} postId 
@@ -129,7 +130,7 @@ export const addPostComment = (postId, payload) => async dispatch => {
   }
 };
 
-
+//TODO; complete Rredux migration
 export const fetchPostById = (postId) => dispatch => {
   return new Promise((resolve, reject) => {
     postsRef.doc(postId).get()
@@ -195,67 +196,6 @@ export const fetchPostDraftById = (postId) => dispatch => {
       });
   })
 };
-/**
- * 
- * @param {*} uid 
- * @param {*} slug 
- */
-export const fetchUserPostBySlug = (uid, slug) => dispatch => {
-  return new Promise((resolve, reject) => {
-    const postRef = postsRef.where("uid", "==", uid).where("slug", "==", slug);
-    
-    postRef.get()
-      .then(snapshot => {
-        const posts = [];
-        snapshot.forEach(doc => {
-          const post = {
-            postId: doc.id,
-            data: doc.data()
-          };
-          posts.push(post)
-        });
-        
-        posts.length === 1 
-          ? resolve(posts[0])
-          : reject("No single post found for this query")
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
-};
-
-/**
- * 
- * @param {*} username 
- * @param {*} slug 
- */
-export const fetchUserPostByUsernameAndSlug = (username, slug) => dispatch => {
-  return new Promise((resolve, reject) => {
-    const postRef = postsRef.where("user.userName", "==", username).where("slug", "==", slug);
-    
-    postRef.get()
-      .then(snapshot => {
-        const posts = [];
-        snapshot.forEach(doc => {
-          const post = {
-            postId: doc.id,
-            data: doc.data()
-          };
-          posts.push(post)
-        });
-        
-        posts.length === 1 
-          ? resolve(posts[0])
-          : reject("No single post found for this query")
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
-};
 
 export const deletePostById = postId => async dispatch => {
   await Promise.all([
@@ -270,15 +210,6 @@ export const deletePostById = postId => async dispatch => {
   })
 };
 
-export const savePostById = (postId, payload) => dispatch => {
-  return new Promise((resolve, reject) => {
-    postsRef.doc(postId).update({
-      body_markdown: payload.body_markdown,
-      date_modified: new Date()
-    });
-    resolve();
-  })
-};
 
 export const savePostDraftById = (postId, payload) => async dispatch => {
   return new Promise((resolve, reject) => {
@@ -312,7 +243,6 @@ export const publishDraftById = (postId) => async dispatch => {
       });
   })
 };
-
 
 
 const assignDefaultUserSettings = async (dispatch, auth) => {
