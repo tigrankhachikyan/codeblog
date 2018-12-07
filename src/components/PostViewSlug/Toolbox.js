@@ -1,14 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-
-import IconButton from '@material-ui/core/IconButton';
 
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
