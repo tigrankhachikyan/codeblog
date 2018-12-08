@@ -63,8 +63,8 @@ class NavBar extends Component {
             >
               <HomeIcon />
             </IconButton>
-            <Typography variant="overline" color="inherit" className={classes.grow}>
-              ```Code Blog```
+            <Typography variant="subheading" color="inherit" className={classes.grow}>
+              ```CodeBlog```
             </Typography>
             {auth ? (
               <div>
