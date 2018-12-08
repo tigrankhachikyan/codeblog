@@ -20,7 +20,7 @@ import {
 } from "./types";
 
 export const fetchLatestPosts = () => dispatch => {
-  const latestPostsRef = postsRef.orderBy("date_created").limit(20);
+  const latestPostsRef = postsRef.orderBy("date_created", "desc").limit(30);
   latestPostsRef.get()
     .then((snapshot) => {
       const posts = [];
