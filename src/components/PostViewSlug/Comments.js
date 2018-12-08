@@ -8,6 +8,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import { 
   addPostComment,
@@ -48,23 +50,32 @@ class Comments extends Component {
         <h3> {comments.length} Comments </h3>
           
         { this.props.user &&
-          <div className = 'textContainer'>
+          <div className = 'textContainer'
+            style={{
+              display: "flex",
+              justify: "center",
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
             {
               this.props.user.photoURL 
                 ? <Avatar alt={this.props.user.displayName} src={this.props.user.photoURL}/>
                 : <AccountCircle />
             }
-            <textarea 
-              className='commentText' 
-              placeholder='Add Comments...'
+            <TextField
+              defaultValue="Bare"
+              variant="standard"
               value={this.state.newCommentText}
-              onChange = {this.handelChange} 
+              onChange = {this.handelChange}
+              fullWidth
+              multiline
             />
-            <button 
-              className = 'commentBtn'
+            <Button 
               type = 'button'
               onClick={this.addComment}
-            > Comment </button>
+            > Comment </Button>
           </div>
         }
         {
