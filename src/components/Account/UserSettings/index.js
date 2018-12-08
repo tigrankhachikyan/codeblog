@@ -89,6 +89,7 @@ class UserSettings extends Component {
                     <TableCell>
                       <TextField
                         defaultValue={settings.USER_NAME}
+                        disabled
                         onChange={(e) => {this.setState({settings: {...this.state.settings, USER_NAME: e.target.value}})}}
                       />
                     </TableCell>
