@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import { connect } from "react-redux";
+import Typography from '@material-ui/core/Typography';
 
 import ListPostCard from "./ListPostCard";
 
@@ -45,21 +46,23 @@ class Home extends Component {
     <div className={classes.root}>
       <Grid
         container
-        direction="column"
         justify="flex-start"
-        alignItems="center"
+        direction="row"
+        alignItems="flex-start"
+        style={{flexWrap: "wrap"}}
       >
+        <Grid item md={8} direction="row" style={{
+          display: "flex",
+          flexWrap: "wrap",
+        }}>
         {
           latestPosts.length > 0 && latestPosts.map((post, i) => {
-            return <Grid key={post.postId}
-              item 
-              xs={12}
-              style={{margin: 10}}
-            >
-              <ListPostCard post={post.data}/>
-            </Grid>
+            return <ListPostCard key={post.postId} post={post.data}/>
           })
         }
+        </Grid>
+        <Grid item md={4}>
+        </Grid>
       </Grid>
     </div>
     );

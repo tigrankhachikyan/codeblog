@@ -18,8 +18,11 @@ const styles = {
   card: {
     minWidth: 400,
     maxWidth: 400,
+    height: 145,
+    maxHeight: 145,
     // paddingTop: 20,
     paddingBottom: 20,
+    margin: 10
   },
   content: {
     paddingLeft: 20,
