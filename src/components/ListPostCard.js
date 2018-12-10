@@ -16,13 +16,13 @@ import {formatDate} from  "../helpers/formatDate";
 
 const styles = {
   card: {
-    minWidth: 400,
-    maxWidth: 400,
+    maxWidth: 380,
     height: 145,
     maxHeight: 145,
     // paddingTop: 20,
     paddingBottom: 20,
-    margin: 10
+    margin: 10,
+    flexGrow: 1
   },
   content: {
     paddingLeft: 20,
