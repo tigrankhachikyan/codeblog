@@ -65,7 +65,6 @@ class Comments extends Component {
                 : <AccountCircle />
             }
             <TextField
-              defaultValue="Bare"
               variant="standard"
               value={this.state.newCommentText}
               onChange = {this.handelChange}

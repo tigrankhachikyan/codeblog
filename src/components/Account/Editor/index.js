@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
@@ -16,6 +16,9 @@ import Button from '@material-ui/core/Button';
 
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
+import Switch from '@material-ui/core/Switch';
+
+import debounce from 'lodash/debounce';
 
 import {
   addToast
@@ -46,19 +49,20 @@ const styles = theme => ({
 });
 
 
-class Editor extends Component {
+class Editor extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       isChanged: false,
       markdown: "",
+      //markdownForRender: "",
       title: "",
 
       draftIsEmpty: true,
       _autoSaveTimerId: null,
 
-      displayContent: null
-    }
+      displayContent: null,
+    };
   }
 
   fetchPostData = async (postId) => {
@@ -98,6 +102,7 @@ class Editor extends Component {
         data.markdown      = post.draft.body_markdown;
       }
 
+      //data.markdownForRender = data.markdown;
       this.setState({...data});
     } catch(e) {
       console.log("Error:", e);
@@ -119,17 +124,6 @@ class Editor extends Component {
     clearInterval(this.state._autoSaveTimerId);
   }
 
-  // showDiff = () => {
-  //   this.setState({
-  //     displayContent: this.renderDraftDiff()
-  //   })
-  // }
-
-  // showEditor = () => {
-  //   this.setState({
-  //     displayContent: this.renderEditor()
-  //   })
-  // }
 
   closeEditingHandles = () => {
     if (this.state.isChanged) {
@@ -139,12 +133,21 @@ class Editor extends Component {
     this.props.history.push(`/account`);
   }
 
+  // delayedRender = debounce(value => {
+  //   this.setState({
+  //     markdownForRender: value,
+  //     isChanged: true
+  //   })
+  // }, 300)
+
   handleChange = (e) => {
     this.setState({
       markdown: e.target.value,
       isChanged: true
     })
-  }
+//    e.persist();
+//    this.delayedRender(e.target.value);
+  };
 
   saveDraftContent = () => {
     const postId = this.props.match.params.id;
@@ -167,44 +170,6 @@ class Editor extends Component {
       addToast({text: "Successfully published latest draft changes", color: "lightgreen"});
     });
   }
-
-  // renderDraftDiff = () => {
-  //   return (
-  //     <Grid item xs={10}>
-  //       <Paper className={this.props.classes.paper}>
-  //         <pre>
-  //           <Diff inputA={this.state.markdown} inputB={this.state.markdownDraft} type="words" />
-  //         </pre>
-  //       </Paper>
-  //     </Grid>
-  //   );
-  // }
-
-  // renderEditor = () => {
-  //   return <Fragment>
-  //     <Grid item xs={6}>
-  //       <Paper className={this.props.classes.paper}>
-  //         <textarea
-  //           style={{
-  //             margin: 5,
-  //             fontSize: 18,
-  //           }}
-  //           value={this.state.markdown}
-  //           onChange={this.handleChange}
-  //         />
-  //       </Paper>
-  //     </Grid>
-  //     <Grid item xs={6}>
-  //       <Paper className={this.props.classes.paper}>
-  //         <Markdown 
-  //           options={{tables: true}}
-  //           markup={ this.state.markdown }
-  //           style={{overflow: "auto"}} 
-  //         />
-  //       </Paper>
-  //     </Grid>
-  //   </Fragment>
-  // }
 
   render() {
     if (!this.state.markdown) return null;
@@ -245,20 +210,13 @@ class Editor extends Component {
               </em>
             </h2>
 
-            { 
-              // !this.state.draftIsEmpty && 
-              //   <div>
-              //     <span>Detected Content from draft</span>
-              //     <Button 
-              //       variant="contained" 
-              //       color="primary" 
-              //       onClick={this.showDiff}
-              //     >
-              //       View Diff
-              //     </Button>
-              //   </div>
-            }
-
+            <div
+              style={{float: "right"}}
+            >
+              <span>Publish?</span>
+              <Switch
+                color="primary"
+              />
             {
               this.state.markdownPublished !== this.state.markdown &&
               ! this.state.isChanged &&
@@ -271,6 +229,7 @@ class Editor extends Component {
                 Publish Draft Changes
               </Button>
             }
+            </div>
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -307,7 +266,7 @@ class Editor extends Component {
 const mapStateToProps = ({ auth, data, settings }) => {
   return {
     uid: auth.uid,
-    post: data.editPost, // TODO: not used yet, move to redux or not?
+    //post: data.editPost, // TODO: not used yet, move to redux or not?
     settings
   };
 };

@@ -83,11 +83,11 @@ export const fetchUserBookmarks = (uid) => async dispatch => {
  */
 export const createPost = (payload) => async dispatch => {
   const newPostRef = postsRef.doc();
-  createCounter(newPostRef, 1, "likes");
-  createCounter(newPostRef, 1, "views");
 
   const id = newPostRef.id;
   payload.slug = payload.slug + "-" + id;
+  payload.likes = 0;
+  payload.views = 0;
   
   try {
     await Promise.all([
@@ -193,7 +193,6 @@ export const deletePostById = postId => async dispatch => {
   batch.delete(postsRef.doc(postId));
   
   batch.delete(postsRef.doc(postId).collection('likes').doc('0'));
-  batch.delete(postsRef.doc(postId).collection('views').doc('0'));
   batch.delete(postsBodyRef.doc(postId));
 
     // Commit the batch
@@ -260,15 +259,12 @@ export const cleanCurrentpost = () => async dispatch => {
  * 
  * @param {*} slug 
  */
-export const fetchPostBySlug = (slug) => async dispatch => {
+export const fetchPostBySlug = (slug, auth) => async dispatch => {
   const matched = /-([^-]+)$/.exec(slug);
   const postId = matched[1];
 
   const postRef     = postsRef.doc(postId);
   const postBodyRef = postsBodyRef.doc(postId);
-  
-  let post     = null;
-  let postBody = null;
 
   try {
     const [
@@ -279,21 +275,16 @@ export const fetchPostBySlug = (slug) => async dispatch => {
       postBodyRef.get()
     ]);
     if (postSnapshot.exists && postBodySnapshot.exists) {
-      post = {postId, ...postSnapshot.data()};
-      postBody = {postId, ...postBodySnapshot.data()};
-
-      const [likes, views] = await Promise.all([
-        getCount(postRef, 'likes'),
-        getCount(postRef, 'views')
-      ]);
-
+      let post = {postId, ...postSnapshot.data()};
+      let postBody = {postId, ...postBodySnapshot.data()};
+      
       dispatch({
         type: LOAD_CURRENT_POST,
         payload: {
-          likes,
-          views
+          post,
+          postBody,
         }
-      });
+      })
 
       postCommentsRef.where('postId', '==', postId).orderBy('dateCreated')
         .onSnapshot(function(querySnapshot) {
@@ -307,25 +298,10 @@ export const fetchPostBySlug = (slug) => async dispatch => {
             }
           })
         });
-      
+      setTimeout(() => viewPost(postId), 4000);
     } else {
       throw new Error(`No Post found with postId: ${postId}`);
     }
-    dispatch({
-      type: LOAD_CURRENT_POST,
-      payload: {
-        post, postBody,
-      }
-    })
-    postRef.onSnapshot(doc => 
-      dispatch({
-        type: LOAD_CURRENT_POST,
-        payload: {
-          post,
-        }
-      })
-    );
-    incrementCounter(firestore, postRef, 0, "views");
 
   } catch(e) {
     console.log(e);
@@ -335,25 +311,99 @@ export const fetchPostBySlug = (slug) => async dispatch => {
   }
 }
 
-export const likePost = (postId) => async (dispatch, getState) => {
+export const doILikedPost = () => async (dispatch, getState) => {
+  const { auth, currentPost } = getState();
+  postsRef.doc(currentPost.post.postId).collection('likes').doc(auth.uid).get().then(doc => {
+
+    if (doc.exists) {
+      dispatch({
+        type: LOAD_CURRENT_POST,
+        payload: {
+          iLiked: true
+        }
+      })
+    }
+  })
+}
+/**
+ * 
+ * @param {*} post 
+ */
+export const likePost = (post) => async (dispatch, getState) => {
   const { auth } = getState();
   if (!auth) {
     console.log("Unauthorized users can't like the post");
     return;
   };
 
-  const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 0, "likes")
-    .then(likes => dispatch({
-        type: LOAD_CURRENT_POST,
-        payload: { likes }
-      })
-    )
+  toggleLike(auth.uid, post).then(post => {
+    dispatch({
+      type: LOAD_CURRENT_POST,
+      payload: {
+        post
+      }
+    })
+  });
 };
 
-export const viewPost = (postId) => async dispatch => {
+function toggleLike(uid, post) {
+  return new Promise((resolve, reject) => {
+  // Create a reference for a new rating, for use inside the transaction
+  let postRef     = postsRef.doc(post.postId);
+  let userLikeRef = postRef.collection('likes').doc(uid);
+  let userLikesStorageRef = firestore.collection('userLikes').doc(`${uid}-${post.postId}`);
+
+  userLikeRef.get().then(docSnapshot => {
+    const liked = docSnapshot.exists;
+
+    return firestore.runTransaction(transaction => {
+      return transaction.get(postRef).then(res => {
+        if (!res.exists) Promise.reject("Document does not exist!");
+
+        let newLikesCount = res.data().likes + (liked ? -1 : 1);
+        transaction.update(postRef, {
+          likes: newLikesCount
+        });
+
+        if (liked) {
+          transaction.delete(userLikeRef);
+          transaction.delete(userLikesStorageRef)
+        } else {
+          transaction.set(userLikeRef, { e: true });
+          transaction.set(userLikesStorageRef, {
+            title: post.title,
+            slug: post.slug
+          })
+        }
+        resolve({...res.data(), postId: res.id, likes: newLikesCount})
+      })
+    });
+  });
+  })
+}
+
+
+export const viewPost = (postId) => {
   const postRef = postsRef.doc(postId);
-  incrementCounter(firestore, postRef, 0, "views");
+  // incrementCounter(firestore, postRef, 0, "views");
+  postRef.get().then(docSnapshot => {
+    // In a transaction, add the new rating and update the aggregate totals
+    return firestore.runTransaction(transaction => {
+      return transaction.get(postRef).then(res => {
+        if (!res.exists) {
+            throw "Document does not exist!";
+        }
+
+        // Compute new number of ratings
+        var newViewsCount = res.data().views + 1;
+
+        // Commit to Firestore
+        transaction.update(postRef, {
+          views: newViewsCount
+        });
+      })
+    });
+  });
 };
 
 /**
@@ -362,50 +412,9 @@ export const viewPost = (postId) => async dispatch => {
  * @param {*} post 
  */
 export const bookmarkPost = (uid, post) => async dispatch => {
-  const userBookmarkRef = userBookmarksRef.doc();
-
-  userBookmarkRef.set({uid, post})
+  const userBookmarkRef = userBookmarksRef.doc(uid).collection(post.postId);
+  userBookmarkRef.set({
+    title: post.title,
+    slug: post.slug
+  });
 };
-
-function createCounter(ref, num_shards, key) {
-  var batch = firestore.batch();
-
-  // Initialize the counter document
-  batch.set(ref, { num_shards: num_shards });
-
-  // Initialize each shard with count=0
-  for (let i = 0; i < num_shards; i++) {
-    let shardRef = ref.collection(key).doc(i.toString());
-    batch.set(shardRef, { count: 0 });
-  }
-
-  // Commit the write batch
-  return batch.commit();
-}
-
-function incrementCounter(db, ref, num_shards, key) {
-  // Select a shard of the counter at random
-  const shard_id = Math.floor(Math.random() * num_shards).toString();
-  const shard_ref = ref.collection(key).doc(shard_id);
-
-  // Update count in a transaction
-  return db.runTransaction(t => {
-    return t.get(shard_ref).then(doc => {
-      const new_count = doc.data().count + 1;
-      t.update(shard_ref, { count: new_count });
-      return new_count;
-    });
-  });
-}
-
-function getCount(ref, key) {
-  // Sum the count of each shard in the subcollection
-  return ref.collection(key).get().then(snapshot => {
-    let total_count = 0;
-    snapshot.forEach(doc => {
-        total_count += doc.data().count;
-    });
-
-    return total_count;
-  });
-}

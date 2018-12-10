@@ -4,7 +4,6 @@ import { Markdown } from 'react-showdown';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import Spinner from '../utils/Spinner';
 import Hidden from '@material-ui/core/Hidden';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -16,7 +15,8 @@ import {
   likePost,
   fetchPostBySlug,
   cleanCurrentpost,
-  viewPost
+  viewPost,
+  doILikedPost
 } from "../../actions";
 
 import Prism from "prismjs";
@@ -39,11 +39,12 @@ const styles = theme => ({
 });
 
 class PostViewSlug extends PureComponent {
-
   async componentDidMount() {
     const { slug } = this.props.match.params;
+
     try {
       await this.props.fetchPostBySlug(slug);
+      await this.props.doILikedPost();
       setTimeout(() => Prism.highlightAll(), 0)
     } catch(err) {
       console.log(err);
@@ -95,9 +96,19 @@ class PostViewSlug extends PureComponent {
 }
 
 const mapStateToProps = ({ auth, currentPost }) => {
+  let post = null;
+  if (currentPost.post ) {
+    post = { ...currentPost.post };
+
+    if (post && "likes" in post) {
+      delete post.likes
+    }
+  }
+
   return {
+    auth,
     currentPost: {
-      post: currentPost.post,
+      post,
       postBody: currentPost.postBody
     }
   };
@@ -107,5 +118,6 @@ export default connect(mapStateToProps, {
   likePost,
   viewPost,
   fetchPostBySlug,
-  cleanCurrentpost
+  cleanCurrentpost,
+  doILikedPost
 })(withStyles(styles)(PostViewSlug));
