@@ -59,7 +59,7 @@ class DashBoard extends Component {
       title: e.target.value,
       slug: this.state.slugChanged 
         ? this.state.slug 
-        : e.target.value.replace(/\s+/g, '-').toLowerCase()
+        : e.target.value.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase()
     })
   }
 
