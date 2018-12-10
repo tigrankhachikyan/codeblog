@@ -16,7 +16,7 @@ import {
   fetchPostBySlug,
   cleanCurrentpost,
   doILikedPost
-} from "../../actions";
+} from "../../actions/currentPost";
 
 import Prism from "prismjs";
 import "../../css/prism.css";

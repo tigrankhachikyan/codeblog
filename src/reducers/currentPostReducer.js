@@ -4,7 +4,7 @@ import {
   REMOVE_CURRENT_POST,
   INCREMENT_TOTAL_LIKES,
   DECREMENT_TOTAL_LIKES
-} from "../actions/types";
+} from "../actions/currentPost/types";
 
 let initState = {
   error: null,

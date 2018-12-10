@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { 
   addPostComment,
-} from "../../actions";
+} from "../../actions/currentPost";
 
 class Comments extends Component {
   constructor(props) {

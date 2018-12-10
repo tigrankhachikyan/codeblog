@@ -11,7 +11,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { 
   likePost,
   bookmarkPost
-} from "../../actions";
+} from "../../actions/currentPost";
 
 import {addToast} from "../../actions/toasts"
 
