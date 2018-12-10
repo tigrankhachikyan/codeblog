@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -25,7 +25,7 @@ import Account from "./components/Account";
 
 import './index.css';
 
-class App extends Component {
+class App extends PureComponent {
 
   async componentDidMount() {
     if (this.props.auth) return;
@@ -46,8 +46,6 @@ class App extends Component {
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
-            <Route exact path="/@:username" component={UserPublicPostsList} />
-            <Route exact path="/@:username/:slug" component={PostViewSlug} />
 
             <Route path="/about"   component={About} />
             <Route path="/signin"  component={SignIn}/>
@@ -62,6 +60,10 @@ class App extends Component {
               }
               return <Redirect to={'/'}/>
             }}/>
+
+            <Route exact path="/@:username" component={UserPublicPostsList} />
+            <Route exact path="/@:username/:slug" component={PostViewSlug} />
+            <Route exact path="/:slug"            component={PostViewSlug} />
           </div>
           <Toasts />
         </div>
@@ -70,8 +72,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, settings }) => {
-  return { auth, settings };
+const mapStateToProps = ({ auth }) => {
+  return { auth };
 };
 
 export default connect(mapStateToProps, {

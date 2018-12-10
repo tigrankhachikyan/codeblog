@@ -13,6 +13,8 @@ import {
   bookmarkPost
 } from "../../actions";
 
+import {addToast} from "../../actions/toasts"
+
 import "../../css/prism.css";
 
 const styles = theme => ({
@@ -41,37 +43,44 @@ const styles = theme => ({
 });
 
 class Toolbox extends PureComponent {
+  handleLikeClick = e => {
+    this.props.likePost(this.props.post);
+  }
+
   render() {
     const { classes } = this.props;
     if (!this.props.post) return null;
 
     const { auth, post } = this.props;
-
+    
     return (
       <div className={classes.root}>
           <div className={classes.pair}>
             <VisibilityIcon color="action"/>
             <Typography component="h5" variant="h5" className={classes.fab}>
-              {this.props.views}
+              {this.props.post.views}
             </Typography>
           </div>
 
           <div className={classes.pair}>
             <ButtonBase aria-label="Like"
               disabled={!auth}
-              onClick={() => this.props.likePost(post.postId)}
+              onClick={this.handleLikeClick}
             >
-              <ThumbUpIcon color="action"/>
+              <ThumbUpIcon color={this.props.iLiked ? "secondary" : "action"}/>
             </ButtonBase>
             <Typography component="h5" variant="h5" className={classes.fab}>
-              {this.props.likes}
+              {this.props.post.likes}
             </Typography>
           </div>
 
           <ButtonBase 
             aria-label="bookmark" className={classes.pair}
             disabled={!auth}
-            onClick={() => this.props.bookmarkPost(auth.uid, post)}
+            onClick={() => {
+              this.props.bookmarkPost(auth.uid, post);
+              this.props.addToast({text: "Added to bookmark list", color: "lightgreen"});
+            }}
           >
             <BookmarkIcon color="action"/>
           </ButtonBase>
@@ -85,12 +94,14 @@ const mapStateToProps = ({ auth, currentPost }) => {
   return {
     auth,
     post: currentPost.post,
-    likes: currentPost.likes,
-    views: currentPost.views
+    iLiked: currentPost.iLiked,
+    //likes: currentPost.likes,
+    //views: currentPost.views
   };
 };
 
 export default connect(mapStateToProps, {
   likePost,
-  bookmarkPost
+  bookmarkPost,
+  addToast
 })(withStyles(styles)(Toolbox));

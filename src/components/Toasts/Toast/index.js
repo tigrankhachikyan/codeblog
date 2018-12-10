@@ -1,18 +1,37 @@
 
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 class Toast extends Component {
   render() {
     return (
-      <li className="toast" style={{ backgroundColor: this.props.color }}>
-        <p className="toast__content">
-          {this.props.text}
-        </p>
-        <button className="toast__dismiss" onClick={this.props.onDismissClick}>
-          x
-        </button>
-      </li>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={true}
+        autoHideDuration={8 * 1000}
+        onClose={this.handleClose}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">{this.props.text}</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={this.props.onDismissClick}
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
     );
   }
   // In our application toast notifications can't be changed once they are created,
