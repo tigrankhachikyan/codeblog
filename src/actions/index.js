@@ -315,6 +315,8 @@ export const fetchPostBySlug = (slug, auth) => async dispatch => {
 
 export const doILikedPost = () => async (dispatch, getState) => {
   const { auth, currentPost } = getState();
+  if (!auth) return;
+
   postsRef.doc(currentPost.post.postId).collection('likes').doc(auth.uid).get().then(doc => {
 
     if (doc.exists) {
@@ -412,7 +414,7 @@ export const viewPost = (postId) => {
  * @param {*} post 
  */
 export const bookmarkPost = (uid, post) => async dispatch => {
-  const userBookmarkRef = userBookmarksRef.doc(uid).collection(post.postId);
+  const userBookmarkRef = userBookmarksRef.doc(uid).collection(post.postId).doc();
   userBookmarkRef.set({
     title: post.title,
     slug: post.slug
