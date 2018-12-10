@@ -16,7 +16,9 @@ import {
 import { 
   LOAD_CURRENT_POST,
   LOAD_CURRENT_POST_COMMENTS,
-  REMOVE_CURRENT_POST
+  REMOVE_CURRENT_POST,
+  INCREMENT_TOTAL_LIKES,
+  DECREMENT_TOTAL_LIKES
 } from "./types";
 
 export const fetchLatestPosts = () => dispatch => {
@@ -339,8 +341,8 @@ export const likePost = (post) => async (dispatch, getState) => {
 
   toggleLike(auth.uid, post).then(post => {
     currentPost.iLiked
-      ? dispatch({ type: "DECREMENT_TOTAL_LIKES"})
-      : dispatch({ type: "INCREMENT_TOTAL_LIKES"})
+      ? dispatch({ type: DECREMENT_TOTAL_LIKES})
+      : dispatch({ type: INCREMENT_TOTAL_LIKES})
   });
 };
 

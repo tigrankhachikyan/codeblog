@@ -1,7 +1,9 @@
 import {
   LOAD_CURRENT_POST,
   LOAD_CURRENT_POST_COMMENTS,
-  REMOVE_CURRENT_POST
+  REMOVE_CURRENT_POST,
+  INCREMENT_TOTAL_LIKES,
+  DECREMENT_TOTAL_LIKES
 } from "../actions/types";
 
 let initState = {
@@ -28,13 +30,13 @@ export default (state = initState, action) => {
         post: null, 
         comments: null
       }
-    case "INCREMENT_TOTAL_LIKES":
+    case INCREMENT_TOTAL_LIKES:
       return {
         ...state,
         post: {...state.post, likes: state.post.likes + 1}, 
         iLiked: true
       }
-    case "DECREMENT_TOTAL_LIKES":
+    case DECREMENT_TOTAL_LIKES:
       return {
         ...state,
         post: {...state.post, likes: state.post.likes - 1}, 
