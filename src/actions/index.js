@@ -330,19 +330,17 @@ export const doILikedPost = () => async (dispatch, getState) => {
  * @param {*} post 
  */
 export const likePost = (post) => async (dispatch, getState) => {
-  const { auth } = getState();
+  const { auth, currentPost } = getState();
+
   if (!auth) {
     console.log("Unauthorized users can't like the post");
     return;
   };
 
   toggleLike(auth.uid, post).then(post => {
-    dispatch({
-      type: LOAD_CURRENT_POST,
-      payload: {
-        post
-      }
-    })
+    currentPost.iLiked
+      ? dispatch({ type: "DECREMENT_TOTAL_LIKES"})
+      : dispatch({ type: "INCREMENT_TOTAL_LIKES"})
   });
 };
 
