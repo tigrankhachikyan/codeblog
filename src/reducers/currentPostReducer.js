@@ -7,6 +7,7 @@ import {
 } from "../actions/types";
 
 let initState = {
+  error: null,
   post: null,
   comments: null,
   likes: null,
@@ -41,6 +42,11 @@ export default (state = initState, action) => {
         ...state,
         post: {...state.post, likes: state.post.likes - 1}, 
         iLiked: false
+      }
+    case "CURRENT_POST_LOADING_ERROR":
+      return {
+        ...state,
+        error: action.error
       }
     default:
       return state;

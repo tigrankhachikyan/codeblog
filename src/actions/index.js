@@ -304,11 +304,13 @@ export const fetchPostBySlug = (slug, auth) => async dispatch => {
     } else {
       throw new Error(`No Post found with postId: ${postId}`);
     }
-
   } catch(e) {
-    console.log(e);
     dispatch({
       type: REMOVE_CURRENT_POST
+    });
+    dispatch({
+      type: "CURRENT_POST_LOADING_ERROR",
+      error: "Failed to laod post"
     })
   }
 }

@@ -15,7 +15,6 @@ import {
   likePost,
   fetchPostBySlug,
   cleanCurrentpost,
-  viewPost,
   doILikedPost
 } from "../../actions";
 
@@ -57,9 +56,12 @@ class PostViewSlug extends PureComponent {
 
   render() {
     const { classes } = this.props;
-    //if (!this.props.currentPost.post) return null;
 
     const { post, postBody } = this.props.currentPost;
+    
+    if (this.props.error) {
+      return <h2>Error Loading post. It is probably removed by author!</h2>
+    }
 
     return (
       <div className={classes.root}>
@@ -107,16 +109,16 @@ const mapStateToProps = ({ auth, currentPost }) => {
 
   return {
     auth,
+    error: currentPost.error,
     currentPost: {
       post,
-      postBody: currentPost.postBody
+      postBody: currentPost.postBody,
     }
   };
 };
 
 export default connect(mapStateToProps, {
   likePost,
-  viewPost,
   fetchPostBySlug,
   cleanCurrentpost,
   doILikedPost
