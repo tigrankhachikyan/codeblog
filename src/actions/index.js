@@ -19,6 +19,8 @@ import {
   REMOVE_CURRENT_POST
 } from "./types";
 
+
+
 export const fetchLatestPosts = () => dispatch => {
   const latestPostsRef = postsRef.orderBy("date_created", "desc").limit(30);
   latestPostsRef.get()
@@ -356,16 +358,25 @@ export const viewPost = (postId) => async dispatch => {
   incrementCounter(firestore, postRef, 0, "views");
 };
 
-/**
+/**a
  * 
  * @param {*} uid 
  * @param {*} post 
  */
 export const bookmarkPost = (uid, post) => async dispatch => {
   const userBookmarkRef = userBookmarksRef.doc();
-
+  // userBookmarksRef.map((bookmark) => {
+  //   if (bookmark.post.postId !== uid) {
+  //     console.log('YES')
+  //   } else {
+  //     console.log('NO')
+  //   }
+  // })
+  
   userBookmarkRef.set({uid, post})
+  
 };
+
 
 function createCounter(ref, num_shards, key) {
   var batch = firestore.batch();

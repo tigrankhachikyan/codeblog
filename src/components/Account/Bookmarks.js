@@ -17,6 +17,7 @@ const styles = theme => ({
   },
 });
 
+
 class Bookmarks extends Component {
   async componentDidMount() {
     await this.props.fetchUserBookmarks(this.props.uid);
@@ -24,6 +25,7 @@ class Bookmarks extends Component {
 
   render() {
     const { classes, userBookmarks } = this.props;
+    
     
     return (
       <div className={classes.root}>
