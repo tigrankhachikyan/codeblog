@@ -51,7 +51,7 @@ class Home extends Component {
         alignItems="flex-start"
         style={{flexWrap: "wrap"}}
       >
-        <Grid item md={8} direction="row" style={{
+        <Grid item md={8} style={{
           display: "flex",
           flexWrap: "wrap",
         }}>
