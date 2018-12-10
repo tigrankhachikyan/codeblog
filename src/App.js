@@ -47,12 +47,16 @@ class App extends PureComponent {
           <div>
             <Route exact path="/" component={Home} />
 
-            <Route path="/about"   component={About} />
-            <Route path="/signin"  component={SignIn}/>
-            <Route path="/forget-password" component={ForgetPassword}/>
-            <Route path="/signup"  component={SignUp}/>
-            <Route path="/account" component={requireAuth(Account)}/>
-            <Route path="/user-settings" component={requireAuth(UserSettings)}/>
+            <Route exact path="/about"   component={About} />
+            <Route exact path="/signin"  component={SignIn}/>
+            <Route exact path="/forget-password" component={ForgetPassword}/>
+            <Route exact path="/signup"  component={SignUp}/>
+            <Route exact path="/@:username" component={UserPublicPostsList} />
+            <Route exact path="/@:username/:slug" component={PostViewSlug} />
+            <Route exact path="/post/:slug"       component={PostViewSlug} />
+
+            <Route exact path="/account" component={requireAuth(Account)}/>
+            <Route exact path="/user-settings" component={requireAuth(UserSettings)}/>
 
             <Route path="/signout" render={() => {
               if (auth) {
@@ -61,9 +65,6 @@ class App extends PureComponent {
               return <Redirect to={'/'}/>
             }}/>
 
-            <Route exact path="/@:username" component={UserPublicPostsList} />
-            <Route exact path="/@:username/:slug" component={PostViewSlug} />
-            <Route exact path="/:slug"            component={PostViewSlug} />
           </div>
           <Toasts />
         </div>

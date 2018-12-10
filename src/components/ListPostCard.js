@@ -11,7 +11,8 @@ import { Link, withRouter } from "react-router-dom";
 
 const styles = {
   card: {
-    minWidth: 600,
+    minWidth: 400,
+    maxWidth: 400,
   },
   bullet: {
     display: 'inline-block',
@@ -43,6 +44,9 @@ function ListPostCard(props) {
         </Typography>
         <Typography component="p">
           {post.excerpt || "NO EXCERPT"}
+        </Typography>
+        <Typography variant="caption" style={{float: "right"}}>
+          {`Liked: ${post.likes} Views ${post.views}`}
         </Typography>
       </CardContent>
       <CardActions>
