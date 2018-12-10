@@ -8,11 +8,22 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Link, withRouter } from "react-router-dom";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+
+import {formatDate} from  "../helpers/formatDate";
 
 const styles = {
   card: {
     minWidth: 400,
     maxWidth: 400,
+    // paddingTop: 20,
+    paddingBottom: 20,
+  },
+  content: {
+    paddingLeft: 20,
+    paddingRight: 20
   },
   bullet: {
     display: 'inline-block',
@@ -23,7 +34,7 @@ const styles = {
     fontSize: 14,
   },
   pos: {
-    marginBottom: 12,
+    marginTop: 12,
   },
 };
 
@@ -32,27 +43,28 @@ function ListPostCard(props) {
 
   return (
     <Card className={classes.card}>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          <Link to={`/@${post.user.userName}`}>@{post.user.userName}</Link>
-        </Typography>
+      <CardContent className={classes.content}>
         <Typography variant="h5" component="h2">
-          {post.title}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          {post.date_created.toDate().toLocaleString()}
+          <Link to={`/@${post.user.userName}/${post.slug}`}>{post.title}</Link>
         </Typography>
         <Typography component="p">
-          {post.excerpt || "NO EXCERPT"}
+          <em>{post.excerpt || "NO EXCERPT"}</em>
         </Typography>
-        <Typography variant="caption" style={{float: "right"}}>
+        <Typography variant="caption" style={{float: "left"}} className={classes.pos}>
+        {formatDate(post.date_created.toDate())}
+        </Typography>
+        <Typography variant="caption" style={{float: "right"}} className={classes.pos}>
           {`Liked: ${post.likes} Views ${post.views}`}
         </Typography>
+        <br/>
+
       </CardContent>
-      <CardActions>
-        <Button size="small" onClick={e => props.history.push(`/@${post.user.userName}/${post.slug}`)}>
-          Read...
-        </Button>
+      <CardActions className={classes.content}>
+        <div>
+          <Typography variant="caption" style={{float: "right"}} className={classes.pos}>
+            By: <Link to={`/@${post.user.userName}`} >@{post.user.userName}</Link>
+          </Typography>
+        </div>
       </CardActions>
     </Card>
   );
