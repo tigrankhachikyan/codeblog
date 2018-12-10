@@ -46,6 +46,7 @@ class App extends PureComponent {
           <NavBar />
           <div>
             <Route exact path="/" component={Home} />
+            <Route path="/account" component={requireAuth(Account)}/>
 
             <Route exact path="/about"   component={About} />
             <Route exact path="/signin"  component={SignIn}/>
@@ -55,7 +56,6 @@ class App extends PureComponent {
             <Route exact path="/@:username/:slug" component={PostViewSlug} />
             <Route exact path="/post/:slug"       component={PostViewSlug} />
 
-            <Route exact path="/account" component={requireAuth(Account)}/>
             <Route exact path="/user-settings" component={requireAuth(UserSettings)}/>
 
             <Route path="/signout" render={() => {
