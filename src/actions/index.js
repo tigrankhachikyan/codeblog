@@ -7,7 +7,13 @@ import {
   userBookmarksRef
 } from "../config/firebase.js";
 
-import { LOAD_POSTS, LOAD_EDIT_POST, REMOVE_USER_POST } from "./types";
+import { 
+  LOAD_POSTS,
+  LOAD_MOST_LIKED_POSTS,
+  LOAD_EDIT_POST,
+  REMOVE_USER_POST
+} from "./types";
+
 import { 
   LOAD_USER_BOOKMARKS,
   LOAD_USER_POSTS
@@ -29,6 +35,30 @@ export const fetchLatestPosts = () => dispatch => {
 
       dispatch({
         type: LOAD_POSTS,
+        payload: { posts }
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+};
+
+export const fetchMostLikedPosts = () => dispatch => {
+  const latestPostsRef = postsRef.orderBy("likes", "desc").limit(30);
+  latestPostsRef.get()
+    .then((snapshot) => {
+      const posts = [];
+
+      snapshot.forEach(doc => {
+        const post = {
+          postId: doc.id,
+          data: doc.data()
+        };
+        posts.push(post)
+      });
+
+      dispatch({
+        type: LOAD_MOST_LIKED_POSTS,
         payload: { posts }
       });
     })

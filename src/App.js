@@ -26,7 +26,7 @@ import Account from "./components/Account";
 import './index.css';
 
 class App extends PureComponent {
-
+  
   async componentDidMount() {
     if (this.props.auth) return;
     try {

@@ -8,7 +8,10 @@ import Typography from '@material-ui/core/Typography';
 
 import ListPostCard from "./ListPostCard";
 
-import {fetchLatestPosts} from "../actions";
+import {
+  fetchLatestPosts,
+  fetchMostLikedPosts
+} from "../actions";
 
 const styles = theme => ({
   root: {
@@ -29,16 +32,19 @@ const styles = theme => ({
 
 
 class Home extends Component {
-  componentDidMount() {
-    const { latestPosts, fetchLatestPosts } = this.props;
+  async componentDidMount() {
+    const { latestPosts, fetchLatestPosts, fetchMostLikedPosts } = this.props;
     if (!latestPosts.length) {
-      fetchLatestPosts();
+      await Promise.all([
+        fetchLatestPosts(),
+        fetchMostLikedPosts()
+      ]);
     }
   }
 
   render() {
     const { classes } = this.props;
-    const { latestPosts } = this.props;
+    const { latestPosts, mostLikedPosts } = this.props;
 
     if (!latestPosts.length) return null;
 
@@ -49,19 +55,31 @@ class Home extends Component {
         justify="flex-start"
         direction="row"
         alignItems="flex-start"
-        style={{flexWrap: "wrap"}}
       >
-        <Grid item md={8} style={{
-          display: "flex",
-          flexWrap: "wrap",
-        }}>
-        {
-          latestPosts.length > 0 && latestPosts.map((post, i) => {
-            return <ListPostCard key={post.postId} post={post.data}/>
-          })
-        }
+        <Grid item md={6}>
+          <Typography variant="h5">
+            Latest Posts
+          </Typography>
+          
+          <Grid>
+          {
+            latestPosts.length > 0 && latestPosts.map((post, i) => {
+              return <ListPostCard key={post.postId} post={post.data}/>
+            })
+          }
+          </Grid>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={6}>
+          <Typography variant="h5">
+            Most Liked
+          </Typography>
+          <Grid>
+          {
+            mostLikedPosts.length > 0 && mostLikedPosts.map((post, i) => {
+              return <ListPostCard key={post.postId} post={post.data}/>
+            })
+          }
+          </Grid>
         </Grid>
       </Grid>
     </div>
@@ -71,7 +89,8 @@ class Home extends Component {
 
 const mapStateToProps = ({ data }) => {
   return {
-    latestPosts: data.latestPosts
+    latestPosts: data.latestPosts,
+    mostLikedPosts: data.mostLikedPosts
   };
 };
 
@@ -80,5 +99,6 @@ Home.propTypes = {
 };
 
 export default connect(mapStateToProps, {
-  fetchLatestPosts
+  fetchLatestPosts,
+  fetchMostLikedPosts
 })(withStyles(styles)(Home));

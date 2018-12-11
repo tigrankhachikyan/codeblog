@@ -149,7 +149,7 @@ function toggleLike(uid, post) {
       return transaction.get(postRef).then(res => {
         if (!res.exists) Promise.reject("Document does not exist!");
 
-        let newLikesCount = res.data().likes + (liked ? -1 : 1);
+        let newLikesCount = (res.data().likes || 0) + (liked ? -1 : 1);
         transaction.update(postRef, {
           likes: newLikesCount
         });

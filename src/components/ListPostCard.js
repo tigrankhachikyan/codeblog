@@ -16,7 +16,8 @@ import {formatDate} from  "../helpers/formatDate";
 
 const styles = {
   card: {
-    maxWidth: 380,
+    //maxWidth: 380,
+    minWidth: 340,
     height: 145,
     maxHeight: 145,
     // paddingTop: 20,

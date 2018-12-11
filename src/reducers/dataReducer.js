@@ -1,5 +1,6 @@
 import {
   LOAD_POSTS,
+  LOAD_MOST_LIKED_POSTS,
   LOAD_USER_POSTS,
   LOAD_EDIT_POST,
   REMOVE_USER_POST,
@@ -10,6 +11,7 @@ import {
 
 let initState = {
   latestPosts: [],
+  mostLikedPosts: [],
   userPosts: [],
   userBookmarks : [],
   editPost: null,
@@ -21,6 +23,11 @@ export default (state = initState, action) => {
       return {
         ...state, 
         latestPosts: [...action.payload.posts]
+      }
+    case LOAD_MOST_LIKED_POSTS:
+      return {
+        ...state, 
+        mostLikedPosts: [...action.payload.posts]
       }
     case REMOVE_USER_POST:
       return {
