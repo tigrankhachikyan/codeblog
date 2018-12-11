@@ -184,7 +184,7 @@ export const viewPost = (postId) => {
         }
 
         // Compute new number of ratings
-        var newViewsCount = res.data().views + 1;
+        let newViewsCount = (res.data().views || 0) + 1;
 
         // Commit to Firestore
         transaction.update(postRef, {
