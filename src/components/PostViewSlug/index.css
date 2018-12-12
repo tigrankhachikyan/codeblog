@@ -15,3 +15,7 @@ h1 a:hover { color: #93291b; text-decoration: none; }
 p { color: #333333; font-family: "Enriqueta", "Signika", Arial, sans-serif; font-size: 26px; font-weight: 300; line-height: 1.5625; margin-bottom: 15px; }
 ul { color: #333333; font-family: "Enriqueta", "Signika", Arial, sans-serif; font-size: 22px; font-weight: 300; line-height: 1.5625; margin-bottom: 15px; }
 
+img {
+  height: auto;
+  width: 100%;
+}
