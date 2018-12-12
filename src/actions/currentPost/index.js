@@ -128,7 +128,7 @@ export const likePost = (post) => async (dispatch, getState) => {
     return;
   };
 
-  toggleLike(auth.uid, post).then(post => {
+  toggleLike(auth.uid, post).then(() => {
     currentPost.iLiked
       ? dispatch({ type: DECREMENT_TOTAL_LIKES})
       : dispatch({ type: INCREMENT_TOTAL_LIKES})
@@ -149,22 +149,19 @@ function toggleLike(uid, post) {
       return transaction.get(postRef).then(res => {
         if (!res.exists) Promise.reject("Document does not exist!");
 
-        let newLikesCount = (res.data().likes || 0) + (liked ? -1 : 1);
-        transaction.update(postRef, {
-          likes: newLikesCount
-        });
-
         if (liked) {
           transaction.delete(userLikeRef);
-          transaction.delete(userLikesStorageRef)
+          transaction.delete(userLikesStorageRef);
+          transaction.update(postRef, { likes: res.data().likes - 1 });
         } else {
           transaction.set(userLikeRef, { e: true });
           transaction.set(userLikesStorageRef, {
             title: post.title,
             slug: post.slug
-          })
+          });
+          transaction.update(postRef, { likes: res.data().likes + 1 });
         }
-        resolve({...res.data(), postId: res.id, likes: newLikesCount})
+        resolve();
       })
     });
   });
