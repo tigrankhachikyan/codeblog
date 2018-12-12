@@ -44,7 +44,7 @@ export const loadPost = (uid, postId) => async dispatch => {
     }),
   ])
 
-  const editorContent = (postBodyDraft === null ? postBody : postBodyDraft);
+  const editorContent = (postBodyDraft === null ? postBody : {...postBodyDraft, contentLoadedFromDraft: true});
 
   dispatch({
     type: EDIT_POST_LOAD_SUCCESS,

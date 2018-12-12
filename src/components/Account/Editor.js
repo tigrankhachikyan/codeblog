@@ -170,8 +170,11 @@ class Editor extends PureComponent {
                   color="primary"
                 />
               {
-                this.props.editPost.body.body_markdown !== this.state.markdown &&
-                ! this.state.isChanged &&
+                (
+                  this.props.editPost.body.body_markdown !== this.state.markdown && ! this.state.isChanged 
+                || 
+                  this.props.editPost.body.contentLoadedFromDraft
+                ) &&
                 <Button 
                   variant="contained" 
                   color="primary" 
