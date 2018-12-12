@@ -10,7 +10,6 @@ import {
 import { 
   LOAD_POSTS,
   LOAD_MOST_LIKED_POSTS,
-  LOAD_EDIT_POST,
   REMOVE_USER_POST
 } from "./types";
 
@@ -135,10 +134,10 @@ export const fetchPostById = (postId) => dispatch => {
         if (!doc.exists) {
           reject('No such document!');
         } else {
-          dispatch({
-            type: LOAD_EDIT_POST,
-            payload: doc.data()
-          });
+          // dispatch({
+          //   type: LOAD_EDIT_POST,
+          //   payload: doc.data()
+          // });
           resolve(doc.data());
         }
       })
@@ -223,32 +222,4 @@ export const deletePostById = postId => async dispatch => {
       return batch.commit();
     }).then(function() {
     }); 
-};
-
-
-export const savePostDraftById = (postId, payload) => async dispatch => {
-  postDraftsRef.doc(postId).set({
-    body_markdown: payload.body_markdown,
-    date_modified: new Date()
-  });
-};
-
-export const publishDraftById = (postId) => async dispatch => {
-  postDraftsRef.doc(postId).get()
-    .then(doc => {
-      if (!doc.exists) {
-        Promise.reject('No such document!');
-      } else {
-        const draft = doc.data();
-        postsBodyRef.doc(postId).update({
-          body_markdown: draft.body_markdown,
-          date_modified: new Date()
-        });
-        return(draft.body_markdown);
-      }
-    })
-    .then(() => postDraftsRef.doc(postId).delete())
-    .catch((err) => {
-      Promise.reject(err);
-    });
 };

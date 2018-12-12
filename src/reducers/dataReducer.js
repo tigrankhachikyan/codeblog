@@ -2,7 +2,6 @@ import {
   LOAD_POSTS,
   LOAD_MOST_LIKED_POSTS,
   LOAD_USER_POSTS,
-  LOAD_EDIT_POST,
   REMOVE_USER_POST,
   REMOVE_USER_POSTS,
   REMOVE_USER_BOOKMARKS,
@@ -53,11 +52,6 @@ export default (state = initState, action) => {
       return {
         ...state, 
         userBookmarks: []
-      }
-    case LOAD_EDIT_POST:
-      return {
-        ...state, 
-        editPost: {...action.payload}
       }
     default:
       return state;

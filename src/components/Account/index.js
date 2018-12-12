@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 
 import DashBoard from './DashBoard';
 import Bookmarks from './Bookmarks';
-import Editor from './Editor';
+import EditorController from './EditorController';
 
 export default class Account extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class Account extends Component {
       <div>
         <Route exact path={`/account/`} component={DashBoard}/>
         <Route exact path={`/account/bookmarks`} component={Bookmarks}/>
-        <Route exact path={'/account/edit/:id'} component={Editor}/>
+        <Route exact path={'/account/edit/:id'} component={EditorController}/>
       </div>
     );
   }

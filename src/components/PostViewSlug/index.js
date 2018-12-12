@@ -79,16 +79,16 @@ class PostViewSlug extends PureComponent {
         <Hidden smDown>
           <Toolbox />
         </Hidden>
-        <Grid item sm={12} md={8} lg={6}>
+        <Grid item sm={12} md={8} lg={6} style={{justifySelf: "center"}}>
         { 
           post && <div>
-                <h1>{post.title}</h1>
-                <Markdown style={{
-                    overflowWrap: "break-word",
-                  }}
-                  markup={ postBody.body_markdown } />
-                <Comments />
-              </div>
+            <h1>{post.title}</h1>
+            <Markdown style={{
+                overflowWrap: "break-word",
+              }}
+              markup={ postBody.body_markdown } />
+            <Comments />
+          </div>
         }
         </Grid>
       </Grid>
