@@ -17,6 +17,8 @@ import {
   deletePostById
 } from "../../../actions";
 
+import { editPostHeader } from "../../../actions/editPost";
+
 import UserPostsTable from './UserPostsTable';
 
 const styles = theme => ({
@@ -53,6 +55,10 @@ class DashBoard extends Component {
   hideModal = () => {
     this.setState({ showDialog: false });
   };
+  
+  handleHeaderFieldUpdate = (uid, postId, field, value) => {
+    this.props.editPostHeader(uid, postId, {field, value})
+  }
 
   handleTitleChange = (e) => {
     this.setState({
@@ -138,6 +144,7 @@ class DashBoard extends Component {
                 posts={this.props.userPosts} 
                 editPost={(postId) => this.editPost(postId)}
                 removePost={(postId) => this.removePost(postId)}
+                togglePrivate={(postId, field, value) => this.handleHeaderFieldUpdate(this.props.auth.uid, postId, field, value)}
               />
           </Grid>
           <Modal show={this.state.showDialog} handleClose={this.hideModal}  className='modal-contaner' >
@@ -199,5 +206,6 @@ const mapStateToProps = ({ data, auth, settings }) => {
 export default withRouter(connect(mapStateToProps, {
   createPost,
   fetchUserPosts,
-  deletePostById
+  deletePostById,
+  editPostHeader
 })(withStyles(styles)(DashBoard)));

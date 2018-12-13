@@ -71,8 +71,12 @@ function UserPostsTable(props) {
 
                 <Switch
                   checked={post.private}
-                  disabled
                   color="primary"
+                  onChange={(e, v) => {
+                    window.confirm(`Are you sure you want to make post ${post.private ? "private" : "public" }`)
+                    ? props.togglePrivate(post.postId, 'private', e.target.checked)
+                    : e.target.checked = !e.target.checked
+                  }}
                 />
                 </CustomTableCell>
                 <CustomTableCell>{post.date_created.toDate().toLocaleString()}</CustomTableCell>
@@ -103,6 +107,7 @@ UserPostsTable.propTypes = {
   
   removePost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
+  togglePrivate: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(UserPostsTable);
