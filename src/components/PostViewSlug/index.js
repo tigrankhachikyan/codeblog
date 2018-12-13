@@ -79,7 +79,7 @@ class PostViewSlug extends PureComponent {
         <Hidden smDown>
           <Toolbox />
         </Hidden>
-        <Grid item sm={12} md={8} lg={6} style={{justifySelf: "center"}}>
+        <Grid item xs={12} md={8} lg={6} style={{justifySelf: "center"}}>
         { 
           post && <div>
             <h1>{post.title}</h1>

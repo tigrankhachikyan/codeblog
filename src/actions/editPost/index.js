@@ -13,10 +13,20 @@ import {
 
 export const discardDraft = (uid, postId) => async dispatch => {}
 
-export const editPostHeader = (uid, postId, payload) => async dispatch => {
-  await postsRef.doc(postId).update({
-    payload
-  });
+export const editPostHeader = (uid, postId, payload) => async (dispatch, getState) => {
+  const { editPost } = getState();
+
+  try {
+    await postsRef.doc(postId).update({ [payload.field]: payload.value });
+    dispatch({
+      type: EDIT_POST_LOAD_SUCCESS,
+      payload: {
+        header: {...editPost.header, [payload.field]: payload.value}
+      }
+    })
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 export const closeEditPost = (uid, postId) => async dispatch => {

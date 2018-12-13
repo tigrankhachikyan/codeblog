@@ -19,7 +19,9 @@ import Switch from '@material-ui/core/Switch';
 
 import {
   savePostDraftById,
-  publishDraftById
+  publishDraftById,
+  discardDraft,
+  editPostHeader
 } from "../../actions/editPost";
 
 import {
@@ -88,6 +90,10 @@ class Editor extends PureComponent {
     this.props.history.push(`/account`);
   }
 
+  handleHeaderFieldUpdate(field, value) {
+    const {uid, postId} = this.props;
+    this.props.editPostHeader(uid, postId, {field, value})
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -118,8 +124,6 @@ class Editor extends PureComponent {
   }
 
   render() {
-    const post = this.props.editPost;
-
     const actions = [
       {
         action: this.saveDraftContent,
@@ -165,13 +169,20 @@ class Editor extends PureComponent {
               <div
                 style={{float: "right"}}
               >
-                <span>Publish?</span>
+                <span>Private</span>
                 <Switch
+                  checked={this.props.editPost.header.private}
+                  onChange={(e, v) => {
+                    console.log(v);
+                    window.confirm(`Are you sure you want to make post ${this.props.editPost.header.private ? "private" : "public" }`)
+                    ? this.handleHeaderFieldUpdate("private", v)
+                    : e.target.checked = !e.target.checked
+                  }}
                   color="primary"
                 />
               {
                 (
-                  this.props.editPost.body.body_markdown !== this.state.markdown && ! this.state.isChanged 
+                  (this.props.editPost.body.body_markdown !== this.state.markdown && ! this.state.isChanged )
                 || 
                   this.props.editPost.body.contentLoadedFromDraft
                 ) &&
@@ -224,7 +235,6 @@ const mapStateToProps = ({ auth, data, settings, editPost }) => {
   return {
     uid: auth.uid,
     editPost,
-    //post: data.editPost, // TODO: not used yet, move to redux or not?
     settings
   };
 };
@@ -236,5 +246,7 @@ Editor.propTypes = {
 export default withRouter(connect(mapStateToProps, {
   addToast,
   savePostDraftById,
-  publishDraftById
+  publishDraftById,
+  discardDraft,
+  editPostHeader
 })(withStyles(styles)(Editor)));

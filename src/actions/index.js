@@ -19,7 +19,7 @@ import {
 } from "./types";
 
 export const fetchLatestPosts = () => dispatch => {
-  const latestPostsRef = postsRef.orderBy("date_created", "desc").limit(30);
+  const latestPostsRef = postsRef.where('private', '==', false).orderBy("date_created", "desc").limit(30);
   latestPostsRef.get()
     .then((snapshot) => {
       const posts = [];
@@ -43,7 +43,7 @@ export const fetchLatestPosts = () => dispatch => {
 };
 
 export const fetchMostLikedPosts = () => dispatch => {
-  const latestPostsRef = postsRef.orderBy("likes", "desc").limit(30);
+  const latestPostsRef = postsRef.where('private', '==', false).orderBy("likes", "desc").limit(30);
   latestPostsRef.get()
     .then((snapshot) => {
       const posts = [];
@@ -111,6 +111,7 @@ export const createPost = (payload) => async dispatch => {
   payload.slug = payload.slug + "-" + id;
   payload.likes = 0;
   payload.views = 0;
+  payload.private = true;
   
   try {
     await Promise.all([
@@ -124,73 +125,6 @@ export const createPost = (payload) => async dispatch => {
   } catch(e) {
     Promise.reject(e)
   }
-};
-
-//TODO; complete Rredux migration
-export const fetchPostById = (postId) => dispatch => {
-  return new Promise((resolve, reject) => {
-    postsRef.doc(postId).get()
-      .then(doc => {
-        if (!doc.exists) {
-          reject('No such document!');
-        } else {
-          // dispatch({
-          //   type: LOAD_EDIT_POST,
-          //   payload: doc.data()
-          // });
-          resolve(doc.data());
-        }
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
-};
-
-export const fetchPostBodyById = (postId) => dispatch => {
-  return new Promise((resolve, reject) => {
-    postsBodyRef.doc(postId).get()
-      .then(doc => {
-        const post = doc.data();
-        if (!doc.exists) {
-          reject('No such post body document!');
-        } else {
-          postsBodyRef.doc(postId).collection('comments').get()
-          .then(snapshot => {
-            const comments = [];
-            snapshot.forEach(doc => comments.push(doc.data()))
-            post.comments = comments;
-            resolve(post);
-          });
-        }
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
-};
-
-/**
- * 
- * @param {String} postId 
- */
-export const fetchPostDraftById = (postId) => dispatch => {
-  return new Promise((resolve, reject) => {
-    postDraftsRef.doc(postId).get()
-      .then(doc => {
-        if (!doc.exists) {
-          resolve(null);
-        } else {
-          resolve(doc.data());
-        }
-      })
-      .catch((err) => {
-        reject(err);
-        console.log('Error getting documents', err);
-      });
-  })
 };
 
 export const deletePostById = postId => async dispatch => {
