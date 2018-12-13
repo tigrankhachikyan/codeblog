@@ -64,6 +64,13 @@ export const fetchPostBySlug = (slug, auth) => async dispatch => {
       let post = {postId, ...postSnapshot.data()};
       let postBody = {postId, ...postBodySnapshot.data()};
       
+      if (post.private) {
+        dispatch({
+          type: "CURRENT_POST_LOADING_ERROR",
+          error: "Failed to laod post"
+        })
+      }
+
       dispatch({
         type: LOAD_CURRENT_POST,
         payload: {
