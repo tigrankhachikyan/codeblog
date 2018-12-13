@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import Switch from '@material-ui/core/Switch';
+
 import './index.css';
 
 
@@ -52,6 +54,7 @@ function UserPostsTable(props) {
           <TableRow>
             <CustomTableCell>Title</CustomTableCell>
             <CustomTableCell>Slug</CustomTableCell>
+            <CustomTableCell>Private</CustomTableCell>
             <CustomTableCell>Date Created</CustomTableCell>
             <CustomTableCell>Actions</CustomTableCell>
           </TableRow>
@@ -64,6 +67,14 @@ function UserPostsTable(props) {
                   <Link to={`/@${post.user.userName}/${post.slug}`}>{post.title}</Link>
                 </CustomTableCell>
                 <CustomTableCell>{post.slug}</CustomTableCell>
+                <CustomTableCell>
+
+                <Switch
+                  checked={post.private}
+                  disabled
+                  color="primary"
+                />
+                </CustomTableCell>
                 <CustomTableCell>{post.date_created.toDate().toLocaleString()}</CustomTableCell>
                 <CustomTableCell>
                   <IconButton aria-label="Delete" className={classes.margin}
