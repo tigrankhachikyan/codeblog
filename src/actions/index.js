@@ -71,7 +71,7 @@ export const fetchMostLikedPosts = () => dispatch => {
  * @param {string} uid Auth user uid
  */
 export const fetchUserPosts = (uid) => async dispatch => {
-  const userPostsref = postsRef.where('uid', '==', uid);
+  const userPostsref = postsRef.where('uid', '==', uid).orderBy("date_created", "desc");
 
   userPostsref.onSnapshot((snapshot) => {
     const docs = [];
