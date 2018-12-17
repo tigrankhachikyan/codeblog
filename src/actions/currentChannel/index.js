@@ -8,7 +8,7 @@ import { LOAD_CURRENT_CHANNEL_POSTS, REMOVE_CURRENT_CHANNEL_POSTS } from './type
 
 export const fetchCurrentUserPosts = (username) => async dispatch => {
   const user = await getUserByUserName(username);
-  const userPostsref = postsRef.where('uid', '==', user.uid);
+  const userPostsref = postsRef.where('uid', '==', user.uid).where('private', '==', false);
 
   userPostsref.onSnapshot((snapshot) => {
     const docs = [];
