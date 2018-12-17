@@ -74,7 +74,7 @@ class Toolbox extends PureComponent {
             </Typography>
           </div>
 
-          <ButtonBase 
+          {/* <ButtonBase 
             aria-label="bookmark" className={classes.pair}
             disabled={!auth}
             onClick={() => {
@@ -83,7 +83,7 @@ class Toolbox extends PureComponent {
             }}
           >
             <BookmarkIcon color="action"/>
-          </ButtonBase>
+          </ButtonBase> */}
 
       </div>
     );

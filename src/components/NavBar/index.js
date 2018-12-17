@@ -98,10 +98,10 @@ class NavBar extends Component {
                     this.props.history.push('/account');
                     this.handleClose();
                   }}>My account</MenuItem>
-                  <MenuItem onClick={() => {
+                  {/* <MenuItem onClick={() => {
                     this.props.history.push('/account/bookmarks');
                     this.handleClose();
-                  }}>Bookmarks</MenuItem>
+                  }}>Bookmarks</MenuItem> */}
                   <MenuItem onClick={() => {
                     this.props.history.push('/user-settings');
                     this.handleClose();
