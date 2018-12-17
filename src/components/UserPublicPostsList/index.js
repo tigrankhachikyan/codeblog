@@ -52,18 +52,19 @@ class UserPublicPostsList extends Component {
           justify="flex-start"
           alignItems="center"
         >
-          <h2>Welcome to {username}'s channel</h2>
+          <Grid item
+            xs={12}
+            md={6}
+          >
+            <h2>Welcome to {username}'s channel</h2>
           {
             posts && posts.map((post, i) => {
-              return <Grid key={post.postId}
-                item 
-                xs={12}
-                style={{margin: 10}}
-              >
+              return <Grid>
                 <ListPostCard post={post}/>
               </Grid>
             })
           }
+          </Grid>
         </Grid>
       </div>
     );
